@@ -36,3 +36,7 @@ Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 //also changed use (up) to page instead of home
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

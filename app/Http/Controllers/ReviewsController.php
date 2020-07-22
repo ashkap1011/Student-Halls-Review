@@ -23,10 +23,8 @@ class ReviewsController extends Controller
     }
 
     public function create(Request $request){
-        //var_dump($request->input("amenities"));
+        var_dump($request->input("amenities"));
         
-        
-
         $tempReview = new TempReview();
         
         $tempReview->dorm_id = $request->input("dorm_id");
