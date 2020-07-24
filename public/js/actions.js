@@ -1,6 +1,4 @@
-function test(){
-    alert("hi");
-}
+
 /*
 $(document).ready(function(){
     $("#button").click(function(){
@@ -12,28 +10,55 @@ $(document).ready(function(){
 
 
 $(document).ready(function(){
+    
+    $("#catered_selfcatered_label").text("Communal Kitchen rating")
+    $('#communal_kitchen').prop('checked', true);
+
+    
+    //populates dorms for chosen uni in drop down
     $("#uni_name_drpdwn").change(function(){
         var uniName =$(this).val(); //have the value of uni chosen
         $.get("/dormsForUni/" + uniName, function(data){
             
-            $("#dorm_name_drpdwn").empty() //mpties all the child nodes of select
+            $("#dorm_name_drpdwn").empty() //empties all the child nodes of select
             $(data).each(function (){
                 $("#dorm_name_drpdwn").append($("<option />").val(this).text(this));
             });
             setDormIdFormElement(data[0]);
             //todo make the field set work properly such that if this value is "" then hide
        });
-        $(".fieldsets").show()
+
+       
+       $(".fieldsets").show()
       });
 
+    //sets dorm_id based on drop down  
     $("#dorm_name_drpdwn").change(function(){
         var dormName =$(this).val(); //have the value of uni chosen
         setDormIdFormElement(dormName);
     });
 
+    $("input[type=radio][name=is_catered]").change(function(){
+        if ($("input[type=radio][name=is_catered]:checked").val() === "0"){
+            $("#catered_selfcatered_label").text("Food Quality rating");
+            $('#communal_kitchen').prop('checked', false);
+            $('#catering').prop('checked', true);
+
+        } else{
+            $("#catered_selfcatered_label").text("Communal Kitchen rating");
+
+            $('#communal_kitchen').prop('checked', true);
+            $('#catering').prop('checked', false);
+            
+            
+        }
+    });
+
+
     
 
 });
+
 
 function setDormIdFormElement(dormName){
     $.get("/dormNameToId/" + dormName, function(data){

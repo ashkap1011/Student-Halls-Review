@@ -38,6 +38,10 @@ class ReviewsController extends Controller
         $tempReview->year_of_residence = $request->input("year_of_residence");
         $tempReview->room_type = $request->input("room_type");
         
+        
+        $tempReview->is_catered = $request->input("is_catered");
+        $tempReview->catered_or_selfcatered_rating = $request->input("catered_or_selfcatered_rating");
+
         $has_amenities = $request->input("amenities");
 
         if($has_amenities  !== null){
@@ -46,13 +50,10 @@ class ReviewsController extends Controller
         $tempReview->quirk = $request->input("quirk");
         $tempReview->review_text = $request->input("review_text");
 
+
         /*
         $input = $request->all();
         foreach($input as $key=>$value){
-            
-            print_r($key); 
-            print_r($value);
-            
             //$tempReview->$key = $request->input(strval($value));
             //var_dump($tempReview);
            

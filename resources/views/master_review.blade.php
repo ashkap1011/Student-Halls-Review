@@ -23,10 +23,10 @@
     <!-- recommends-->
     <fieldset class="fieldsets">
     Recommend
-    <input type="radio" id="yes" name="is_recommended" value="1" checked>
-    <label for="yes">Yes</label>
-    <input type="radio" id="no" name="is_recommended" value="0">
-    <label for="no">No</label><br><br>
+    <input type="radio" id="is_recommended_yes" name="is_recommended" value="1" checked>
+    <label for="is_recommended_yes">Yes</label>
+    <input type="radio" id="is_recommended_no" name="is_recommended" value="0">
+    <label for="is_recommended_no">No</label><br><br>
     </fieldset>
 
 
@@ -45,7 +45,7 @@
     <fieldset class="fieldsets">
     <!--calendar year-->
     <br> year of residency
-    <select id="year" name="year_of_residence" class="">
+    <select id="year" name="year_of_residence" >
         @php ($last= 2015)
         @php ($now = date('Y'))
        
@@ -68,6 +68,19 @@
     </select>
     </fieldset>
 
+    <fieldset class="fieldsets">
+        <label for="is_catered"> Is it Self Catered</label>
+        <input type="radio" id="is_catered_yes" name="is_catered" value="1" checked>
+        <label for="is_catered_yes">Yes</label>
+        <input type="radio" id="is_catered_no" name="is_catered" value="0">
+        <label for="is_catered_no">No</label><br>
+    </fieldset>   
+
+    <fieldset>
+        <label for="catered_or_selfcatered_rating" id="catered_selfcatered_label"></label>
+        <input type="number" class="star_ratings" id="catered_or_selfcatered_rating" name="catered_or_selfcatered_rating"  min="1" max="5"><br>
+    </fieldset>
+
 
     <fieldset class="fieldsets">
     <br> Amenities: <br>
@@ -76,6 +89,7 @@
     <input type='checkbox' id="{{$amenity}}" name="amenities[]" value="{{$amenity}}">
     <label for="{{$amenity}}">{{$amenityValue}} </label><br>
     @endforeach
+
     </fieldset>
     
 

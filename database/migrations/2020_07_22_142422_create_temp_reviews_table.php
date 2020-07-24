@@ -34,11 +34,14 @@ class CreateTempReviewsTable extends Migration
             $table->enum('year_of_residence', ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030']);	
             $table->enum('room_type', ['single', 'double', 'shared','studio','other']);	
          
+            $table->boolean('is_catered');
+            $table->tinyInteger('catered_or_selfcatered_rating');
+
             $table->set('amenities',['common_area', 'games','outdoor_area','elevator','communal_kitchen','catering','private_bathroom', 'social_events','mature_students_only'])->nullable();
          
-            $table->string('quirk', 50);
+            $table->string('quirk', 50)->nullable();
 
-            $table->string('review_text', 400);
+            $table->string('review_text', 400)->nullable();
 
             $table->timestamps();
         });
