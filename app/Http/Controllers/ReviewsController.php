@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {   
-    public function index(){
+    public function writeReview(){
         $universities = University::all();
         $amenities = array('common_area', 'games','outdoor_area','elevator'
     ,'communal_kitchen','catering','private_bathroom'
@@ -17,53 +17,39 @@ class ReviewsController extends Controller
         return view('review', compact('universities','amenities'));
     }
 
-    
 
-    public function newDormReviewPage($uni_name){
+    public function newUniOrDormReviewPage($uni_name){
         $amenities = array('common_area', 'games','outdoor_area','elevator'
     ,'communal_kitchen','catering','private_bathroom'
     , 'social_events','mature_students_only');
-        return view('new_dorm_review', compact('uni_name', 'amenities'));
+
+        $isNewUni =false;
+        if ($uni_name == '-'){
+            $isNewUni = true;
+        }
+
+        return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni'));
     }
 
-    public function newUniAndDormReviewPage(){
-        $amenities = array('common_area', 'games','outdoor_area','elevator'
-        ,'communal_kitchen','catering','private_bathroom'
-        , 'social_events','mature_students_only');
-        
-        return view('new_uni_dorm_review', compact('amenities'));
-
-    }
+   
 
     public function createNewReview(Request $request){
         
-        $temp_review = $this->createReview($request);
+        $temp_review = $this->appendReview($request);
         $temp_review->dorm_id = $request->input("dorm_id"); 
         $temp_review->save();
     }
 
-    public function createNewDormReview(Request $request){
+    public function createReviewForNewUniOrDorm(Request $request){
         
-        $temp_review = $this->createReview($request);
+        $temp_review = $this->appendReview($request);
         $temp_review->uni_name = $request->input("uni_name");
         $temp_review->dorm_name = $request->input("dorm_name");
         $temp_review->save();
 
     }
 
-    public function createNewUniAndDormReview(Request $request){
-        
-        $temp_review = $this->createReview($request);
-        $temp_review->uni_name = $request->input("uni_name");
-        $temp_review->dorm_name = $request->input("dorm_name");
-        $temp_review->save();
-
-    }
-
-
-
-
-    public function createReview($request){
+    public function appendReview($request){
         
         $temp_review = new TempReview();
 
@@ -113,18 +99,7 @@ class ReviewsController extends Controller
 
     /*
     Use for other review pages 
-     <br>
-    <input type="text" id="uni_name" name="uni_name" value="" hidden><br>
-    dorm name
-    <input type="text" id="dorm_name" name="dorm_name" value="" ><br>
-    uni id
-    <input type="number" id="uni_id" name="uni_id" value="" ><br>
-    dorm id
 
-    https://stackoverflow.com/questions/548541/insert-ignore-vs-insert-on-duplicate-key-update
-https://stackoverflow.com/questions/37836087/get-all-fields-from-db-model-in-laravel#:~:text=You%20can%20use%20Schema%3A%3A,values%20of%20your%20Drink%20object.
-https://laravel.com/docs/7.x/mix#vanilla-js
-https://www.hungred.com/how-to/tutorial-jquery-select-box-manipulation-plugin/
 https://laravel.com/docs/7.x/eloquent#eloquent-model-conventions
 https://laravel.com/docs/7.x/eloquent-collections#available-methods
 https://laravel.com/docs/7.x/queries#retrieving-results
