@@ -14,7 +14,7 @@
 </select>
 
 
-<a href="/add/new-uni-dorm-review"> Add a New University</a>
+<a href="/-/add/new-uni-dorm-review"> Add a New University</a>
 
 <div id="dorm_name_section">
 <label for="dorm_name_drpdwn">Select The Dorm</label>

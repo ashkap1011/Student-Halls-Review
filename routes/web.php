@@ -24,15 +24,12 @@ Route::get('/', function () {
 
 Route::get('/', 'PageController@index');
 
-Route::get('/add/new-review', 'ReviewsController@index');
+Route::get('/add/new-review', 'ReviewsController@writeReview');
 Route::post('/post_review', 'ReviewsController@createNewReview');
 
-Route::get('/{uni_name}/add/new-dorm-review', 'ReviewsController@newDormReviewPage');
-Route::post('/post_dorm_review', 'ReviewsController@createNewDormReview');
+Route::get('/{uni_name}/add/new-uni-dorm-review', 'ReviewsController@newUniOrDormReviewPage');
+Route::post('/post_review_for_new_uni_or_dorm', 'ReviewsController@createReviewForNewUniOrDorm');
 
-
-Route::get('/add/new-uni-dorm-review','ReviewsController@newUniAndDormReviewPage');
-Route::post('/post_uni_and_dorm_review','ReviewsController@createNewUniAndDormReview');
 
 
 Route::get('/dormsForUni/{uni_name}','ReviewsController@dormsOnUniSelection');

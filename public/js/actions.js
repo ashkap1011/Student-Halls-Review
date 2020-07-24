@@ -77,7 +77,7 @@ function setDormSectionPerUniSelection(){
        
             //set link for new dorm for the chosen uni
             var uniSelected = $('select#uni_name_drpdwn option:checked').val()
-            $('#add_new_dorm').attr('href', '/'+uniSelected+'/add/new-dorm-review');
+            $('#add_new_dorm').attr('href', '/'+uniSelected+'/add/new-uni-dorm-review');
         });
 
         $('#dorm_name_section').show()
