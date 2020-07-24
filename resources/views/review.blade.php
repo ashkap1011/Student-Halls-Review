@@ -19,6 +19,9 @@
 
 </select>
 
+<a href="/" id="add_new_dorm">Add a Dorm</a>
+
+
 <form action="/newreview" method="post">
     
     <input type="number" id="dorm_id" name="dorm_id" value=""><br>

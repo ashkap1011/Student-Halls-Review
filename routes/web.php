@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PageController;
+use App\Review;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,8 +28,10 @@ Route::get('/review', 'ReviewsController@index');
 
 Route::post('/newreview', 'ReviewsController@create');
 
-Route::get('/dormsForUni/{uniName}','ReviewsController@dormsOnUniSelection');
-Route::get('/dormNameToId/{dormName}','ReviewsController@dormNameToId');
+Route::get('/dormsForUni/{uni_name}','ReviewsController@dormsOnUniSelection');
+Route::get('/dormNameToId/{dorm_name}','ReviewsController@dormNameToId');
+
+Route::get('/{uni_name}/add_dorm', 'ReviewsController@newDormReviewPage');
 
 
 

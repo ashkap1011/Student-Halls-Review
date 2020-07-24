@@ -9,12 +9,14 @@ $(document).ready(function(){
 */
 
 
+
+
 $(document).ready(function(){
     
     $("#catered_selfcatered_label").text("Communal Kitchen rating")
     $('#communal_kitchen').prop('checked', true);
 
-    
+
     //populates dorms for chosen uni in drop down
     $("#uni_name_drpdwn").change(function(){
         var uniName =$(this).val(); //have the value of uni chosen
@@ -26,7 +28,12 @@ $(document).ready(function(){
             });
             setDormIdFormElement(data[0]);
             //todo make the field set work properly such that if this value is "" then hide
-       });
+       
+            //set link for new dorm for the chosen uni
+            var uniSelected = $("select#uni_name_drpdwn option:checked").val()
+            $('#add_new_dorm').attr('href', '/'+uniSelected+'/add_dorm');
+       
+        });
 
        
        $(".fieldsets").show()
@@ -38,6 +45,10 @@ $(document).ready(function(){
         setDormIdFormElement(dormName);
     });
 
+    /*checks to see the correct catering related amenity is selected based
+    on user selection, also changes the text for the catering/self catered 
+    rating
+    */
     $("input[type=radio][name=is_catered]").change(function(){
         if ($("input[type=radio][name=is_catered]:checked").val() === "0"){
             $("#catered_selfcatered_label").text("Food Quality rating");
@@ -46,15 +57,13 @@ $(document).ready(function(){
 
         } else{
             $("#catered_selfcatered_label").text("Communal Kitchen rating");
-
             $('#communal_kitchen').prop('checked', true);
             $('#catering').prop('checked', false);
-            
             
         }
     });
 
-
+    
     
 
 });
