@@ -77,6 +77,7 @@ class ReviewsController extends Controller
         return $temp_review;
     }
 
+    
     public function dormsOnUniSelection($uni_name){
         $uni_id = University::where('uni_name', strval($uni_name))->value('uni_id');
         $dorms_of_uni = Dorm::where('uni_id', strval($uni_id))->get();   
