@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class ReviewsController extends Controller
 {   
-
     public function index(){
         $universities = University::all();
         $amenities = array('common_area', 'games','outdoor_area','elevator'
@@ -18,12 +17,55 @@ class ReviewsController extends Controller
         return view('review', compact('universities','amenities'));
     }
 
-    public function create(Request $request){
+    
+
+    public function newDormReviewPage($uni_name){
+        $amenities = array('common_area', 'games','outdoor_area','elevator'
+    ,'communal_kitchen','catering','private_bathroom'
+    , 'social_events','mature_students_only');
+        return view('new_dorm_review', compact('uni_name', 'amenities'));
+    }
+
+    public function newUniAndDormReviewPage(){
+        $amenities = array('common_area', 'games','outdoor_area','elevator'
+        ,'communal_kitchen','catering','private_bathroom'
+        , 'social_events','mature_students_only');
+        
+        return view('new_uni_dorm_review', compact('amenities'));
+
+    }
+
+    public function createNewReview(Request $request){
+        
+        $temp_review = $this->createReview($request);
+        $temp_review->dorm_id = $request->input("dorm_id"); 
+        $temp_review->save();
+    }
+
+    public function createNewDormReview(Request $request){
+        
+        $temp_review = $this->createReview($request);
+        $temp_review->uni_name = $request->input("uni_name");
+        $temp_review->dorm_name = $request->input("dorm_name");
+        $temp_review->save();
+
+    }
+
+    public function createNewUniAndDormReview(Request $request){
+        
+        $temp_review = $this->createReview($request);
+        $temp_review->uni_name = $request->input("uni_name");
+        $temp_review->dorm_name = $request->input("dorm_name");
+        $temp_review->save();
+
+    }
+
+
+
+
+    public function createReview($request){
         
         $temp_review = new TempReview();
-        
-        $temp_review->dorm_id = $request->input("dorm_id");
-
 
         $temp_review->room_rating = $request->input("room_rating");
         $temp_review->building_rating = $request->input("building_rating");
@@ -45,8 +87,8 @@ class ReviewsController extends Controller
         }
         $temp_review->quirk = $request->input("quirk");
         $temp_review->review_text = $request->input("review_text");
-        
-        $temp_review->save();
+
+        return $temp_review;
     }
 
     public function dormsOnUniSelection($uni_name){
@@ -66,21 +108,9 @@ class ReviewsController extends Controller
         return $dorm_id;
     }
 
-    public function newDormReviewPage($uni_name){
-        $amenities = array('common_area', 'games','outdoor_area','elevator'
-    ,'communal_kitchen','catering','private_bathroom'
-    , 'social_events','mature_students_only');
-        return view('new_dorm_review', compact('uni_name', 'amenities'));
-    }
 
 
 
-
-
-
-    //https://stackoverflow.com/questions/40640069/dynamic-dropdown-options-with-jquery
-
-    
     /*
     Use for other review pages 
      <br>

@@ -1,4 +1,9 @@
 .fieldsets {
     display:none;
 }
-#test{display:none;}
+
+#dorm_name_section{
+    display:none;
+}
+
+

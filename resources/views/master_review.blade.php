@@ -4,6 +4,8 @@
 
 @section('content')
 
+    @yield('form_header')
+
     @yield('form_beginning')
 
     <!-- ratings-->
@@ -28,7 +30,6 @@
     <input type="radio" id="is_recommended_no" name="is_recommended" value="0">
     <label for="is_recommended_no">No</label><br><br>
     </fieldset>
-
 
     <!-- Year of Study-->
     <fieldset class="fieldsets">
@@ -56,7 +57,6 @@
     </select> 
     </fieldset>
 
-
     <!-- Room type -->
     <fieldset class="fieldsets">
     <br>Room Type:
@@ -81,7 +81,6 @@
         <input type="number" class="star_ratings" id="catered_or_selfcatered_rating" name="catered_or_selfcatered_rating"  min="1" max="5"><br>
     </fieldset>
 
-
     <fieldset class="fieldsets">
     <br> Amenities: <br>
     @foreach ($amenities as $amenity)
@@ -89,9 +88,7 @@
     <input type='checkbox' id="{{$amenity}}" name="amenities[]" value="{{$amenity}}">
     <label for="{{$amenity}}">{{$amenityValue}} </label><br>
     @endforeach
-
     </fieldset>
-    
 
     <fieldset class="fieldsets">
     <br> Quriks:
