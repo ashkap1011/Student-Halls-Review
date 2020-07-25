@@ -15,7 +15,7 @@ class CreateTempReviewsTable extends Migration
     {
         Schema::create('temp_reviews', function (Blueprint $table) {
             $table->id();
-            
+            $table->boolean('is_new_uni');
             $table->string('uni_name',100)->nullable();
             $table->string('dorm_name',100)->nullable();
 

@@ -19,8 +19,10 @@
     
     @if ($isNewUni)
         <label for="uni_name">Uni Name</label>
-        <input type="text" id="uni_name" name="uni_name">
+        <input type="text" id="uni_name" name="uni_name"> 
+        <input type="text" id="is_new_uni" name="is_new_uni" value="1" hidden>
     @else
+        <input type="text" id="is_new_uni" name="is_new_uni" value="0" hidden>
         <input type="text" id="uni_name" name="uni_name" value="{{$uni_name}}" hidden>
     @endif
     

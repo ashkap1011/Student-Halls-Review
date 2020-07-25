@@ -33,7 +33,8 @@
 
 
 <form action="/post_review" method="post">
-    
+    <input type="text" id="is_new_uni" name="is_new_uni" value="0" hidden>
+
     <input type="number" id="dorm_id" name="dorm_id" value="" hidden><br>
     <br>
     
