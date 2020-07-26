@@ -37,7 +37,7 @@ $(document).ready(function(){
 
     //sets dorm_id based on drop down  
     $('#dorm_name_drpdwn').change(function(){
-        var dormName =$(this).val(); //have the value of uni chosen
+        let dormName =$(this).val(); //have the value of uni chosen
         setDormIdFormElement(dormName);
     });
 
@@ -58,14 +58,72 @@ $(document).ready(function(){
         }
     });
 
-    
+    $('.editable_cell').dblclick(function() {
+        let val = $(this).html();
+        
+        let elementId = $(this).attr('class').split(' ').pop();//gives you the second class name of element
+        $(this).append('<input type = "text" name="updated_text" value="' + val + 
+        '" /><input type="button" class="update_btn" onclick="updateReview(this)" value="Update"></td>');
+        
+        //var rowId = $(this).attr('class').replace(/[^\d\.]/g, ''); //temp_review
+        //$('.td_of_row_'+rowId).empty().append('<input type="text" name="test" value="' + rowId + '" /><input type="submit" />')
+        //$(this).parent('td').prev('td').empty().html('<input type="text" name="test" value="' + vvaall + '" /><input type="submit" />');
+      });
+
+      /*********************************/
+      //TODO remove onClick from above function and make it work.
+      
+      $('.delete_btn').click(function(){
+        //add r u sure!!!!
+        let rowId = $(this).attr('id').replace(/[^\d\.]/g, '');
+        $.post('/delete_temp_review',{
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewId: rowId
+        });
+        location.reload();
+      });
+      
+      //pushes reviews from temp_reviews to 
+    $('#push_btn').click(function(){
+        let reviewsToPush = $('input:checkbox:checked').map(function(){
+            return $(this).attr('id').replace(/[^\d\.]/g, '');
+          }).get(); 
+        
+        $.post('/migrate_temp_review',{
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewsToMigrate: reviewsToPush
+        });
+        
+
+    });
+
     
 
 });
 
+function updateReview(button){
+    let tableDataElement = $(button).parent()
+    let columnName = $(tableDataElement).attr('class').split(' ').pop();
+    let rowId = $(tableDataElement).attr('class').replace(/[^\d\.]/g, ''); //temp_review
+    let newValue = $(button).prev().val();
+    
+    $.post('/update_temp_review', {
+
+        '_token': $('meta[name=csrf-token]').attr('content'),
+        column: columnName,
+        reviewId: rowId,
+        value: newValue 
+    }
+    );
+    location.reload();
+}
+
+
+
+
 
 function setDormSectionPerUniSelection(){
-    var uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
+    let uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
         $.get('/dormsForUni/' + uniName, function(data){
             
             $('#dorm_name_drpdwn').empty() //empties all the child nodes of select
@@ -76,7 +134,7 @@ function setDormSectionPerUniSelection(){
             //todo make the field set work properly such that if this value is "" then hide
        
             //set link for new dorm for the chosen uni
-            var uniSelected = $('select#uni_name_drpdwn option:checked').val()
+            let uniSelected = $('select#uni_name_drpdwn option:checked').val()
             $('#add_new_dorm').attr('href', '/'+uniSelected+'/add/new-uni-dorm-review');
         });
 
