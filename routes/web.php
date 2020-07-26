@@ -39,6 +39,12 @@ Route::get('/posted_reviews','AdminController@reviews');
 Route::get('/posted_reviews_with_new_dorm','AdminController@reviewsWithNewDorm');
 Route::get('/posted_reviews_with_new_uni','AdminController@reviewsWithNewUni');
 
+Route::post('/update_temp_review', 'AdminController@updateTempReview');
+Route::post('/delete_temp_review','AdminController@deleteTempReview');
+Route::post('/migrate_temp_review','AdminController@migrateTempReview');
+
+
+
 //Route::get('/home', 'HomeController@index')->name('home');
 //also changed use (up) to page instead of home
 

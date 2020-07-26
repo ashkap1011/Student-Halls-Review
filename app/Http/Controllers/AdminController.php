@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\TempReview;
-
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -46,30 +46,48 @@ class AdminController extends Controller
         return view('/admin_reviews', compact('reviews','temp_review_columns'));
     }*/
 
-    /*
-     $all_temp_reviews = TempReview::all();
-        $temp_review_columns= Schema::getColumnListing('temp_reviews');
-        var_dump($temp_review_columns);
-         */
+    public function updateTempReview(Request $request){
+        $messages =[
+            'required' =>'this is required'
+        ];
+        
+        $Validator = Validator::make(
+            $request->all(),
+            [
+                'value'=>'required|string',
+            ],
+            $messages
+            );
 
 
-    /**
-     * 
-<table >
-    <thead>
-        @foreach ($temp_review_columns as $column_name)
-        <th>{{ $column_name }}<th>
-        @endforeach
-    </thead>
-    @foreach ($all_temp_reviews as $row)
-        <tr>
-            @foreach ($temp_review_columns as $column)
-            <td>{{$row->$column}}</td>    
-            @endforeach
-        </tr>
-    @endforeach
-</table>
-     */
+            $id = strval($request->reviewId);
+            $column = strval($request->column);
+            $value = strval($request->value);
+
+            if($Validator->fails()){
+                $Response = ['fail'=>'not good son'];
+            }else{
+                $Response = ['success'=>'your action has been successful'.$id];
+            }
+               
+        
+        $review = TempReview::find($id);
+        $review->$column = $value;
+        $review->save();
+        
+        return response()->json($Response,200);
+        
+        //var_dump($request->value);
+    }
+
+    public function deleteTempReview(Request $request){
+        $request->all();
+        $id = strval($request->reviewId);
+        $review = TempReview::find($id);
+        $review->delete();
+    }
+
+
 
 
 
