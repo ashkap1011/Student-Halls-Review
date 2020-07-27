@@ -41,7 +41,7 @@ Route::get('/posted_reviews_with_new_uni','AdminController@reviewsWithNewUni');
 
 Route::post('/update_temp_review', 'AdminController@updateTempReview');
 Route::post('/delete_temp_review','AdminController@deleteTempReview');
-Route::post('/migrate_temp_review','AdminController@migrateTempReview');
+Route::post('/migrate_temp_review','AdminController@migrateTempReviews');
 
 
 

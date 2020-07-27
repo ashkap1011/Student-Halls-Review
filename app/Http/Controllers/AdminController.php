@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Dorm;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\TempReview;
 use App\Review;
+use App\University;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -19,8 +22,9 @@ class AdminController extends Controller
     public function reviews(){
         //reviews for pre-existing dorms will not have a dorm name but instead a dorm_id
         $reviews = TempReview::whereNull('dorm_name')->get();
-        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         $type_of_review = 'normal_reviews';
+
+        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
 
@@ -28,16 +32,17 @@ class AdminController extends Controller
     public function reviewsWithNewDorm(){
         $reviews = TempReview::where('is_new_uni','=','0')
                     ->whereNotNull('dorm_name')->get();
-        
-        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         $type_of_review = 'new_dorm_reviews';
+
+        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
 
     public function reviewsWithNewUni(){
         $reviews = TempReview::where('is_new_uni','=','1')->get();
-        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         $type_of_review = 'new_uni_reviews';
+
+        $temp_review_columns = Schema::getColumnListing('temp_reviews');
         return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
     /*Use this and get rid of code but find out why it doesn't work
@@ -77,8 +82,6 @@ class AdminController extends Controller
         $review->save();
         
         return response()->json($Response,200);
-        
-        //var_dump($request->value);
     }
 
     public function deleteTempReview(Request $request){
@@ -88,44 +91,67 @@ class AdminController extends Controller
         $review->delete();
     }
 
-    public function migrateTempReview(Request $request){
+    public function migrateTempReviews(Request $request){
         $request->all();
-
-        //
-        //$ans = implode(" ",$request->reviewsToMigrate);
         $reviews_arr = $request->reviewsToMigrate;
         $reviewType =  $request->typeOfReviews;
-        //$reviews_arr = (array) $reviews_arr;
         
         foreach ($reviews_arr as $reviewId) {
-            $public_review_column_names = Schema::getColumnListing('reviews');
             $temp_review = TempReview::find($reviewId);
-            $public_review = new Review();
-            if($reviewType =='normal_reviews'){
-                foreach($public_review_column_names as $column_name){
-                    if($column_name =='review_id'){
-                        continue;
-                    }
-                    if($column_name =='date'){
-                        continue;
-                    }
-                  $public_review->$column_name = $temp_review->$column_name;
-               }
-
-            } else if($reviewType ==='new_dorm_reviews'){
-                return response()->json('not good',200);
-            } else{
-                return response()->json('nor this',200);
+            if($reviewType =='new_dorm_reviews'){
+                $this->createNewDorm($temp_review);
+            } 
+            if($reviewType == 'new_uni_reviews'){
+                $this->createNewUni($temp_review);
             }
+            
+            $public_review = $this->mapTempReviewToPublicReview($temp_review);
             $public_review->save();
         }
-        /**
-         * $public_review_column_names = implode(" ",$public_review_column_names);
-            return response()->json('normal'.$public_review_column_names,200);
-         */
+        
     }
 
+    public function mapTempReviewToPublicReview($temp_review){
+        $public_review_column_names = Schema::getColumnListing('reviews');
+        $public_review = new Review();
+        foreach($public_review_column_names as $column_name){
+            if($column_name =='review_id'){
+                continue;
+            }
+            if($column_name =='date'){
+                continue;
+            }
+          $public_review->$column_name = $temp_review->$column_name;
+       }
+       return $public_review;
 
+    }
+
+    public function createNewDorm($temp_review){
+        
+        $uniNameFromReview = $temp_review->uni_name;
+        $newDormName = $temp_review->dorm_name;
+
+        $uniIdFromUniversities = University::where('uni_name',$uniNameFromReview)->value('uni_id');
+        $newDorm = new Dorm();
+        $newDorm->uni_id = $uniIdFromUniversities;
+        $newDorm->dorm_name = $newDormName;
+        $newDorm->save();
+
+        $temp_review->dorm_id = Dorm::where('dorm_name', strval($newDormName))->value('dorm_id');
+    }
+
+    public function createNewUni($temp_review){
+        $newUni = new University();
+        $newUni->uni_name= $temp_review->uni_name;
+        $newUni->save();
+        $this->createNewDorm($temp_review);
+    }
+
+    //set this on foriegn key!!
+    //->onDelete('cascade');
+    //https://stackoverflow.com/questions/26437342/laravel-migration-best-way-to-add-foreign-key
+//read this cos apparently there is another way
 
 
 
