@@ -4,6 +4,7 @@
 
 @section('content')
 
+@include('inc.navbar_admin')
 
 
 <a href="/posted_reviews">Reviews </a>

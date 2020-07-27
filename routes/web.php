@@ -3,7 +3,6 @@
 use App\Http\Controllers\PageController;
 use App\Review;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,13 +13,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-/*
-Route::get('/', function () {
-    return view('welcome');
-});
-*/
-
 
 Route::get('/', 'PageController@index');
 
@@ -43,11 +35,5 @@ Route::post('/update_temp_review', 'AdminController@updateTempReview');
 Route::post('/delete_temp_review','AdminController@deleteTempReview');
 Route::post('/migrate_temp_review','AdminController@migrateTempReviews');
 
-
-
-//Route::get('/home', 'HomeController@index')->name('home');
-//also changed use (up) to page instead of home
-
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

@@ -5,6 +5,8 @@
 @section('title', 'WriteReviews')
 
 @section('content')
+@include('inc.navbar_admin')
+
     <h1 id='type_of_reviews'>{{$type_of_review}}</h1>
 <table>
     <th>Delete</th>
