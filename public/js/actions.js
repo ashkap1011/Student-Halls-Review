@@ -88,12 +88,14 @@ $(document).ready(function(){
         let reviewsToPush = $('input:checkbox:checked').map(function(){
             return $(this).attr('id').replace(/[^\d\.]/g, '');
           }).get(); 
+        let reviewType = $('#type_of_reviews').html();
         
         $.post('/migrate_temp_review',{
             '_token': $('meta[name=csrf-token]').attr('content'),
-            reviewsToMigrate: reviewsToPush
+            reviewsToMigrate: reviewsToPush,
+            typeOfReviews: reviewType
         });
-        
+
 
     });
 

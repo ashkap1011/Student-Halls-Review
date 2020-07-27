@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\TempReview;
+use App\Review;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -19,8 +20,8 @@ class AdminController extends Controller
         //reviews for pre-existing dorms will not have a dorm name but instead a dorm_id
         $reviews = TempReview::whereNull('dorm_name')->get();
         $temp_review_columns = Schema::getColumnListing('temp_reviews');
-
-        return view('/admin_reviews', compact('reviews','temp_review_columns'));
+        $type_of_review = 'normal_reviews';
+        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
 
     //New dorm will have is_new_uni as false and will have a dorm name
@@ -29,15 +30,15 @@ class AdminController extends Controller
                     ->whereNotNull('dorm_name')->get();
         
         $temp_review_columns = Schema::getColumnListing('temp_reviews');
-
-        return view('/admin_reviews', compact('reviews','temp_review_columns'));
+        $type_of_review = 'new_dorm_reviews';
+        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
 
     public function reviewsWithNewUni(){
         $reviews = TempReview::where('is_new_uni','=','1')->get();
         $temp_review_columns = Schema::getColumnListing('temp_reviews');
-
-        return view('/admin_reviews', compact('reviews','temp_review_columns'));
+        $type_of_review = 'new_uni_reviews';
+        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
     /*Use this and get rid of code but find out why it doesn't work
     public function generateReviews($reviews){
@@ -85,6 +86,43 @@ class AdminController extends Controller
         $id = strval($request->reviewId);
         $review = TempReview::find($id);
         $review->delete();
+    }
+
+    public function migrateTempReview(Request $request){
+        $request->all();
+
+        //
+        //$ans = implode(" ",$request->reviewsToMigrate);
+        $reviews_arr = $request->reviewsToMigrate;
+        $reviewType =  $request->typeOfReviews;
+        //$reviews_arr = (array) $reviews_arr;
+        
+        foreach ($reviews_arr as $reviewId) {
+            $public_review_column_names = Schema::getColumnListing('reviews');
+            $temp_review = TempReview::find($reviewId);
+            $public_review = new Review();
+            if($reviewType =='normal_reviews'){
+                foreach($public_review_column_names as $column_name){
+                    if($column_name =='review_id'){
+                        continue;
+                    }
+                    if($column_name =='date'){
+                        continue;
+                    }
+                  $public_review->$column_name = $temp_review->$column_name;
+               }
+
+            } else if($reviewType ==='new_dorm_reviews'){
+                return response()->json('not good',200);
+            } else{
+                return response()->json('nor this',200);
+            }
+            $public_review->save();
+        }
+        /**
+         * $public_review_column_names = implode(" ",$public_review_column_names);
+            return response()->json('normal'.$public_review_column_names,200);
+         */
     }
 
 
