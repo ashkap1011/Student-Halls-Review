@@ -34,23 +34,44 @@ class ReviewsController extends Controller
    
 
     public function createNewReview(Request $request){
-        
+           
+
         $temp_review = $this->appendReview($request);
         $temp_review->dorm_id = $request->input('dorm_id'); 
         $temp_review->save();
     }
 
     public function createReviewForNewUniOrDorm(Request $request){
-        
+        $request->validate([
+            'uni_name' => 'required',
+            'dorm_name' => 'required',
+        ]);
+
         $temp_review = $this->appendReview($request);
         $temp_review->uni_name = $request->input('uni_name');
         $temp_review->dorm_name = $request->input('dorm_name');
         $temp_review->save();
-
     }
 
     public function appendReview($request){
-        
+
+        $request->validate([//addminmaxvalues
+            'is_new_uni' => 'required|boolean',
+            'room_rating' => 'required|integer|between:1,5',
+            'building_rating' => 'required|integer|between:1,5',
+            'location_rating' => 'required|integer|between:1,5',
+            'bathroom_rating' => 'required|integer|between:1,5',
+            'staff_rating' => 'required|integer|between:1,5',
+            'is_recommended' => 'required|boolean',
+            'year_of_study' => 'required|string',
+            'year_of_residence' => 'required|integer',
+            'year_of_study' => 'required|string',
+            'is_catered' => 'required|boolean',
+            'catered_or_selfcatered_rating' => 'required|integer|between:1,5',
+            'amenities' => 'array',
+            'quirk' => 'nullable',
+            'review_text' => 'nullable',
+        ]);
         $temp_review = new TempReview();
         $temp_review->is_new_uni = $request->input('is_new_uni');
         $temp_review->room_rating = $request->input('room_rating');

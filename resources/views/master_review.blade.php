@@ -1,4 +1,4 @@
-@extends('master')
+@extends('layouts.master')
 
 @section('title', 'WriteReviews')
 
@@ -101,6 +101,9 @@
 
     <input type="submit" value="Submit">
 </form>
-use spellcheck attribute
 
+use spellcheck attribute
+@foreach ($errors->all() as $error)
+<li>{{ $error }}</li>
+@endforeach
 @endsection

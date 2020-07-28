@@ -1,6 +1,6 @@
-@extends('master')
+@extends('layouts.master')
 
-@section('title', 'WriteReviews')
+@section('title', 'Admin Panel')
 
 @section('content')
 

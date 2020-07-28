@@ -19,7 +19,7 @@
     
     @if ($isNewUni)
         <label for="uni_name">Uni Name</label>
-        <input type="text" id="uni_name" name="uni_name"> 
+        <input type="text" id="uni_name" name="uni_name" required> 
         <input type="text" id="is_new_uni" name="is_new_uni" value="1" hidden>
     @else
         <input type="text" id="is_new_uni" name="is_new_uni" value="0" hidden>
@@ -28,6 +28,6 @@
     
 
     <label for="dorm_name">Dorm Name</label>
-    <input type="text" id="dorm_name" name="dorm_name" value="">
+    <input type="text" id="dorm_name" name="dorm_name" value="" required>
     
 @endsection
