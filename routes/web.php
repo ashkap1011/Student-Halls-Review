@@ -35,5 +35,7 @@ Route::post('/update_temp_review', 'AdminController@updateTempReview');
 Route::post('/delete_temp_review','AdminController@deleteTempReview');
 Route::post('/migrate_temp_review','AdminController@migrateTempReviews');
 
+
+
 Auth::routes();
 

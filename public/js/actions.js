@@ -1,3 +1,16 @@
+
+/*
+$(document).ready(function(){
+    $("#button").click(function(){
+        alert("Data: ")
+        $(".fieldsets").show()
+      });
+});
+*/
+
+
+
+
 $(document).ready(function(){
     
     /*sets as deafualt the dorm being self catered 
@@ -12,7 +25,7 @@ $(document).ready(function(){
         $('.fieldsets').show();
     }
 
-    //takes care of the case where the user goes back from Add a Dorm hyperlink
+    //takes care of the case where the use goes back from Add a Dorm hyperlink
     if($('select#uni_name_drpdwn option:checked').val() !== ''){
         setDormSectionPerUniSelection();
     }
@@ -70,7 +83,7 @@ $(document).ready(function(){
         location.reload();
       });
       
-      //pushes reviews from temp_reviews to 
+      //pushes reviews from temp_reviews to public reviews
     $('#push_btn').click(function(){
         let reviewsToPush = $('input:checkbox:checked').map(function(){
             return $(this).attr('id').replace(/[^\d\.]/g, '');

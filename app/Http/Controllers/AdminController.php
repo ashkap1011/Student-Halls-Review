@@ -72,35 +72,15 @@ class AdminController extends Controller
     }*/
 
     public function updateTempReview(Request $request){
-        $messages =[
-            'required' =>'this is required'
-        ];
-        
-        $Validator = Validator::make(
-            $request->all(),
-            [
-                'value'=>'required|string',
-            ],
-            $messages
-            );
-
-
-            $id = strval($request->reviewId);
-            $column = strval($request->column);
-            $value = strval($request->value);
-
-            if($Validator->fails()){
-                $Response = ['fail'=>'not good son'];
-            }else{
-                $Response = ['success'=>'your action has been successful'.$id];
-            }
-               
-        
+       
+        $id = strval($request->reviewId);
+        $column = strval($request->column);
+        $value = strval($request->value);              
+                        
         $review = TempReview::find($id);
         $review->$column = $value;
         $review->save();
         
-        return response()->json($Response,200);
     }
 
     public function deleteTempReview(Request $request){
@@ -116,33 +96,33 @@ class AdminController extends Controller
         $reviewType =  $request->typeOfReviews;
         
         foreach ($reviews_arr as $reviewId) {
-            $temp_review = TempReview::find($reviewId);
+            $tempReview = TempReview::find($reviewId);
             if($reviewType =='new_dorm_reviews'){
-                $this->createNewDorm($temp_review);
+                $this->createNewDorm($tempReview);
             } 
             if($reviewType == 'new_uni_reviews'){
-                $this->createNewUni($temp_review);
+                $this->createNewUni($tempReview);
             }
             
-            $public_review = $this->mapTempReviewToPublicReview($temp_review);
-            $public_review->save();
+            $publicReview = $this->mapTempReviewToPublicReview($tempReview);
+            $publicReview->save();
         }
         
     }
 
     public function mapTempReviewToPublicReview($temp_review){
-        $public_review_column_names = Schema::getColumnListing('reviews');
-        $public_review = new Review();
-        foreach($public_review_column_names as $column_name){
-            if($column_name =='review_id'){
+        $publicReviewColumnNames = Schema::getColumnListing('reviews');
+        $publicReview = new Review();
+        foreach($publicReviewColumnNames as $columName){
+            if($columName =='review_id'){
                 continue;
             }
-            if($column_name =='date'){
+            if($columName =='date'){
                 continue;
             }
-          $public_review->$column_name = $temp_review->$column_name;
+          $publicReview->$columName = $temp_review->$columName;
        }
-       return $public_review;
+       return $publicReview;
 
     }
 
@@ -161,10 +141,15 @@ class AdminController extends Controller
     }
 
     public function createNewUni($temp_review){
+        $newUniName = $temp_review->uni_name;
+        
         $newUni = new University();
-        $newUni->uni_name= $temp_review->uni_name;
+        $newUni->uni_name= $newUniName;
         $newUni->save();
+        
+
         $this->createNewDorm($temp_review);
+
     }
 
     //set this on foriegn key!!

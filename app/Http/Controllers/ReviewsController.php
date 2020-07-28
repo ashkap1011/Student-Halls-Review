@@ -34,11 +34,10 @@ class ReviewsController extends Controller
    
 
     public function createNewReview(Request $request){
-           
 
-        $temp_review = $this->appendReview($request);
-        $temp_review->dorm_id = $request->input('dorm_id'); 
-        $temp_review->save();
+        $tempReview = $this->appendReview($request);
+        $tempReview->dorm_id = $request->input('dorm_id'); 
+        $tempReview->save();
     }
 
     public function createReviewForNewUniOrDorm(Request $request){
@@ -47,15 +46,15 @@ class ReviewsController extends Controller
             'dorm_name' => 'required',
         ]);
 
-        $temp_review = $this->appendReview($request);
-        $temp_review->uni_name = $request->input('uni_name');
-        $temp_review->dorm_name = $request->input('dorm_name');
-        $temp_review->save();
+        $tempReview = $this->appendReview($request);
+        $tempReview->uni_name = $request->input('uni_name');
+        $tempReview->dorm_name = $request->input('dorm_name');
+        $tempReview->save();
     }
 
     public function appendReview($request){
 
-        $request->validate([//addminmaxvalues
+        $request->validate([ //addminmaxvalues
             'is_new_uni' => 'required|boolean',
             'room_rating' => 'required|integer|between:1,5',
             'building_rating' => 'required|integer|between:1,5',
@@ -70,51 +69,54 @@ class ReviewsController extends Controller
             'catered_or_selfcatered_rating' => 'required|integer|between:1,5',
             'amenities' => 'array',
             'quirk' => 'nullable',
-            'review_text' => 'nullable',
+            'review_text' => 'nullable'
         ]);
-        $temp_review = new TempReview();
-        $temp_review->is_new_uni = $request->input('is_new_uni');
-        $temp_review->room_rating = $request->input('room_rating');
-        $temp_review->building_rating = $request->input('building_rating');
-        $temp_review->location_rating = $request->input('location_rating');
-        $temp_review->bathroom_rating = $request->input('bathroom_rating');
-        $temp_review->staff_rating = $request->input('staff_rating');
-        $temp_review->is_recommended = $request->input('is_recommended');
-        $temp_review->year_of_study = $request->input('year_of_study');
-        $temp_review->year_of_residence = $request->input('year_of_residence');
-        $temp_review->room_type = $request->input('room_type');
+
+        $tempReview = new TempReview();
+        $tempReview->is_new_uni = $request->input('is_new_uni');
+        $tempReview->room_rating = $request->input('room_rating');
+        $tempReview->building_rating = $request->input('building_rating');
+        $tempReview->location_rating = $request->input('location_rating');
+        $tempReview->bathroom_rating = $request->input('bathroom_rating');
+        $tempReview->staff_rating = $request->input('staff_rating');
+        $tempReview->is_recommended = $request->input('is_recommended');
+        $tempReview->year_of_study = $request->input('year_of_study');
+        $tempReview->year_of_residence = $request->input('year_of_residence');
+        $tempReview->room_type = $request->input('room_type');
                 
-        $temp_review->is_catered = $request->input('is_catered');
-        $temp_review->catered_or_selfcatered_rating = $request->input('catered_or_selfcatered_rating');
+        $tempReview->is_catered = $request->input('is_catered');
+        $tempReview->catered_or_selfcatered_rating = $request->input('catered_or_selfcatered_rating');
 
-        $has_amenities = $request->input('amenities');
+        $hasAmenities = $request->input('amenities');
 
-        if($has_amenities  !== null){
-            $temp_review->amenities = implode(',',$has_amenities);
+        if($hasAmenities  !== null){
+            $tempReview->amenities = implode(',',$hasAmenities);
         }
-        $temp_review->quirk = $request->input('quirk');
-        $temp_review->review_text = $request->input('review_text');
+        $tempReview->quirk = $request->input('quirk');
+        $tempReview->review_text = $request->input('review_text');
 
-        return $temp_review;
+        return $tempReview;
     }
 
 
     public function dormsOnUniSelection($uni_name){
-        $uni_id = University::where('uni_name', strval($uni_name))->value('uni_id');
-        $dorms_of_uni = Dorm::where('uni_id', strval($uni_id))->get();   
+        $uniId = University::where('uni_name', strval($uni_name))->value('uni_id');
+        $dormsOfUni = Dorm::where('uni_id', strval($uniId))->get();   
 
-        $dorm_name_arr= array();
-        foreach($dorms_of_uni as $dorm){
-            array_push($dorm_name_arr, strval($dorm->dorm_name));
+        $dormNames= array();
+        foreach($dormsOfUni as $dorm){
+            array_push($dormNames, strval($dorm->dorm_name));
         }
-        return $dorm_name_arr;
+        return $dormNames;
     }
 
     public function dormNameToId($dorm_name){
-        $dorm_id = Dorm::where('dorm_name', strval($dorm_name))->value('dorm_id');
+        $dormId = Dorm::where('dorm_name', strval($dorm_name))->value('dorm_id');
         
-        return $dorm_id;
+        return $dormId;
     }
+
+    
 
 
     

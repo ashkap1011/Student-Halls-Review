@@ -74,9 +74,6 @@
         <label for="is_catered_yes">Yes</label>
         <input type="radio" id="is_catered_no" name="is_catered" value="0">
         <label for="is_catered_no">No</label><br>
-    </fieldset>   
-
-    <fieldset>
         <label for="catered_or_selfcatered_rating" id="catered_selfcatered_label"></label>
         <input type="number" class="star_ratings" id="catered_or_selfcatered_rating" name="catered_or_selfcatered_rating"  min="1" max="5"><br>
     </fieldset>
@@ -95,15 +92,16 @@
     <textarea name="quirk" rows="1" cols="30" placeholder="Any quirks?"> </textarea>
     <br><br> Text
     <textarea name="review_text" rows="10" cols="30" placeholder="Any quirks?"> </textarea>
+    <input type="submit" value="Submit">
+
     </fieldset>
     
     @csrf
 
-    <input type="submit" value="Submit">
 </form>
 
 use spellcheck attribute
-@foreach ($errors->all() as $error)
-<li>{{ $error }}</li>
-@endforeach
+ @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
 @endsection
