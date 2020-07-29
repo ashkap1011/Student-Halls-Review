@@ -1,16 +1,3 @@
-
-/*
-$(document).ready(function(){
-    $("#button").click(function(){
-        alert("Data: ")
-        $(".fieldsets").show()
-      });
-});
-*/
-
-
-
-
 $(document).ready(function(){
     
     /*sets as deafualt the dorm being self catered 
@@ -95,13 +82,33 @@ $(document).ready(function(){
             reviewsToMigrate: reviewsToPush,
             typeOfReviews: reviewType
         });
-
+       
 
     });
 
-    
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    });
+        
+
+    $('#search').on('keyup',function(){
+        console.log('yes')
+        $value=$(this).val();
+        $.ajax({
+            type : 'get',
+            url : '/search',
+            data:{'search':$value},
+            success:function(data){
+            $('.search_results').html(data);
+            }
+        });   
+    });
 
 });
+
 
 function updateReview(button){
     let tableDataElement = $(button).parent()
@@ -119,9 +126,6 @@ function updateReview(button){
     );
     location.reload();
 }
-
-
-
 
 
 function setDormSectionPerUniSelection(){
@@ -150,7 +154,7 @@ function setDormIdFormElement(dormName){
         $('#dorm_id').val(data);
     });
 }
-
+    
 
 
 

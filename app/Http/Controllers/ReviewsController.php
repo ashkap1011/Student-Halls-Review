@@ -32,7 +32,6 @@ class ReviewsController extends Controller
     }
 
    
-
     public function createNewReview(Request $request){
 
         $tempReview = $this->appendReview($request);

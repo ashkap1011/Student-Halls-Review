@@ -18,13 +18,36 @@
             @endauth
         </div>
     @endif
+</div>
 
     <div class="content">
         <div class="title m-b-md">
-            Laravelhi
+            <a href="/add/new-review"> write a review</a><br>
+            
+            <div class="search">
+                <div class="search_bar">
+                    <input type="text" class="form-controller" id="search" name="search">
+                </div>
+                <div class="search_results">
 
+                </div>
+
+            <!----
+        <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+        <th>name</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    -->
+
+            Laravelhi
         </div>
     </div>
-</div>
-        @endsection
+    </div>
+    
+@endsection
 
