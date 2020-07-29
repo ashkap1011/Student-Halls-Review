@@ -93,7 +93,6 @@ $(document).ready(function(){
         }
     });
         
-
     $('#search').on('keyup',function(){
         console.log('yes')
         $value=$(this).val();
@@ -154,7 +153,8 @@ function setDormIdFormElement(dormName){
         $('#dorm_id').val(data);
     });
 }
-    
+
+
 
 
 

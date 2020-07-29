@@ -26,25 +26,13 @@
             
             <div class="search">
                 <div class="search_bar">
-                    <input type="text" class="form-controller" id="search" name="search">
+                    <input type="text" class="form-controller" id="search" name="search" autocomplete="off">
                 </div>
                 <div class="search_results">
 
                 </div>
 
-            <!----
-        <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-        <th>name</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-        </table>
-    -->
-
-            Laravelhi
+                Laravelhi
         </div>
     </div>
     </div>
