@@ -1,3 +1,5 @@
+//const { toArray, create } = require("lodash");
+//don't know why the above function exists
 $(document).ready(function(){
     
     /*sets as deafualt the dorm being self catered 
@@ -152,6 +154,44 @@ function setDormIdFormElement(dormName){
     $.get('/dormNameToId/' + dormName, function(data){
         $('#dorm_id').val(data);
     });
+}
+
+function initMap(){
+    
+    $.getJSON('/map_add_data',function(markers){
+        createMap(markers)
+    })
+}
+var map;
+
+function createMap(markers){
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(-33.863276, 151.207977),
+          zoom: 12
+    });           
+    
+    for(var i = 0; i < markers.length; i++){
+        addMarker(markers[i]);
+    }
+}
+
+function addMarker(marker){
+
+    var name = marker.name;
+    var address = marker.address;
+    
+    var markerLatLng = new google.maps.LatLng(parseFloat(marker.lat),parseFloat(marker.lng));
+    var html= '<b>' + name +'</b>' + '<p>' + address +"</p>"
+    var mark = new google.maps.Marker({
+            map: map,
+            position: markerLatLng 
+    });
+
+    var infoWindow = new google.maps.InfoWindow;
+        google.maps.event.addListener(mark, 'click', function(){
+            infoWindow.setContent(html);
+            infoWindow.open(map, mark);
+        });
 }
 
 
