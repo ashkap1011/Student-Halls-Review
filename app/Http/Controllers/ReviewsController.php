@@ -11,17 +11,13 @@ class ReviewsController extends Controller
 {   
     public function writeReview(){
         $universities = University::all();
-        $amenities = array('common_area', 'games','outdoor_area','elevator'
-    ,'communal_kitchen','catering','private_bathroom'
-    , 'social_events','mature_students_only');
+        $amenities = config('constants.options.amenities');
         return view('review', compact('universities','amenities'));
     }
 
 
     public function newUniOrDormReviewPage($uni_name){
-        $amenities = array('common_area', 'games','outdoor_area','elevator'
-    ,'communal_kitchen','catering','private_bathroom'
-    , 'social_events','mature_students_only');
+        $amenities = config('constants.options.amenities');
 
         $isNewUni =false;
         if ($uni_name == '-'){
@@ -70,7 +66,7 @@ class ReviewsController extends Controller
             'quirk' => 'nullable',
             'review_text' => 'nullable'
         ]);
-
+        //todo make this neater using a constants.php thing
         $tempReview = new TempReview();
         $tempReview->is_new_uni = $request->input('is_new_uni');
         $tempReview->room_rating = $request->input('room_rating');

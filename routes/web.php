@@ -37,11 +37,7 @@ Route::post('/migrate_temp_review','AdminController@migrateTempReviews');
 Route::get('/search', 'PageController@search');
 Route::get('/{uniName}/dorms', 'PageController@createDormsForUni');
 
-Route::get('/map_test', 'MapController@index');
-Route::get('/map_add_data','MapController@addData');
-
-
-
+Route::get('/testset', 'PageController@getDormsPerFilters');
 
 Auth::routes();
 

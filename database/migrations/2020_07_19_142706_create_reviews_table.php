@@ -16,7 +16,7 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('review_id');
             $table->integer('dorm_id')->unsigned();
-            $table->foreign('dorm_id')->references('dorm_id')->on('dorms');
+            $table->foreign('dorm_id')->references('dorm_id')->on('dorms')->onDelete('cascade');
 
             //5 star ratings
             $table->tinyInteger('room_rating');
@@ -39,9 +39,8 @@ class CreateReviewsTable extends Migration
 
             $table->string('review_text', 400)->nullable();
 
-            $table->string('date',40)->nullable();
+            $table->string('created_at',63)->nullable();
             
-
         });
         
     }

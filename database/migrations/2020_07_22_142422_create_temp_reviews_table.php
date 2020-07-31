@@ -20,7 +20,7 @@ class CreateTempReviewsTable extends Migration
             $table->string('dorm_name',100)->nullable();
 
             $table->integer('dorm_id')->nullable()->unsigned();
-            $table->foreign('dorm_id')->references('dorm_id')->on('dorms');
+            $table->foreign('dorm_id')->references('dorm_id')->on('dorms')->onDelete('cascade');
 
          //5 star ratings
             $table->tinyInteger('room_rating');
@@ -42,6 +42,14 @@ class CreateTempReviewsTable extends Migration
             $table->string('quirk', 50)->nullable();
 
             $table->string('review_text', 400)->nullable();
+            /**if the user inputs a new uni there will also be a new dorm hence two locations */
+            $table->string('uni_address',100)->nullable();
+            $table->float('uni_lat', 10, 6)->nullable();
+            $table->float('uni_lng', 10, 6)->nullable();
+
+            $table->string('dorm_address',100)->nullable();
+            $table->float('dorm_lat', 10, 6)->nullable();
+            $table->float('dorm_lng', 10, 6)->nullable();
 
             $table->timestamps();
         });

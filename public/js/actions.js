@@ -8,7 +8,7 @@ $(document).ready(function(){
     */
 
     $('#catered_selfcatered_label').text('Communal Kitchen rating')
-    $('#communal_kitchen').prop('checked', true);
+    $('.fieldsets #communal_kitchen').prop('checked', true);
 
     if($('#dorm_id').html() == null){
         $('.fieldsets').show();
@@ -128,7 +128,6 @@ function updateReview(button){
     location.reload();
 }
 
-
 function setDormSectionPerUniSelection(){
     let uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
         $.get('/dormsForUni/' + uniName, function(data){
@@ -156,28 +155,28 @@ function setDormIdFormElement(dormName){
     });
 }
 
+/**Creates Map and fills it with markers of the uni and its dorms 
+ * uni and dorms are defined in the relevant blade.php script tags.
+*/
+
 function initMap(){
     
-    $.getJSON('/map_add_data',function(markers){
-        createMap(markers)
-    })
-}
-var map;
-
-function createMap(markers){
     map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(-33.863276, 151.207977),
+        center: new google.maps.LatLng(uni.lat, uni.lng),
           zoom: 12
-    });           
+    });
+    createMarkers(dorms,map)
     
-    for(var i = 0; i < markers.length; i++){
-        addMarker(markers[i]);
+}
+    
+function createMarkers(dorms,map){       
+    for(var i = 0; i < dorms.length; i++){
+        addMarker(dorms[i],map);
     }
 }
 
-function addMarker(marker){
-
-    var name = marker.name;
+function addMarker(marker,map){
+    var name = marker.dorm_name;
     var address = marker.address;
     
     var markerLatLng = new google.maps.LatLng(parseFloat(marker.lat),parseFloat(marker.lng));
@@ -193,6 +192,58 @@ function addMarker(marker){
             infoWindow.open(map, mark);
         });
 }
+
+
+//This document refers to Dorms upons Uni selection
+$(document).ready(function(){
+    $('#amenity_filters').click(function(){
+        let amenitiesSelected = $('input:checkbox:checked').map(function(){
+            return $(this).attr('id')
+        }).get(); 
+        
+        //get reviews per dorm id 
+        
+        //maturestudentonly,catering, communal kitchen, common area, elevator
+        //private bathroom
+    });
+    //maybe check object
+    $('#sorting_options').click(function(){
+        let selected = $('input[type=radio][name=sort_by]:checked').val()
+        var dormsForSorting = JSON.parse(JSON.stringify(dorms))
+        if(selected === 'name'){
+            dormsForSorting.sort(getSortOrder('dorm_name'))
+            $('#dorms_div').empty();
+            for(var dorm in dormsForSorting){
+                $('#dorms_div').append('<p>' +dormsForSorting[dorm].dorm_name + '</p>')
+            }
+        }
+        if(selected === 'rating'){
+            //amke ajax query
+        }
+        if(selected == 'date'){
+            $('#dorms_div').empty();
+            for(var dorm in dorms){
+                $('#dorms_div').append('<p>' +dorms[dorm].dorm_name + '</p>')
+            }
+        }
+
+    })
+
+
+});
+
+function getSortOrder(prop) {    
+    return function(a, b) {    
+        if (a[prop] > b[prop]) {    
+            return 1;    
+        } else if (a[prop] < b[prop]) {    
+            return -1;    
+        }    
+        return 0;    
+    }    
+}
+
+
 
 
 

@@ -62,6 +62,7 @@ class AdminController extends Controller
         $type_of_review = 'new_uni_reviews';
 
         $temp_review_columns = Schema::getColumnListing('temp_reviews');
+        
         return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
     /*Use this and get rid of code but find out why it doesn't work
@@ -72,7 +73,6 @@ class AdminController extends Controller
     }*/
 
     public function updateTempReview(Request $request){
-       
         $id = strval($request->reviewId);
         $column = strval($request->column);
         $value = strval($request->value);              
@@ -97,66 +97,75 @@ class AdminController extends Controller
         
         foreach ($reviews_arr as $reviewId) {
             $tempReview = TempReview::find($reviewId);
+            /*if review contains a new dorm or uni then it will first 
+            add the new dorm/uni to table before saving the review
+            */
             if($reviewType =='new_dorm_reviews'){
                 $this->createNewDorm($tempReview);
             } 
             if($reviewType == 'new_uni_reviews'){
                 $this->createNewUni($tempReview);
             }
-            
             $publicReview = $this->mapTempReviewToPublicReview($tempReview);
             $publicReview->save();
+            $lastInsertedReview = $publicReview->id;
+            $this->updateDormStatistics($lastInsertedReview);
         }
         
     }
 
-    public function mapTempReviewToPublicReview($temp_review){
+    public function mapTempReviewToPublicReview($tempReview){
         $publicReviewColumnNames = Schema::getColumnListing('reviews');
         $publicReview = new Review();
         foreach($publicReviewColumnNames as $columName){
             if($columName =='review_id'){
                 continue;
             }
-            if($columName =='date'){
-                continue;
-            }
-          $publicReview->$columName = $temp_review->$columName;
+          $publicReview->$columName = $tempReview->$columName;
        }
        return $publicReview;
-
     }
+    /**
+     * Creates new dorm record using info from $temp_review
+     */
 
-    public function createNewDorm($temp_review){
-        
-        $uniNameFromReview = $temp_review->uni_name;
-        $newDormName = $temp_review->dorm_name;
-
+     //create fail safe where if user doesn't add new uni
+    public function createNewDorm($tempReview){
+        $uniNameFromReview = $tempReview->uni_name;
+        $newDormName = $tempReview->dorm_name;
         $uniIdFromUniversities = University::where('uni_name',$uniNameFromReview)->value('uni_id');
         $newDorm = new Dorm();
         $newDorm->uni_id = $uniIdFromUniversities;
         $newDorm->dorm_name = $newDormName;
+        $newDorm->address= $tempReview->dorm_address;
+        $newDorm->lat= $tempReview->dorm_lat;
+        $newDorm->lng= $tempReview->dorm_lng;
         $newDorm->save();
-
-        $temp_review->dorm_id = Dorm::where('dorm_name', strval($newDormName))->value('dorm_id');
+        $tempReview->dorm_id = Dorm::where('dorm_name', strval($newDormName))->value('dorm_id');
     }
 
-    public function createNewUni($temp_review){
-        $newUniName = $temp_review->uni_name;
-        
+    public function createNewUni($tempReview){
+        $newUniName = $tempReview->uni_name;
         $newUni = new University();
         $newUni->uni_name= $newUniName;
+        $newUni->address= $tempReview->uni_address;
+        $newUni->lat= $tempReview->uni_lat;
+        $newUni->lng= $tempReview->uni_lng;
         $newUni->save();
-        
 
-        $this->createNewDorm($temp_review);
+        $this->createNewDorm($tempReview);
 
     }
 
-    //set this on foriegn key!!
-    //->onDelete('cascade');
-    //https://stackoverflow.com/questions/26437342/laravel-migration-best-way-to-add-foreign-key
-//read this cos apparently there is another way
 
+    public function updateDormStatistics($reviewId){
+        //get dorm id from review id, then add 
+
+
+        //return response()->json(array('success' => true, 'POOOOOOOP' => $newDorm->review_id), 200);
+    
+    
+    }
 
 
 }

@@ -16,14 +16,21 @@ class CreateDormsTable extends Migration
         Schema::create('dorms', function (Blueprint $table) {
             $table->increments('dorm_id');
             $table->integer('uni_id')->unsigned();
-            $table->foreign('uni_id')->references('uni_id')->on('universities');
-
-            
-            $table->string('dorm_name', 100);
-            $table->timestamps();
-
-           
-
+            $table->foreign('uni_id')->references('uni_id')->on('universities')->onDelete('cascade');           
+            $table->string('dorm_name', 127)->unique();
+            $table->tinyInteger('average_rating');
+            $table->smallInteger('reviews_count');
+            $table->boolean('has_common_area');
+            $table->boolean('has_games');
+            $table->boolean('has_outdoor_area');
+            $table->boolean('has_elevator');
+            $table->boolean('has_communal_kitchen');
+            $table->boolean('has_private_bathroom');
+            $table->boolean('has_social_events');
+            $table->boolean('has_mature_students_only');
+            $table->string('address',127);
+            $table->float('lat', 10, 6);
+            $table->float('lng', 10, 6);         
         });
       
     }

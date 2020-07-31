@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Config;
 use App\Dorm;
 use App\University;
 use Illuminate\Http\Request;
@@ -29,10 +29,19 @@ class PageController extends Controller
     }
 
     public function createDormsForUni($uniName){
-        $uniId = University::where('uni_name',strval($uniName))->value('uni_id');
-        $dorms = Dorm::where('uni_id',strval($uniId))->get();
-
-        return view('/dorms_for_uni', compact('dorms','uniName'));
+        $uni = University::where('uni_name',strval($uniName))->first();
+        $uniId = strval($uni->uni_id);
+        $dorms = Dorm::where('uni_id',$uniId)->get();
+        $amenities = config('constants.options.amenities');
+        return view('/dorms_for_uni', compact('dorms','uni','amenities'));
         //return view showing all dorms and filter list
     }
+
+    public function getDormsPerFilters(){
+       $dorms = Dorm::where('amenities','communal_kitchen')->get();
+       print_r($dorms);
+    }
+
+
+
 }
