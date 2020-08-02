@@ -19,6 +19,7 @@ class CreateUniversitiesTable extends Migration
             $table->string('address',127);
             $table->float('lat', 10, 6);
             $table->float('lng', 10, 6);
+            $table->boolean('has_intercollegiate_dorms');
         });
         
     }

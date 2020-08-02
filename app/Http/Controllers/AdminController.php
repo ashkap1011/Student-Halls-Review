@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Dorm;
+use App\IntercollegiateDorm;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Http\Request;
 use App\TempReview;
@@ -80,7 +81,6 @@ class AdminController extends Controller
         $review = TempReview::find($id);
         $review->$column = $value;
         $review->save();
-        
     }
 
     public function deleteTempReview(Request $request){
@@ -88,6 +88,7 @@ class AdminController extends Controller
         $id = strval($request->reviewId);
         $review = TempReview::find($id);
         $review->delete();
+
     }
 
     public function migrateTempReviews(Request $request){
@@ -118,7 +119,7 @@ class AdminController extends Controller
         $publicReviewColumnNames = Schema::getColumnListing('reviews');
         $publicReview = new Review();
         foreach($publicReviewColumnNames as $columName){
-            if($columName =='review_id'){
+            if($columName =='id'){
                 continue;
             }
           $publicReview->$columName = $tempReview->$columName;
@@ -133,39 +134,170 @@ class AdminController extends Controller
     public function createNewDorm($tempReview){
         $uniNameFromReview = $tempReview->uni_name;
         $newDormName = $tempReview->dorm_name;
-        $uniIdFromUniversities = University::where('uni_name',$uniNameFromReview)->value('uni_id');
-        $newDorm = new Dorm();
-        $newDorm->uni_id = $uniIdFromUniversities;
-        $newDorm->dorm_name = $newDormName;
-        $newDorm->address= $tempReview->dorm_address;
-        $newDorm->lat= $tempReview->dorm_lat;
-        $newDorm->lng= $tempReview->dorm_lng;
-        $newDorm->save();
-        $tempReview->dorm_id = Dorm::where('dorm_name', strval($newDormName))->value('dorm_id');
+        $uniOfReview = University::where('uni_name',$uniNameFromReview)->first();
+        $uniIdOfReview = $uniOfReview->uni_id;
+        if(!Dorm::where('dorm_name',$newDormName)->exists()){
+            echo 'dormnmae not previously existing';
+            $newDorm = new Dorm();
+            $newDorm->uni_id = $uniIdOfReview;
+            $newDorm->dorm_name = $newDormName;
+            $newDorm->reviews_count = 0;    //will be changed after review is inputted
+            $newDorm->overall_rating= 0;
+            foreach(config('constants.options.amenities') as $amenity) {
+                $amenity = 'has_'.$amenity;
+                $newDorm->$amenity = 0;
+            }  
+            $newDorm->address= $tempReview->dorm_address;
+            $newDorm->lat= $tempReview->dorm_lat;
+            $newDorm->lng= $tempReview->dorm_lng;
+            $newDorm->save();
+        } else{
+            echo'dorm previously found being executed';
+            $dorm = Dorm::where('dorm_name', $newDormName)->first();
+            //dorm name might exist but for a diff uni or dorm exists for a same uni (same query)
+            //if same uni then set dorm_id to the existing dorm (like below)
+            //if not same uni based on uni_id then add to intercollegiate and return dorm id as before
+            //therefore when adding review it will go for the same uni. 
+        
+            /*if dorm is for the same uni, this scenario would occur when several 
+            users enter review for the same new dorm - caused by delay in pushing reviews to the public which 
+            would mean users can't access dorms for which people have made reviews already*/
+            $existingDormUniId = $dorm->uni_id;
+            $existingDormId= $dorm->dorm_id;
+            //this means same dorm but new uni- i.e. intercollegiate dorm.
+            if($existingDormUniId != $uniIdOfReview){   //i.e. uni_id of dorm in public and uni_id of review so must be intercollegiate
+                $intercollegiateDorm = IntercollegiateDorm::where('dorm_id',$existingDormId)->first();
+                if($intercollegiateDorm == null){
+                    echo 'intercollegiate for dorm doesn"t exist';
+                    $interClgtDorm = new IntercollegiateDorm(); 
+                    $interClgtDorm->dorm_id = $existingDormId;
+                    $interClgtDorm->uni_id_set = [$existingDormUniId,$uniIdOfReview];
+                    $interClgtDorm ->save();
+                    $uniOfReview->has_intercollegiate_dorms = '1';
+                    $uniOfReview->save();
+                    $uniOfExistingDorm = University::where('uni_id',$existingDormUniId )->first();
+                    $uniOfExistingDorm->has_intercollegiate_dorms = '1';
+                    $uniOfExistingDorm->save();
+                   //maybe consider having is_intercollegiate in Dorm thing.
+                } else{
+                    echo 'where the money is';
+                    $intClgtUniIdSets = $intercollegiateDorm->uni_id_set;
+                    array_push($intClgtUniIdSets, $uniIdOfReview);
+                    $intercollegiateDorm->uni_id_set= $intClgtUniIdSets;
+                    $intercollegiateDorm->save();
+                    $uniOfReview->has_intercollegiate_dorms = '1';
+                    $uniOfReview->save();
+                }      
+            }         
+
+        }
+        $tempReview->dorm_id = Dorm::where('dorm_name', $newDormName)->value('dorm_id');
+        
+        
+        /**need to see if perhaps intercollegiate, i.e. dorm name exists twice but for diff uni,
+        *so iterate through all dorms where dorm_name is $newdormName. but give the one that has 
+            sameuninameintemp then when displaying dorms, check if uni/dorm exists in
+            this table, if so then shows it as Dorm-name (intercollegiate) and append rest of the reviews 
+            for that dorm onto it. 
+            here return the dorm which has same uni_name from temp review, also check if it returns a collection or what. 
+        */ 
+        //here if user enters same dorm name but gives it diff 
+
+        
     }
 
     public function createNewUni($tempReview){
         $newUniName = $tempReview->uni_name;
+        if(!University::where('uni_name',$newUniName)->exists()){
         $newUni = new University();
         $newUni->uni_name= $newUniName;
         $newUni->address= $tempReview->uni_address;
         $newUni->lat= $tempReview->uni_lat;
         $newUni->lng= $tempReview->uni_lng;
+        $newUni->has_intercollegiate_dorms = '0';
         $newUni->save();
-
+        }
         $this->createNewDorm($tempReview);
 
     }
 
-
     public function updateDormStatistics($reviewId){
-        //get dorm id from review id, then add 
-
-
+        $dormId = Review::where('id',$reviewId)->value('dorm_id');
+        $dorm = Dorm::where('dorm_id',$dormId)->first();
+        $newReviewRating = $this->overallReviewRating($reviewId);
+        $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
+        $dorm->increment('reviews_count');
+        $newOverallDormRating= ($currSumOfDormRating + $newReviewRating) / (float) $dorm->reviews_count;
+       
+        $dorm->overall_rating = $newOverallDormRating;
+        $dorm->save();
+        $this->updateDormAmenities($dorm,$reviewId);
+                //get current overallreview rating =0, times number of review => +new rating/incremented thing
         //return response()->json(array('success' => true, 'POOOOOOOP' => $newDorm->review_id), 200);
     
-    
     }
+
+    public function overallReviewRating($reviewId){
+        $review = Review::where('id',$reviewId)->first();
+        $starRatings = config('constants.options.starRatings');
+        $sum =0;
+        foreach($starRatings as $rating){
+            $sum+=$review->$rating;
+        }
+        return $sum/(float) sizeof($starRatings);
+    }
+
+    public function updateDormAmenities($dorm,$reviewId){
+        $reviewCount = $dorm->reviews_count;
+        if($reviewCount > 2){
+                $amenityArray = $this->createZeroValueAmenityArray();
+                $reviews = Review::where('dorm_id',$dorm->dorm_id)->get();
+                foreach($reviews as $review){
+                    $reviewAmenitiesArr = explode(',',$review->amenities);
+                    foreach($reviewAmenitiesArr as $reviewAmenity){
+                        $amenityArray[$reviewAmenity]++;
+                    }
+                }
+                $this->validateAndUpdateHasAmenities($dorm,$amenityArray);
+            //iterate through all reviews per dorm id and count number of review 
+        } else{
+            
+            $review = Review::where('id',$reviewId)->first();
+            $amenitiesFromReview = $review->amenities;
+            $amenitiesArray = explode(',',$amenitiesFromReview);
+            foreach($amenitiesArray as $amenity){
+                $amenityName = 'has_'.$amenity;
+                $dorm->$amenityName = '1';
+            }   $dorm->save();
+
+        }
+
+    }
+
+    public function createZeroValueAmenityArray(){
+        $amenityArray = array();
+        $size=count(config('constants.options.amenities')); 
+
+        for ($i = 0; $i < $size; $i++) {
+            $amenityArray[config('constants.options.amenities')[$i]] = 0;
+          }
+        return $amenityArray;   
+    }
+
+    public function validateAndUpdateHasAmenities($dorm,$amenitiesArray){
+        
+        foreach($amenitiesArray as $key =>$value){
+            $hasAmenityName = 'has_'.$key;
+            if(3*$value >= $dorm->reviews_count){   //a third or more say the dorm has the Amenity
+                $dorm->$hasAmenityName = '1';
+            } else{
+                $dorm->$hasAmenityName = '0';
+            }
+        }   $dorm->save();
+
+    }
+
+    
 
 
 }

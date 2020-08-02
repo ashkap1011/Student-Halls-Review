@@ -18,9 +18,10 @@ class CreateDormsTable extends Migration
             $table->integer('uni_id')->unsigned();
             $table->foreign('uni_id')->references('uni_id')->on('universities')->onDelete('cascade');           
             $table->string('dorm_name', 127)->unique();
-            $table->tinyInteger('average_rating');
+            $table->float('overall_rating', 6, 5);
             $table->smallInteger('reviews_count');
             $table->boolean('has_common_area');
+            $table->boolean('has_catering');
             $table->boolean('has_games');
             $table->boolean('has_outdoor_area');
             $table->boolean('has_elevator');
@@ -32,7 +33,6 @@ class CreateDormsTable extends Migration
             $table->float('lat', 10, 6);
             $table->float('lng', 10, 6);         
         });
-      
     }
 
     /**

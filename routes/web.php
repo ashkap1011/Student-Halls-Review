@@ -39,5 +39,10 @@ Route::get('/{uniName}/dorms', 'PageController@createDormsForUni');
 
 Route::get('/testset', 'PageController@getDormsPerFilters');
 
+//https://stackoverflow.com/questions/22279435/what-does-mass-assignment-mean-in-laravel
+//!!!!!!!!!!!!!!!!!! really important for security.
+
+
+
 Auth::routes();
 
