@@ -32,6 +32,11 @@
     <p>{{$dorm->dorm_name}}</p>
 @endforeach
 
+@foreach($intrclgtDorms as $dorm)
+<p>{{$dorm->dorm_name}}</p>
+@endforeach
+</div>
+
 
     <style>
     /* Set the size of the div element that contains the map */
@@ -46,7 +51,8 @@
   <div id="map"></div>
 <script>
    var dorms = {!! json_encode($dorms, JSON_HEX_TAG) !!}
-   console.log(dorms)
+   var interCollegiateDorms = {!! json_encode($intrclgtDorms, JSON_HEX_TAG) !!}
+   console.log(interCollegiateDorms)
    var uni = {!! json_encode($uni, JSON_HEX_TAG) !!}
 </script>
 <!--

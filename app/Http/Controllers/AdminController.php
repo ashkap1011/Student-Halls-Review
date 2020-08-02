@@ -129,8 +129,6 @@ class AdminController extends Controller
     /**
      * Creates new dorm record using info from $temp_review
      */
-
-     //create fail safe where if user doesn't add new uni
     public function createNewDorm($tempReview){
         $uniNameFromReview = $tempReview->uni_name;
         $newDormName = $tempReview->dorm_name;
@@ -154,10 +152,6 @@ class AdminController extends Controller
         } else{
             echo'dorm previously found being executed';
             $dorm = Dorm::where('dorm_name', $newDormName)->first();
-            //dorm name might exist but for a diff uni or dorm exists for a same uni (same query)
-            //if same uni then set dorm_id to the existing dorm (like below)
-            //if not same uni based on uni_id then add to intercollegiate and return dorm id as before
-            //therefore when adding review it will go for the same uni. 
         
             /*if dorm is for the same uni, this scenario would occur when several 
             users enter review for the same new dorm - caused by delay in pushing reviews to the public which 
@@ -168,6 +162,7 @@ class AdminController extends Controller
             if($existingDormUniId != $uniIdOfReview){   //i.e. uni_id of dorm in public and uni_id of review so must be intercollegiate
                 $intercollegiateDorm = IntercollegiateDorm::where('dorm_id',$existingDormId)->first();
                 if($intercollegiateDorm == null){
+                    //creates intercollegiate dorm and adds uni ids of both review and existing dorm universities to uni_id_sets, and updates both universtiesi has_intercollegiate_dorms to true;
                     echo 'intercollegiate for dorm doesn"t exist';
                     $interClgtDorm = new IntercollegiateDorm(); 
                     $interClgtDorm->dorm_id = $existingDormId;
@@ -178,8 +173,9 @@ class AdminController extends Controller
                     $uniOfExistingDorm = University::where('uni_id',$existingDormUniId )->first();
                     $uniOfExistingDorm->has_intercollegiate_dorms = '1';
                     $uniOfExistingDorm->save();
-                   //maybe consider having is_intercollegiate in Dorm thing.
-                } else{
+                    
+                   
+                } else{//adds to existing intercollegiate dorm the uni of the review and updates the uni's has_intercollegate_dorms field to true;
                     echo 'where the money is';
                     $intClgtUniIdSets = $intercollegiateDorm->uni_id_set;
                     array_push($intClgtUniIdSets, $uniIdOfReview);
@@ -274,6 +270,7 @@ class AdminController extends Controller
 
     }
 
+    //create assoc array where all amenities have zero value
     public function createZeroValueAmenityArray(){
         $amenityArray = array();
         $size=count(config('constants.options.amenities')); 
@@ -283,6 +280,7 @@ class AdminController extends Controller
           }
         return $amenityArray;   
     }
+
 
     public function validateAndUpdateHasAmenities($dorm,$amenitiesArray){
         

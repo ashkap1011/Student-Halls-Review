@@ -194,8 +194,10 @@ function addMarker(marker,map){
 }
 
 
-//This document refers to Dorms upons Uni selection
+//This document refers to Dorms upon Uni selection i.e. dorms_for_uni.blade.php
 $(document).ready(function(){
+    var alldorms = dorms.concat(interCollegiateDorms)
+    console.log(alldorms)
     $('#amenity_filters').click(function(){
         let amenitiesSelected = $('input:checkbox:checked').map(function(){
             return $(this).attr('id')
@@ -209,7 +211,7 @@ $(document).ready(function(){
     //maybe check object
     $('#sorting_options').click(function(){
         let selected = $('input[type=radio][name=sort_by]:checked').val()
-        var dormsForSorting = JSON.parse(JSON.stringify(dorms))
+        var dormsForSorting = JSON.parse(JSON.stringify(dorms)) //dorms is defined in php file
         if(selected === 'name'){
             dormsForSorting.sort(getSortOrder('dorm_name'))
             $('#dorms_div').empty();
@@ -231,6 +233,7 @@ $(document).ready(function(){
 
 
 });
+
 
 function getSortOrder(prop) {    
     return function(a, b) {    

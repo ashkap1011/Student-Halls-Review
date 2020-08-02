@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Config;
 use App\Dorm;
+use App\IntercollegiateDorm;
 use App\University;
 use Illuminate\Http\Request;
 
@@ -33,13 +34,33 @@ class PageController extends Controller
         $uniId = strval($uni->uni_id);
         $dorms = Dorm::where('uni_id',$uniId)->get();
         $amenities = config('constants.options.amenities');
-        return view('/dorms_for_uni', compact('dorms','uni','amenities'));
+        $intrclgtDorms = [];
+        if($uni->has_intercollegiate_dorms =='1'){
+            $intrclgtDorms= $this->appendIntercollegiateDorms($dorms,$uni->uni_id);
+            
+
+        }
+        return view('/dorms_for_uni', compact('dorms','uni','amenities','intrclgtDorms'));
         //return view showing all dorms and filter list
     }
 
     public function getDormsPerFilters(){
        $dorms = Dorm::where('amenities','communal_kitchen')->get();
        print_r($dorms);
+    }
+
+    public function appendIntercollegiateDorms($dormsArr,$uniId){
+        $allIntercollegiateDorms = IntercollegiateDorm::all();
+        $intercollegiateDormsArr = [];
+        foreach($allIntercollegiateDorms as $interclgtDorm){
+            if(in_array($uniId,$interclgtDorm->uni_id_set)){
+                $dorm = Dorm::where('dorm_id', $interclgtDorm->dorm_id)->first();
+                if($dorm->uni_id != $uniId){        //avoids adding interCltdorms whose uni_id is same as the requested uni, i.e. already in $dorms of method caller
+                $intercollegiateDormsArr[] = $dorm;
+                }
+            }
+        }
+        return $intercollegiateDormsArr;
     }
 
 
