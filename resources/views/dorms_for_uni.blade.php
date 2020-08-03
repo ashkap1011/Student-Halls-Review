@@ -1,9 +1,10 @@
 @extends('layouts.master')
 
-@section('title', 'Homepage')
+@section('title', '{{$uni->uni_name}}"\'s Dorms"')
 
 @section('content')
 
+<h5 id="dorms_for_uni" hidden> </h5>
 <h1 id="uni_heading">{{strval($uni->uni_name)}}</h1>
 
 

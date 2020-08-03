@@ -8,7 +8,7 @@ use App\University;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
-{
+{   
     public function index(){
         return view('homepage');
     }
@@ -36,20 +36,18 @@ class PageController extends Controller
         $amenities = config('constants.options.amenities');
         $intrclgtDorms = [];
         if($uni->has_intercollegiate_dorms =='1'){
-            $intrclgtDorms= $this->appendIntercollegiateDorms($dorms,$uni->uni_id);
-            
-
+            $intrclgtDorms= $this->seekIntercollegiateDorms($dorms,$uni->uni_id);
         }
         return view('/dorms_for_uni', compact('dorms','uni','amenities','intrclgtDorms'));
         //return view showing all dorms and filter list
-    }
+    }   //maybe don't show intercollegiate closest uni in terms of walking distance.
 
     public function getDormsPerFilters(){
        $dorms = Dorm::where('amenities','communal_kitchen')->get();
        print_r($dorms);
     }
 
-    public function appendIntercollegiateDorms($dormsArr,$uniId){
+    public function seekIntercollegiateDorms($dormsArr,$uniId){
         $allIntercollegiateDorms = IntercollegiateDorm::all();
         $intercollegiateDormsArr = [];
         foreach($allIntercollegiateDorms as $interclgtDorm){
@@ -63,6 +61,10 @@ class PageController extends Controller
         return $intercollegiateDormsArr;
     }
 
-
-
+    public function getHighestRatedDorm($uniName){
+        //get highest rated dorm, check to see if uni has intercollegiate, if so find highetrated and compare with this one.
+        //you can merge two together:https://stackoverflow.com/questions/42494732/append-a-laravel-collection-with-another-collection
+        
+    }
+    ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were for.
 }

@@ -196,8 +196,15 @@ function addMarker(marker,map){
 
 //This document refers to Dorms upon Uni selection i.e. dorms_for_uni.blade.php
 $(document).ready(function(){
-    var alldorms = dorms.concat(interCollegiateDorms)
-    console.log(alldorms)
+    if($('#dorms_for_uni').length){
+        for (var key in interCollegiateDorms) { //appends intercollegiate to name of dorms that are intercollegiate
+            interCollegiateDorms[key].dorm_name += ' (Intercollegiate)';    
+            //CHANGE HER DISTANCE TO UNI AS 0., THEN IN DISPLAY DORMS IF 0 THEN DON'T APPEND X MINS WALK
+        }
+        var alldorms = dorms.concat(interCollegiateDorms)
+        displayDorms(alldorms)
+    }
+       
     $('#amenity_filters').click(function(){
         let amenitiesSelected = $('input:checkbox:checked').map(function(){
             return $(this).attr('id')
@@ -211,22 +218,16 @@ $(document).ready(function(){
     //maybe check object
     $('#sorting_options').click(function(){
         let selected = $('input[type=radio][name=sort_by]:checked').val()
-        var dormsForSorting = JSON.parse(JSON.stringify(dorms)) //dorms is defined in php file
+        var dormsForSorting = alldorms
         if(selected === 'name'){
             dormsForSorting.sort(getSortOrder('dorm_name'))
-            $('#dorms_div').empty();
-            for(var dorm in dormsForSorting){
-                $('#dorms_div').append('<p>' +dormsForSorting[dorm].dorm_name + '</p>')
-            }
+            displayDorms(dormsForSorting);
         }
-        if(selected === 'rating'){
-            //amke ajax query
+        if(selected === 'Higest Overall Rating'){
+            alldorms.sort(getSortOrder('overall_rating'))
         }
-        if(selected == 'date'){
-            $('#dorms_div').empty();
-            for(var dorm in dorms){
-                $('#dorms_div').append('<p>' +dorms[dorm].dorm_name + '</p>')
-            }
+        if(selected == 'Most Rated'){
+            alldorms.sort(getSortOrder('reviews_count'))
         }
 
     })
@@ -244,6 +245,13 @@ function getSortOrder(prop) {
         }    
         return 0;    
     }    
+}
+
+function displayDorms(dormsArr){
+    $('#dorms_div').empty();
+        for(var dorm in dormsArr){
+            $('#dorms_div').append('<p>' +dormsArr[dorm].dorm_name + '</p>')
+        }
 }
 
 
