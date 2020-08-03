@@ -6,6 +6,7 @@ use App\TempReview;
 use App\University;
 use App\Dorm;
 use Illuminate\Http\Request;
+use App\IntercollegiateDorm;
 
 class ReviewsController extends Controller
 {   
@@ -95,13 +96,20 @@ class ReviewsController extends Controller
 
 
     public function dormsOnUniSelection($uni_name){
-        $uniId = University::where('uni_name', strval($uni_name))->value('uni_id');
-        $dormsOfUni = Dorm::where('uni_id', strval($uniId))->get();   
+        $uni = University::where('uni_name', $uni_name)->first();
+        $dormsOfUni = Dorm::where('uni_id', $uni->uni_id)->get();   
 
         $dormNames= array();
         foreach($dormsOfUni as $dorm){
             array_push($dormNames, strval($dorm->dorm_name));
         }
+        
+        if($uni->has_intercollegiate_dorms == '1'){
+            // print('has it');
+            $dormNames = $this->appendIntercollegiateDormNames($dormNames,$uni->uni_id);
+        } 
+        
+        
         return $dormNames;
     }
 
@@ -109,6 +117,20 @@ class ReviewsController extends Controller
         $dormId = Dorm::where('dorm_name', strval($dorm_name))->value('dorm_id');
         
         return $dormId;
+    }
+
+    private function appendIntercollegiateDormNames($dormNames,$uniId){
+        $allIntercollegiateDorms = IntercollegiateDorm::all();
+        foreach($allIntercollegiateDorms as $interclgtDorm){
+            if(in_array($uniId,$interclgtDorm->uni_id_set)){
+                $dorm = Dorm::where('dorm_id', $interclgtDorm->dorm_id)->first();
+                if($dorm->uni_id != $uniId){        //avoids adding interCltdorms whose uni_id is same as the requested uni, i.e. already in $dorms of method caller
+                    array_push($dormNames, $dorm->dorm_name);
+                }
+            }
+        } 
+        return $dormNames;
+
     }
 
     

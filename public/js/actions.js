@@ -6,34 +6,37 @@ $(document).ready(function(){
     and so it changes rating to communal kitchen and 
     selects communal kitchen check box as checked.
     */
-
-    $('#catered_selfcatered_label').text('Communal Kitchen rating')
-    $('.fieldsets #communal_kitchen').prop('checked', true);
-
-    if($('#dorm_id').html() == null){
-        $('.fieldsets').show();
-    }
-
-    //takes care of the case where the use goes back from Add a Dorm hyperlink
-    if($('select#uni_name_drpdwn option:checked').val() !== ''){
-        setDormSectionPerUniSelection();
+    if($('#new_review_form').length){
+        $('#catered_selfcatered_label').text('Communal Kitchen rating')
+        $('.fieldsets #communal_kitchen').prop('checked', true);
+    
+        if($('#dorm_id').html() == null){
+            $('.fieldsets').show();
+        }
+    
+        //takes care of the case where the user goes back from Add a Dorm hyperlink
+        if($('select#uni_name_drpdwn option:checked').val() !== ''){
+            setDormSectionPerUniSelection();
+        }
+        
+        //populates dorms for chosen uni in drop down
+        $('#uni_name_drpdwn').change(function(){
+            console.log('new uni selected')
+            setDormSectionPerUniSelection()
+          });
+    
+        //sets dorm_id based on drop down  
+        $('#dorm_name_drpdwn').change(function(){
+            let dormName =$(this).val(); //have the value of uni chosen
+            setDormIdFormElement(dormName);
+        });
+    
+        /*checks to see the correct catering related amenity is selected based
+        on user selection, also changes the text for the catering/self catered 
+        rating
+        */
     }
     
-    //populates dorms for chosen uni in drop down
-    $('#uni_name_drpdwn').change(function(){
-        setDormSectionPerUniSelection()
-      });
-
-    //sets dorm_id based on drop down  
-    $('#dorm_name_drpdwn').change(function(){
-        let dormName =$(this).val(); //have the value of uni chosen
-        setDormIdFormElement(dormName);
-    });
-
-    /*checks to see the correct catering related amenity is selected based
-    on user selection, also changes the text for the catering/self catered 
-    rating
-    */
     $('input[type=radio][name=is_catered]').change(function(){
         if ($('input[type=radio][name=is_catered]:checked').val() === '0'){
             $('#catered_selfcatered_label').text('Food Quality rating');
@@ -129,14 +132,15 @@ function updateReview(button){
 }
 
 function setDormSectionPerUniSelection(){
+    console.log('hi');
     let uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
-        $.get('/dormsForUni/' + uniName, function(data){
-            
+        $.get('/dormsForUni/' + uniName, function(data){    //gets dorm names.
+            console.log(data);  
             $('#dorm_name_drpdwn').empty() //empties all the child nodes of select
             $(data).each(function (){
                 $('#dorm_name_drpdwn').append($('<option />').val(this).text(this));
             });
-            setDormIdFormElement(data[0]);
+            setDormIdFormElement(data[0]);//this sets the initial dorm id to first dorm of the uni
             //todo make the field set work properly such that if this value is "" then hide
        
             //set link for new dorm for the chosen uni
@@ -223,11 +227,14 @@ $(document).ready(function(){
             dormsForSorting.sort(getSortOrder('dorm_name'))
             displayDorms(dormsForSorting);
         }
-        if(selected === 'Higest Overall Rating'){
+        if(selected === 'rating'){
             alldorms.sort(getSortOrder('overall_rating'))
+            displayDorms(alldorms);
+
         }
-        if(selected == 'Most Rated'){
+        if(selected == 'reviews_count'){
             alldorms.sort(getSortOrder('reviews_count'))
+            displayDorms(alldorms);
         }
 
     })

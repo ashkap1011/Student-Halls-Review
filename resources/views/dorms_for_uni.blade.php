@@ -1,21 +1,21 @@
 @extends('layouts.master')
 
-@section('title', '{{$uni->uni_name}}"\'s Dorms"')
+@section('title', 'University')
 
 @section('content')
 
-<h5 id="dorms_for_uni" hidden> </h5>
+<h5 id="dorms_for_uni" hidden> </h5>   
 <h1 id="uni_heading">{{strval($uni->uni_name)}}</h1>
 
 
 <div id="sorting_options">
     <h3>Sort</h3>
-    <input type="radio" id="date" name="sort_by" value="date">
-    <label for="date">Date</label><br>
     <input type="radio" id="name" name="sort_by" value="name">
     <label for="name">Name</label><br>
     <input type="radio" id="rating" name="sort_by" value="rating">
-    <label for="rating">Highest Rated</label><br>
+    <label for="rating">Highest Rating</label><br>
+    <input type="radio" id="reviews_count" name="sort_by" value="reviews_count">
+    <label for="reviews_count">Most Rated</label><br>
 </div>
 
 

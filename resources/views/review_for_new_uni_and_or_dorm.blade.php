@@ -2,6 +2,7 @@
 
 
 @section('form_header')
+    <h5 id="new_review_form" hidden> </h5>   
 
     @if ($isNewUni)
         <h2>Let us know your Uni and and we will add it shortly</h2>

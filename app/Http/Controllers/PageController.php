@@ -66,5 +66,5 @@ class PageController extends Controller
         //you can merge two together:https://stackoverflow.com/questions/42494732/append-a-laravel-collection-with-another-collection
         
     }
-    ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were for.
+    ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were.
 }

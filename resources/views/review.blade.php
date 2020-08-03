@@ -2,6 +2,7 @@
 
 
 @section('form_header')
+<h5 id="new_review_form" hidden> </h5>   
 
 <label for="uni_name">Select a University</label>
 <select id="uni_name_drpdwn" name="uni_name_drpdwn">
