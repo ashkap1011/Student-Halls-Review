@@ -88,7 +88,6 @@ class AdminController extends Controller
         $id = strval($request->reviewId);
         $review = TempReview::find($id);
         $review->delete();
-
     }
 
     public function migrateTempReviews(Request $request){
@@ -112,7 +111,6 @@ class AdminController extends Controller
             $lastInsertedReview = $publicReview->id;
             $this->updateDormStatistics($lastInsertedReview);
         }
-        
     }
 
     public function mapTempReviewToPublicReview($tempReview){
@@ -174,7 +172,6 @@ class AdminController extends Controller
                     $uniOfExistingDorm->has_intercollegiate_dorms = '1';
                     $uniOfExistingDorm->save();
                     
-                   
                 } else{//adds to existing intercollegiate dorm the uni of the review and updates the uni's has_intercollegate_dorms field to true;
                     echo 'where the money is';
                     $intClgtUniIdSets = $intercollegiateDorm->uni_id_set;
@@ -257,7 +254,6 @@ class AdminController extends Controller
                 $this->validateAndUpdateHasAmenities($dorm,$amenityArray);
             //iterate through all reviews per dorm id and count number of review 
         } else{
-            
             $review = Review::where('id',$reviewId)->first();
             $amenitiesFromReview = $review->amenities;
             $amenitiesArray = explode(',',$amenitiesFromReview);

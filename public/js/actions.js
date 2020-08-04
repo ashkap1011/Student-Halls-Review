@@ -199,56 +199,59 @@ function addMarker(marker,map){
 
 
 //This document refers to Dorms upon Uni selection i.e. dorms_for_uni.blade.php
+
+var filteredDorms;
 $(document).ready(function(){
+    filteredDorms = dorms;
     if($('#dorms_for_uni').length){
-        for (var key in interCollegiateDorms) { //appends intercollegiate to name of dorms that are intercollegiate
-            interCollegiateDorms[key].dorm_name += ' (Intercollegiate)';    
-            //CHANGE HER DISTANCE TO UNI AS 0., THEN IN DISPLAY DORMS IF 0 THEN DON'T APPEND X MINS WALK
-        }
-        var alldorms = dorms.concat(interCollegiateDorms)
-        displayDorms(alldorms)
+        displayDorms(filteredDorms);
     }
-       
     $('#amenity_filters').click(function(){
-        let amenitiesSelected = $('input:checkbox:checked').map(function(){
-            return $(this).attr('id')
+        var filters = $('input:checkbox:checked').map(function(){
+            return $(this).attr('id');
         }).get(); 
-        
-        //get reviews per dorm id 
-        
-        //maturestudentonly,catering, communal kitchen, common area, elevator
-        //private bathroom
+    
+        filteredDorms = dorms.filter(function(val) {
+            for(var i = 0; i < filters.length; i++){
+                if(val[filters[i]] != 1){
+                return false;
+                }
+            }return true;
+            
+        }); 
+        displayDorms(filteredDorms);
+        sortDormsBy();
     });
-    //maybe check object
     $('#sorting_options').click(function(){
-        let selected = $('input[type=radio][name=sort_by]:checked').val()
-        var dormsForSorting = alldorms
-        if(selected === 'name'){
-            dormsForSorting.sort(getSortOrder('dorm_name'))
-            displayDorms(dormsForSorting);
-        }
-        if(selected === 'rating'){
-            alldorms.sort(getSortOrder('overall_rating'))
-            displayDorms(alldorms);
-
-        }
-        if(selected == 'reviews_count'){
-            alldorms.sort(getSortOrder('reviews_count'))
-            displayDorms(alldorms);
-        }
-
+        sortDormsBy();
     })
-
 
 });
 
+function sortDormsBy(){
+    let selected = $('input[type=radio][name=sort_by]:checked').val()
+    var dormsForSorting = filteredDorms
+    if(selected === 'name'){
+        dormsForSorting.sort(getSortOrder('dorm_name'))
+        displayDorms(dormsForSorting.reverse());
+    }
+    if(selected === 'rating'){
+        dormsForSorting.sort(getSortOrder('overall_rating'))
+        displayDorms(dormsForSorting);
+
+    }
+    if(selected === 'reviews_count'){
+        dormsForSorting.sort(getSortOrder('reviews_count'))
+        displayDorms(dormsForSorting);
+    }
+}
 
 function getSortOrder(prop) {    
     return function(a, b) {    
         if (a[prop] > b[prop]) {    
-            return 1;    
-        } else if (a[prop] < b[prop]) {    
             return -1;    
+        } else if (a[prop] < b[prop]) {    
+            return 1;    
         }    
         return 0;    
     }    
@@ -256,21 +259,10 @@ function getSortOrder(prop) {
 
 function displayDorms(dormsArr){
     $('#dorms_div').empty();
-        for(var dorm in dormsArr){
-            $('#dorms_div').append('<p>' +dormsArr[dorm].dorm_name + '</p>')
-        }
+    for(var dorm in dormsArr){
+        $('#dorms_div').append('<a href="/'+ uni.uni_name+ '/dorms/' + dormsArr[dorm].dorm_name + '">' +dormsArr[dorm].dorm_name + '</a><br>')
+    }
 }
-
-
-
-
-
-
-
-
-//document.getElementById("uni_name").addEventListener("click", onUniNameSelection);
-
-  
 
     
     

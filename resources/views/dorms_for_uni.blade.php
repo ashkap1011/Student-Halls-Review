@@ -3,6 +3,18 @@
 @section('title', 'University')
 
 @section('content')
+<div class="container-fluid">
+
+
+<div class="container">
+
+
+
+<div class="jumbotron">
+    <h1>Bootstrap Tutorial</h1>
+    <p>Bootstrap is the most popular HTML, CSS...</p>
+</div>
+</div>
 
 <h5 id="dorms_for_uni" hidden> </h5>   
 <h1 id="uni_heading">{{strval($uni->uni_name)}}</h1>
@@ -22,22 +34,16 @@
 <div id="amenity_filters">
     <h3>Filters</h3>
 @foreach ($amenities as $amenity)
-    <input type="checkbox" id="{{$amenity}}" name="amenity_filters[]" value="{{$amenity}}">
-    <label for="{{$amenity}}"> {{$amenity}}</label><br>
+    <input type="checkbox" id="has_{{$amenity}}" name="amenity_filters[]" value="{{$amenity}}">
+    <label for="has_{{$amenity}}"> {{$amenity}}</label><br>
 @endforeach
 </div>
 
 <h2>Dorms</h2>
 <div id="dorms_div">
-@foreach ($dorms as $dorm)
-    <p>{{$dorm->dorm_name}}</p>
-@endforeach
 
-@foreach($intrclgtDorms as $dorm)
-<p>{{$dorm->dorm_name}}</p>
-@endforeach
+
 </div>
-
 
     <style>
     /* Set the size of the div element that contains the map */
@@ -52,8 +58,7 @@
   <div id="map"></div>
 <script>
    var dorms = {!! json_encode($dorms, JSON_HEX_TAG) !!}
-   var interCollegiateDorms = {!! json_encode($intrclgtDorms, JSON_HEX_TAG) !!}
-   console.log(interCollegiateDorms)
+  
    var uni = {!! json_encode($uni, JSON_HEX_TAG) !!}
 </script>
 <!--
