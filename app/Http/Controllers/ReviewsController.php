@@ -8,8 +8,11 @@ use App\Dorm;
 use Illuminate\Http\Request;
 use App\IntercollegiateDorm;
 
+
 class ReviewsController extends Controller
 {   
+    
+
     public function writeReview(){
         $universities = University::all();
         $amenities = config('constants.options.amenities');
@@ -19,18 +22,15 @@ class ReviewsController extends Controller
 
     public function newUniOrDormReviewPage($uni_name){
         $amenities = config('constants.options.amenities');
-
         $isNewUni =false;
         if ($uni_name == '-'){
             $isNewUni = true;
         }
-
         return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni'));
     }
 
    
     public function createNewReview(Request $request){
-
         $tempReview = $this->appendReview($request);
         $tempReview->dorm_id = $request->input('dorm_id'); 
         $tempReview->save();
@@ -67,6 +67,7 @@ class ReviewsController extends Controller
             'quirk' => 'nullable',
             'review_text' => 'nullable'
         ]);
+
         //todo make this neater using a constants.php thing
         $tempReview = new TempReview();
         $tempReview->is_new_uni = $request->input('is_new_uni');
@@ -105,7 +106,6 @@ class ReviewsController extends Controller
         }
         
         if($uni->has_intercollegiate_dorms == '1'){
-            // print('has it');
             $dormNames = $this->appendIntercollegiateDormNames($dormNames,$uni->uni_id);
         } 
         
@@ -115,7 +115,6 @@ class ReviewsController extends Controller
 
     public function dormNameToId($dorm_name){
         $dormId = Dorm::where('dorm_name', strval($dorm_name))->value('dorm_id');
-        
         return $dormId;
     }
 

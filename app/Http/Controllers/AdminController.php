@@ -66,13 +66,7 @@ class AdminController extends Controller
         
         return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
     }
-    /*Use this and get rid of code but find out why it doesn't work
-    public function generateReviews($reviews){
-        $temp_review_columns = Schema::getColumnListing('temp_reviews');
-
-        return view('/admin_reviews', compact('reviews','temp_review_columns'));
-    }*/
-
+    
     public function updateTempReview(Request $request){
         $id = strval($request->reviewId);
         $column = strval($request->column);
@@ -92,13 +86,13 @@ class AdminController extends Controller
 
     public function migrateTempReviews(Request $request){
         $request->all();
-        $reviews_arr = $request->reviewsToMigrate;
-        $reviewType =  $request->typeOfReviews;
+        $reviews_arr = $request->reviewsToMigrate;  //all reviews pushed in one go
+        $reviewType =  $request->typeOfReviews;         
         
         foreach ($reviews_arr as $reviewId) {
             $tempReview = TempReview::find($reviewId);
             /*if review contains a new dorm or uni then it will first 
-            add the new dorm/uni to table before saving the review
+            add the new dorm/uni to DB before saving the review
             */
             if($reviewType =='new_dorm_reviews'){
                 $this->createNewDorm($tempReview);
@@ -119,7 +113,10 @@ class AdminController extends Controller
         foreach($publicReviewColumnNames as $columName){
             if($columName =='id'){
                 continue;
-            }
+            } if($columName == 'overall_rating'){   
+                $publicReview->overall_rating = $this->calculateOverallReviewRating($tempReview);
+                continue;
+            } 
           $publicReview->$columName = $tempReview->$columName;
        }
        return $publicReview;
@@ -173,7 +170,6 @@ class AdminController extends Controller
                     $uniOfExistingDorm->save();
                     
                 } else{//adds to existing intercollegiate dorm the uni of the review and updates the uni's has_intercollegate_dorms field to true;
-                    echo 'where the money is';
                     $intClgtUniIdSets = $intercollegiateDorm->uni_id_set;
                     array_push($intClgtUniIdSets, $uniIdOfReview);
                     $intercollegiateDorm->uni_id_set= $intClgtUniIdSets;
@@ -185,8 +181,7 @@ class AdminController extends Controller
 
         }
         $tempReview->dorm_id = Dorm::where('dorm_name', $newDormName)->value('dorm_id');
-        
-        
+                
         /**need to see if perhaps intercollegiate, i.e. dorm name exists twice but for diff uni,
         *so iterate through all dorms where dorm_name is $newdormName. but give the one that has 
             sameuninameintemp then when displaying dorms, check if uni/dorm exists in
@@ -195,8 +190,6 @@ class AdminController extends Controller
             here return the dorm which has same uni_name from temp review, also check if it returns a collection or what. 
         */ 
         //here if user enters same dorm name but gives it diff 
-
-        
     }
 
     public function createNewUni($tempReview){
@@ -214,6 +207,23 @@ class AdminController extends Controller
 
     }
 
+
+    //takes reviewId, updates overall dorms stat 
+
+    public function uupdateDormStatistics($review){
+        //update dorm overall rating
+        
+        $dorm = Dorm::where('dorm_id',$review->dorm_id)->first();
+        $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
+        $dorm->increment('reviews_count');
+        $newOverallDormRating= ($currSumOfDormRating + $review->overall_rating) / (float) $dorm->reviews_count;
+        $dorm->overall_rating = $newOverallDormRating;
+        $dorm->save();
+        //update dorm amenities
+
+    }
+
+
     public function updateDormStatistics($reviewId){
         $dormId = Review::where('id',$reviewId)->value('dorm_id');
         $dorm = Dorm::where('dorm_id',$dormId)->first();
@@ -221,13 +231,22 @@ class AdminController extends Controller
         $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
         $dorm->increment('reviews_count');
         $newOverallDormRating= ($currSumOfDormRating + $newReviewRating) / (float) $dorm->reviews_count;
-       
+        
         $dorm->overall_rating = $newOverallDormRating;
         $dorm->save();
         $this->updateDormAmenities($dorm,$reviewId);
-                //get current overallreview rating =0, times number of review => +new rating/incremented thing
-        //return response()->json(array('success' => true, 'POOOOOOOP' => $newDorm->review_id), 200);
     
+    }
+
+
+
+    public function calculateOverallReviewRating($tempReview){
+        $starRatings = config('constants.options.starRatings');
+        $sum =0;
+        foreach($starRatings as $rating){
+            $sum+=$tempReview->$rating;
+        }
+        return $sum/(float) sizeof($starRatings);
     }
 
     public function overallReviewRating($reviewId){
@@ -237,8 +256,40 @@ class AdminController extends Controller
         foreach($starRatings as $rating){
             $sum+=$review->$rating;
         }
-        return $sum/(float) sizeof($starRatings);
+        return round($sum/(float) sizeof($starRatings),2);
     }
+
+    //function 
+
+    public function uupdateDormAmenities($dorm, $tempReview){
+        $reviewsCount = $dorm->reviews_count;
+        if($reviewsCount>2){
+            //get json, increase it per new amenities then validateandupdateamenities which saves the data
+            $dormAmenitiesCountArray=$dorm->amenities_count;
+            $tempReviewAmenitiesArray = explode(',',$tempReview->amenities);    
+            $index = 0;
+
+            $amenitiesArray = config('constants.options.amenities');
+            //iterate rhough tempreview, find index in amenities array, then use that index to increase dorm amenities count
+            foreach($tempReviewAmenitiesArray as $amenity){
+                array_search($amenity,)
+            }
+            
+            
+            for ($i = 0; $i < sizeof($amenitiesArray); $i++) {
+                if($tempReviewAmenitiesArray[$i] == '1'){   
+                    $dormAmenitiesCountArray[$i]++;
+                }
+            }
+
+
+        }
+
+
+
+    }
+
+
 
     public function updateDormAmenities($dorm,$reviewId){
         $reviewCount = $dorm->reviews_count;
@@ -261,9 +312,7 @@ class AdminController extends Controller
                 $amenityName = 'has_'.$amenity;
                 $dorm->$amenityName = '1';
             }   $dorm->save();
-
         }
-
     }
 
     //create assoc array where all amenities have zero value

@@ -8,5 +8,7 @@ class Dorm extends Model
 {
     public $timestamps = false;
     protected $primaryKey = 'dorm_id';
-
+    protected $casts = [
+        'amenities' => 'array'
+    ];
 }
