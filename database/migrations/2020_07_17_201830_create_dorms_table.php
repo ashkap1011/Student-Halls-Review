@@ -20,19 +20,11 @@ class CreateDormsTable extends Migration
             $table->string('dorm_name', 127)->unique();
             $table->float('overall_rating', 3, 2);
             
-            foreach(config('constants.options.amenities') as $amenities){
-                
-            }
+            $table->json('overall_star_ratings');
+            
             $table->smallInteger('reviews_count');
-            $table->boolean('has_common_area');
-            $table->boolean('has_catering');
-            $table->boolean('has_games');
-            $table->boolean('has_outdoor_area');
-            $table->boolean('has_elevator');
-            $table->boolean('has_communal_kitchen');
-            $table->boolean('has_private_bathroom');
-            $table->boolean('has_social_events');
-            $table->boolean('has_mature_students_only');
+            $table->json('has_amenities');
+            
             $table->json('amenities_count');    //counts the number of each amenitiy based on reviews
             $table->string('address',127);
             $table->float('lat', 10, 6);

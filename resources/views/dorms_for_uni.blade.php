@@ -34,8 +34,8 @@
 <div id="amenity_filters">
     <h3>Filters</h3>
 @foreach ($amenities as $amenity)
-    <input type="checkbox" id="has_{{$amenity}}" name="amenity_filters[]" value="{{$amenity}}">
-    <label for="has_{{$amenity}}"> {{$amenity}}</label><br>
+    <input type="checkbox" id="{{$amenity}}" name="amenity_filters[]" value="{{$amenity}}">
+    <label for="{{$amenity}}"> {{$amenity}}</label><br>
 @endforeach
 </div>
 
@@ -58,8 +58,10 @@
   <div id="map"></div>
 <script>
    var dorms = {!! json_encode($dorms, JSON_HEX_TAG) !!}
-  
+    
    var uni = {!! json_encode($uni, JSON_HEX_TAG) !!}
+
+   const AMENITIES = {!!json_encode($amenities)!!}
 </script>
 <!--
 <script defer

@@ -94,16 +94,15 @@ class AdminController extends Controller
             /*if review contains a new dorm or uni then it will first 
             add the new dorm/uni to DB before saving the review
             */
-            if($reviewType =='new_dorm_reviews'){
-                $this->createNewDorm($tempReview);
-            } 
             if($reviewType == 'new_uni_reviews'){
                 $this->createNewUni($tempReview);
             }
+            if($reviewType =='new_dorm_reviews'){
+                $this->createNewDorm($tempReview);
+            } 
             $publicReview = $this->mapTempReviewToPublicReview($tempReview);
             $publicReview->save();
-            $lastInsertedReview = $publicReview->id;
-            $this->updateDormStatistics($lastInsertedReview);
+            $this->updateDormStatistics($publicReview,$tempReview);
         }
     }
 
@@ -136,14 +135,14 @@ class AdminController extends Controller
             $newDorm->dorm_name = $newDormName;
             $newDorm->reviews_count = 0;    //will be changed after review is inputted
             $newDorm->overall_rating= 0;
-            foreach(config('constants.options.amenities') as $amenity) {
-                $amenity = 'has_'.$amenity;
-                $newDorm->$amenity = 0;
-            }  
+            $newDorm->overall_star_ratings = array_fill(0, sizeOf(config('constants.options.starRatings')), 0);  
+            $newDorm->has_amenities = array_fill(0, sizeOf(config('constants.options.amenities')), 0);  
+            $newDorm->amenities_count = array_fill(0, sizeOf(config('constants.options.amenities')), 0);//number of reviews that say user has these amenities
             $newDorm->address= $tempReview->dorm_address;
             $newDorm->lat= $tempReview->dorm_lat;
             $newDorm->lng= $tempReview->dorm_lng;
             $newDorm->save();
+            
         } else{
             echo'dorm previously found being executed';
             $dorm = Dorm::where('dorm_name', $newDormName)->first();
@@ -204,40 +203,45 @@ class AdminController extends Controller
         $newUni->save();
         }
         $this->createNewDorm($tempReview);
-
     }
-
 
     //takes reviewId, updates overall dorms stat 
 
-    public function uupdateDormStatistics($review){
-        //update dorm overall rating
+    public function updateDormStatistics($publicReview,$tempReview){
+        //update dorm overall ratings
+        $dorm = Dorm::where('dorm_id',$publicReview->dorm_id)->first();
         
-        $dorm = Dorm::where('dorm_id',$review->dorm_id)->first();
-        $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
-        $dorm->increment('reviews_count');
-        $newOverallDormRating= ($currSumOfDormRating + $review->overall_rating) / (float) $dorm->reviews_count;
-        $dorm->overall_rating = $newOverallDormRating;
+        $this->updateDormOverallRating($dorm,$publicReview);
+        $this->updateDormOverallStarRatings($dorm,$tempReview);
+        $this->updateDormAmenities($dorm, $tempReview);
+        $dorm->reviews_count = $dorm->reviews_count +1;
+        $this->validateAndUpdateHasAmenities($dorm);
         $dorm->save();
         //update dorm amenities
-
     }
 
-
-    public function updateDormStatistics($reviewId){
-        $dormId = Review::where('id',$reviewId)->value('dorm_id');
-        $dorm = Dorm::where('dorm_id',$dormId)->first();
-        $newReviewRating = $this->overallReviewRating($reviewId);
-        $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
-        $dorm->increment('reviews_count');
-        $newOverallDormRating= ($currSumOfDormRating + $newReviewRating) / (float) $dorm->reviews_count;
-        
-        $dorm->overall_rating = $newOverallDormRating;
-        $dorm->save();
-        $this->updateDormAmenities($dorm,$reviewId);
+    public function updateDormOverallRating($dorm,$review){
+        $dormReviewsCount = $dorm->reviews_count;
+        $currSumOfDormRating = $dorm->overall_rating * $dormReviewsCount;
+        $newOverallDormRating= ($currSumOfDormRating + $review->overall_rating) / (float) ($dormReviewsCount+1);
+        $dorm->overall_rating = bcdiv($newOverallDormRating,1,2);
+    }
     
+    public function updateDormOverallStarRatings($dorm,$tempReview){
+        $dormReviewsCount = $dorm->reviews_count;
+        $dormStarRatingsArray = $dorm->overall_star_ratings;
+        $starRatings = config('constants.options.starRatings');
+        for($i=0;$i<sizeof($dormStarRatingsArray); $i++){
+            $rating = $starRatings[$i];
+            $currStarRating = $dormStarRatingsArray[$i];
+            $newReviewStarRating = $tempReview->$rating;
+            $newRating= (($currStarRating * $dormReviewsCount) + $newReviewStarRating)/(float) ($dormReviewsCount+1);
+            $newRoundedRating = bcdiv($newRating,1,2);  
+            $dormStarRatingsArray[$i] = $newRoundedRating;
+        }
+        $dorm->overall_star_ratings = $dormStarRatingsArray;
+       
     }
-
 
 
     public function calculateOverallReviewRating($tempReview){
@@ -259,37 +263,57 @@ class AdminController extends Controller
         return round($sum/(float) sizeof($starRatings),2);
     }
 
-    //function 
-
-    public function uupdateDormAmenities($dorm, $tempReview){
+    public function updateDormAmenities($dorm, $tempReview){
         $reviewsCount = $dorm->reviews_count;
-        if($reviewsCount>2){
+        $tempReviewAmenitiesArray = explode(',',$tempReview->amenities);    
+        $amenitiesArray = config('constants.options.amenities');
             //get json, increase it per new amenities then validateandupdateamenities which saves the data
             $dormAmenitiesCountArray=$dorm->amenities_count;
-            $tempReviewAmenitiesArray = explode(',',$tempReview->amenities);    
-            $index = 0;
-
-            $amenitiesArray = config('constants.options.amenities');
             //iterate rhough tempreview, find index in amenities array, then use that index to increase dorm amenities count
             foreach($tempReviewAmenitiesArray as $amenity){
-                array_search($amenity,)
+                $indexOfAmenity = array_search($amenity,$amenitiesArray);
+                $dormAmenitiesCountArray[$indexOfAmenity]++;
             }
-            
-            
-            for ($i = 0; $i < sizeof($amenitiesArray); $i++) {
-                if($tempReviewAmenitiesArray[$i] == '1'){   
-                    $dormAmenitiesCountArray[$i]++;
-                }
+            $dorm->amenities_count = $dormAmenitiesCountArray;            
+            if($reviewsCount>2){
+                print('more than 2 reviews');
+                $this->validateAndUpdateHasAmenities($dorm);
+            } else{
+                $this->updateHasAmenities($dorm);
             }
-
-
-        }
-
-
-
     }
 
 
+    public function updateHasAmenities($dorm){
+        $amenitiesArraySize = sizeof(config('constants.options.amenities'));
+        $dormAmenitiesCountArray = $dorm->amenities_count;
+        $dormHasAmenitiyArr = $dorm->has_amenities;
+        for($i = 0; $i < $amenitiesArraySize; $i++){
+            if($dormAmenitiesCountArray[$i] > 0){
+                $dormHasAmenitiyArr[$i] = 1;
+            }
+        }
+        $dorm->has_amenities = $dormHasAmenitiyArr;
+    }
+    //if a third of the reviews say it has the amenity exists then has_amenity's respective index turns true.
+    public function validateAndUpdateHasAmenities($dorm){
+        $dormReviewsCount = $dorm->reviews_count;
+        $dormAmenitiesCount = $dorm->amenities_count;
+        $dormHasAmenitiyArr = $dorm->has_amenities;
+        for($i=0;$i<sizeOf($dormAmenitiesCount);$i++){
+            if(3*$dormAmenitiesCount[$i] >= $dormReviewsCount){
+                $dormHasAmenitiyArr[$i] = 1;
+            }
+            else{
+                $dormHasAmenitiyArr[$i] = 0;
+            }
+        }
+        $dorm->has_amenities = $dormHasAmenitiyArr;
+    }
+
+
+
+    /*
 
     public function updateDormAmenities($dorm,$reviewId){
         $reviewCount = $dorm->reviews_count;
@@ -325,22 +349,22 @@ class AdminController extends Controller
           }
         return $amenityArray;   
     }
-
-
-    public function validateAndUpdateHasAmenities($dorm,$amenitiesArray){
+    */
+    /*
+    public function updateDormStatistics($reviewId){
+        $dormId = Review::where('id',$reviewId)->value('dorm_id');
+        $dorm = Dorm::where('dorm_id',$dormId)->first();
+        $newReviewRating = $this->overallReviewRating($reviewId);
+        $currSumOfDormRating = $dorm->overall_rating * $dorm->reviews_count;
+        $dorm->increment('reviews_count');
+        $newOverallDormRating= ($currSumOfDormRating + $newReviewRating) / (float) $dorm->reviews_count;
         
-        foreach($amenitiesArray as $key =>$value){
-            $hasAmenityName = 'has_'.$key;
-            if(3*$value >= $dorm->reviews_count){   //a third or more say the dorm has the Amenity
-                $dorm->$hasAmenityName = '1';
-            } else{
-                $dorm->$hasAmenityName = '0';
-            }
-        }   $dorm->save();
-
-    }
-
+        $dorm->overall_rating = $newOverallDormRating;
+        $dorm->save();
+        $this->updateDormAmenities($dorm,$reviewId);
     
-
+    }
+    
+*/
 
 }

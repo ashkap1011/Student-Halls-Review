@@ -38,13 +38,11 @@ class PageController extends Controller
         return view('/dorms_for_uni', compact('dorms','uni','amenities'));
         
     }   
-
+    
     public function getFilteredDorms(Request $request,$uniName){
         $uni = University::where('uni_name',strval($uniName))->first();
         $dorms = $this->getDormsForUni($uni);
-        
-
-        
+                
     }
     
     public function getDormsForUni($uni){

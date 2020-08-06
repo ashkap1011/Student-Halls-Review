@@ -202,27 +202,33 @@ function addMarker(marker,map){
 
 var filteredDorms;
 $(document).ready(function(){
-    filteredDorms = dorms;
     if($('#dorms_for_uni').length){
+        filteredDorms = dorms;
         displayDorms(filteredDorms);
     }
     $('#amenity_filters').click(function(){
         var filters = $('input:checkbox:checked').map(function(){
             return $(this).attr('id');
         }).get(); 
-    
+        
+        
         filteredDorms = dorms.filter(function(val) {
             for(var i = 0; i < filters.length; i++){
-                if(val[filters[i]] != 1){
-                return false;
-                }
+                console.log(filters[i])
+                let indexOfFilter = AMENITIES.indexOf(filters[i])
+                console.log(indexOfFilter)
+                if(val.has_amenities[indexOfFilter] == 0){
+                    return false;
+                } 
             }return true;
             
-        }); 
+        });
+
         displayDorms(filteredDorms);
         sortDormsBy();
     });
     $('#sorting_options').click(function(){
+        console.log('sort!');
         sortDormsBy();
     })
 
@@ -232,6 +238,7 @@ function sortDormsBy(){
     let selected = $('input[type=radio][name=sort_by]:checked').val()
     var dormsForSorting = filteredDorms
     if(selected === 'name'){
+        console.log(dormsForSorting)
         dormsForSorting.sort(getSortOrder('dorm_name'))
         displayDorms(dormsForSorting.reverse());
     }

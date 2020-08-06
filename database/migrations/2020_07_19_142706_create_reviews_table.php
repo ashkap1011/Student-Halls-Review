@@ -19,7 +19,7 @@ class CreateReviewsTable extends Migration
             $table->foreign('dorm_id')->references('dorm_id')->on('dorms')->onDelete('cascade');
 
 
-            $table->float('overall_rating', 3, 2);                                                                                                                                                                                                                                                                     
+            $table->float('overall_rating', 2, 1);                                                                                                                                                                                                                                                                     
             $table->boolean('is_recommended');
             $table->enum('year_of_study', ['first', 'second', 'third','fourth','postgraduate']);	
             $table->enum('year_of_residence', ['2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026','2027','2028','2029','2030']);	

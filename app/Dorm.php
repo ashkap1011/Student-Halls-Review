@@ -9,6 +9,10 @@ class Dorm extends Model
     public $timestamps = false;
     protected $primaryKey = 'dorm_id';
     protected $casts = [
-        'amenities' => 'array'
+        'amenities_count' => 'array',
+        'overall_star_ratings' => 'array',
+        'has_amenities' => 'array',
     ];
+    
+    
 }
