@@ -37,7 +37,7 @@ class CreateTempReviewsTable extends Migration
             $table->boolean('is_catered');
             $table->tinyInteger('catered_or_selfcatered_rating');
 
-            $table->set('amenities',['common_area', 'games','outdoor_area','elevator','communal_kitchen','catering','private_bathroom', 'social_events','mature_students_only'])->nullable();
+            $table->set('amenities',config('constants.options.amenities'))->nullable();
          
             $table->string('quirk', 50)->nullable();
 

@@ -227,16 +227,16 @@ $(document).ready(function(){
         displayDorms(filteredDorms);
         sortDormsBy();
     });
-    $('#sorting_options').click(function(){
-        console.log('sort!');
+    $('#sorting_options_dropdown').change(function(){
         sortDormsBy();
     })
 
 });
 
 function sortDormsBy(){
-    let selected = $('input[type=radio][name=sort_by]:checked').val()
+    let selected = $('select#sorting_options_dropdown option:checked').val()
     var dormsForSorting = filteredDorms
+    console.log(selected)
     if(selected === 'name'){
         console.log(dormsForSorting)
         dormsForSorting.sort(getSortOrder('dorm_name'))

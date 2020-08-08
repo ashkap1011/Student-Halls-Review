@@ -34,7 +34,6 @@ class PageController extends Controller
         $uni = University::where('uni_name',strval($uniName))->first();
         $amenities = config('constants.options.amenities');
         $dorms = $this->getDormsForUni($uni);
-
         return view('/dorms_for_uni', compact('dorms','uni','amenities'));
         
     }   

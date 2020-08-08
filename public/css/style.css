@@ -6,4 +6,116 @@
     display:none;
 }
 
+.main-body  {
+    max-height: 200px;
+    margin:auto;
+    max-width: 90%;
+}
 
+.background{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 25em;
+    max-width: 95%;
+    margin: auto;
+}
+
+
+
+#uni_heading{
+    font-size: small;
+    font-weight: 800;
+    padding-top: 3%;
+    padding-bottom: 2%;
+}
+
+
+
+
+/*
+    Filter styling
+*/
+#amenity_filters{
+    padding:4% 3% 3% 2%;
+    margin-right: 4%;
+    background-color: bisque;
+}
+#filter_sidenote{
+    font-style: italic;
+    font-weight: lighter;
+}
+h4 {    /*REfers to the filter checkbox title*/
+    font-size:x-large;
+}
+.filters{
+    font-size:large;
+    display: inline;
+    padding:0.5%;
+}
+
+/*
+end of filter styling
+*/
+
+
+#halls_header_title{
+    font-size: xx-large;
+    padding-left: 3%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    display: inline-block;
+}
+
+#halls_header_right{
+    float:right;   
+    padding: 3% 2% 1% 0%
+}
+
+
+.halls{
+    float:left;
+}
+
+.dorm_icon{
+    float:left;
+    height:auto;
+    width:20%;
+}
+
+.number_of_reviews{
+    float:right;
+}
+
+
+h3{
+    font-size: x-large;
+}
+
+.overall_rating_decimal{
+    font-size: large;
+    display:inline;
+    font-weight: bold;
+}
+
+.star-icon {
+    color: orange;
+  }
+
+.star_rating{
+      display: inline;
+      vertical-align: middle;
+}
+
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { body {background-color: pink; }
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) { body {background-color: blue;} }
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { body {background-color: green;} }
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { body {background-color: skyBlue;} }}
