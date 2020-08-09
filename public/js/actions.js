@@ -2,18 +2,17 @@
 //don't know why the above function exists
 $(document).ready(function(){
     
-    /*sets as deafualt the dorm being self catered 
+    /*sets as defualt the dorm being self catered 
     and so it changes rating to communal kitchen and 
     selects communal kitchen check box as checked.
     */
     if($('#new_review_form').length){
         $('#catered_selfcatered_label').text('Communal Kitchen rating')
         $('.fieldsets #communal_kitchen').prop('checked', true);
-    
+        console.log('hi')
         if($('#dorm_id').html() == null){
             $('.fieldsets').show();
         }
-    
         //takes care of the case where the user goes back from Add a Dorm hyperlink
         if($('select#uni_name_drpdwn option:checked').val() !== ''){
             setDormSectionPerUniSelection();
@@ -50,20 +49,66 @@ $(document).ready(function(){
         }
     });
 
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    });
+        
+    $('#search').on('keyup',function(){
+        console.log('yes')
+        $value=$(this).val();
+        $.ajax({
+            type : 'get',
+            url : '/search',
+            data:{'search':$value},
+            success:function(data){
+            $('.search_results').html(data);
+            }
+        });   
+    });
+
+});
+
+
+//gets the dorms of the uni that has been selected from the dropdown
+function setDormSectionPerUniSelection(){
+    let uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
+        $.get('/dormsForUni/' + uniName, function(data){    //gets dorm names.
+            $('#dorm_name_drpdwn').empty() //empties all the child nodes of select
+            $(data).each(function (){
+                $('#dorm_name_drpdwn').append($('<option />').val(this).text(this));
+            });
+            setDormIdFormElement(data[0]);//this sets the initial dorm id to first dorm of the uni
+            //todo make the field set work properly such that if this value is "" then hide
+       
+            //set link for new dorm for the chosen uni
+            let uniSelected = $('select#uni_name_drpdwn option:checked').val()
+            $('#add_new_dorm').attr('href', '/'+uniSelected+'/add/new-uni-dorm-review');
+        });
+
+        $('#dorm_name_section').show()
+       $('.fieldsets').show()
+}
+
+
+function setDormIdFormElement(dormName){
+    $.get('/dormNameToId/' + dormName, function(data){
+        $('#dorm_id').val(data);
+    });
+}
+
+
+//Refers to the admin panel's CRUD operations
+$(document).ready(function(){
     $('.editable_cell').dblclick(function() {
         let val = $(this).html();
         
         let elementId = $(this).attr('class').split(' ').pop();//gives you the second class name of element
         $(this).append('<input type = "text" name="updated_text" value="' + val + 
         '" /><input type="button" class="update_btn" onclick="updateReview(this)" value="Update"></td>');
-        
-        //var rowId = $(this).attr('class').replace(/[^\d\.]/g, ''); //temp_review
-        //$('.td_of_row_'+rowId).empty().append('<input type="text" name="test" value="' + rowId + '" /><input type="submit" />')
-        //$(this).parent('td').prev('td').empty().html('<input type="text" name="test" value="' + vvaall + '" /><input type="submit" />');
       });
-
-      /*********************************/
-      //TODO remove onClick from above function and make it work.
       
       $('.delete_btn').click(function(){
         //add r u sure!!!!
@@ -88,32 +133,11 @@ $(document).ready(function(){
             typeOfReviews: reviewType
         });
        
-
-    });
-
-
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        }
-    });
-        
-    $('#search').on('keyup',function(){
-        console.log('yes')
-        $value=$(this).val();
-        $.ajax({
-            type : 'get',
-            url : '/search',
-            data:{'search':$value},
-            success:function(data){
-            $('.search_results').html(data);
-            }
-        });   
     });
 
 });
 
-
+//update a review's field
 function updateReview(button){
     let tableDataElement = $(button).parent()
     let columnName = $(tableDataElement).attr('class').split(' ').pop();
@@ -131,71 +155,9 @@ function updateReview(button){
     location.reload();
 }
 
-function setDormSectionPerUniSelection(){
-    console.log('hi');
-    let uniName =$('#uni_name_drpdwn').val(); //have the value of uni chosen
-        $.get('/dormsForUni/' + uniName, function(data){    //gets dorm names.
-            console.log(data);  
-            $('#dorm_name_drpdwn').empty() //empties all the child nodes of select
-            $(data).each(function (){
-                $('#dorm_name_drpdwn').append($('<option />').val(this).text(this));
-            });
-            setDormIdFormElement(data[0]);//this sets the initial dorm id to first dorm of the uni
-            //todo make the field set work properly such that if this value is "" then hide
-       
-            //set link for new dorm for the chosen uni
-            let uniSelected = $('select#uni_name_drpdwn option:checked').val()
-            $('#add_new_dorm').attr('href', '/'+uniSelected+'/add/new-uni-dorm-review');
-        });
-
-        $('#dorm_name_section').show()
-       $('.fieldsets').show()
-}
 
 
-function setDormIdFormElement(dormName){
-    $.get('/dormNameToId/' + dormName, function(data){
-        $('#dorm_id').val(data);
-    });
-}
 
-/**Creates Map and fills it with markers of the uni and its dorms 
- * uni and dorms are defined in the relevant blade.php script tags.
-*/
-
-function initMap(){
-    
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: new google.maps.LatLng(uni.lat, uni.lng),
-          zoom: 12
-    });
-    createMarkers(dorms,map)
-    
-}
-    
-function createMarkers(dorms,map){       
-    for(var i = 0; i < dorms.length; i++){
-        addMarker(dorms[i],map);
-    }
-}
-
-function addMarker(marker,map){
-    var name = marker.dorm_name;
-    var address = marker.address;
-    
-    var markerLatLng = new google.maps.LatLng(parseFloat(marker.lat),parseFloat(marker.lng));
-    var html= '<b>' + name +'</b>' + '<p>' + address +"</p>"
-    var mark = new google.maps.Marker({
-            map: map,
-            position: markerLatLng 
-    });
-
-    var infoWindow = new google.maps.InfoWindow;
-        google.maps.event.addListener(mark, 'click', function(){
-            infoWindow.setContent(html);
-            infoWindow.open(map, mark);
-        });
-}
 
 
 //This document refers to Dorms upon Uni selection i.e. dorms_for_uni.blade.php
@@ -265,10 +227,10 @@ function getSortOrder(prop) {
 }
 
 function displayDorms(dormsArr){
-    $('#halls').empty();
+    $('#dorms').empty();
     console.log(dormsArr)
     for(var i =0; i<dormsArr.length;i++){
-        $('#halls').append('<div class="row" id="row_'+i+'"></div>')
+        $('#dorms').append('<div class="row" id="row_'+i+'"></div>')
         let row = $('#row_'+i)
         createDormCard(row,dormsArr[i++])
         if(i<dormsArr.length){
@@ -282,11 +244,11 @@ function displayDorms(dormsArr){
     }*/
 
 }
-var dormForLink
+
 function createDormCard(rowDiv, dorm){
     console.log(dorm);
     rowDiv.append(
-        '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card" id="dorm_'+dorm.dorm_id+'" style="cursor: pointer;">'+
+        '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link dorm_card" id="dorm_'+dorm.dorm_id+'" style="cursor: pointer;">'+
             '<div class="card bg-light">'+
              ' <div class="card-body">'+
                 '<img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">'+
@@ -325,7 +287,7 @@ function getStarRatingAsStringElement(dorm){
 }   
 
 function addEmptyStars(ratingIntegerPart,elementString){
-    for(var i = ratingIntegerPart; i<=5; i++){
+    for(var i = ratingIntegerPart; i<5; i++){
         elementString += '<i class="far fa-star star-icon"></i>'
     }
     return elementString
@@ -337,8 +299,39 @@ function numOfReviews(reviewsCount){
     return reviewString;
 }
 
-function reviewsForDorm(){
-    'location.href="/"+uni.uni_name+ '/dorms/' + dormForLink.dorm_name'
+/**Creates Map and fills it with markers of the uni and its dorms 
+ * uni and dorms are defined in the relevant blade.php script tags.
+*/
+
+function initMap(){
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(uni.lat, uni.lng),
+          zoom: 12
+    });
+    createMarkers(dorms,map)
 }
     
+function createMarkers(dorms,map){       
+    for(var i = 0; i < dorms.length; i++){
+        addMarker(dorms[i],map);
+    }
+}
+
+function addMarker(marker,map){
+    var name = marker.dorm_name;
+    var address = marker.address;
+    
+    var markerLatLng = new google.maps.LatLng(parseFloat(marker.lat),parseFloat(marker.lng));
+    var html= '<b>' + name +'</b>' + '<p>' + address +"</p>"
+    var mark = new google.maps.Marker({
+            map: map,
+            position: markerLatLng 
+    });
+
+    var infoWindow = new google.maps.InfoWindow;
+        google.maps.event.addListener(mark, 'click', function(){
+            infoWindow.setContent(html);
+            infoWindow.open(map, mark);
+        });
+}
 

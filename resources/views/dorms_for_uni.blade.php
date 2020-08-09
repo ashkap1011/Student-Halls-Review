@@ -17,7 +17,7 @@
       </li>
       
     </ul>
-  </nav>
+</nav>
 
   <div class="background" style="background-image: url(/storage/university-banner/qmul1.jpg);">
   </div>
@@ -27,7 +27,7 @@
   <h1 id="uni_heading">{{strval($uni->uni_name)}} Queen Mary University Of London</h1>
 
   <div class="row">
-    <div class="col-sm-3">
+    <div class="col-sm-4 col-md-3">
       <div id="amenity_filters">
         <h4>Filter Amenities</h4>
         <p id="filter_sidenote">Generated from our reviews</p>
@@ -39,15 +39,19 @@
         <label class="filters"for="{{$amenity}}"> {{$amenity}}</label><br>
         @endforeach
       </div>
+      <div id="map_container">
+        <h4 id="map_title">Halls Location</h4>
+        <div id="map"></div>
+      </div>
     </div>
 
-    <div class="col-sm-9" style="background-color:lavenderblush;">
+    <div class="col-sm-8 col-md-9" id="main_panel_of_dorms" style="background-color:lavenderblush;">
       
-      <div class="halls_header row">
-        <div id="halls_header_title" class="col-sm-4">          
+      <div class="dorms_header row">
+        <div id="dorms_header_title" class="col-sm-4">          
           <h2>Halls</h2> 
         </div>
-        <div id="halls_header_sort" class="col-sm-8">
+        <div id="dorms_header_sort" class="col-sm-8">
           <label for="Sort">Sort By:</label>
           <select name="Sort" id="sorting_options_dropdown">
             <option hidden disabled selected value> -- select an option -- </option>
@@ -58,11 +62,11 @@
         </div> 
       </div>
 
-      <div id="halls">
+      <div id="dorms">
         
         
       </div>
-
+      
     
       
       
@@ -83,14 +87,14 @@
     <style>
     /* Set the size of the div element that contains the map */
     #map {
-      height: 400px;  /* The height is 400 pixels */
+      height: 350px;  /* The height is 400 pixels */
       width: 100%;  /* The width is the width of the web page */
      }
   </style>
 
 
 
-  <div id="map"></div>
+  
 <script>
    var dorms = {!! json_encode($dorms, JSON_HEX_TAG) !!}
     
@@ -100,9 +104,9 @@
 
    
 </script>
-<!--
-<script defer
-   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgKta8lMAtyclRFwFAAb-mkGRf8ORQJxo&callback=initMap">
+  <!---
+    <script defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgKta8lMAtyclRFwFAAb-mkGRf8ORQJxo&callback=initMap">
     </script>
--->
+ --->
 @endsection

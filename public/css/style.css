@@ -7,11 +7,9 @@
 }
 
 .main-body  {
-    max-height: 200px;
     margin:auto;
-    max-width: 90%;
 }
-
+/*background image*/
 .background{
     background-repeat: no-repeat;
     background-size: cover;
@@ -21,8 +19,6 @@
     margin: auto;
 }
 
-
-
 #uni_heading{
     font-size: xx-large;
     font-weight: 800;
@@ -30,24 +26,19 @@
     padding-bottom: 1%;
 }
 
-
-
-
 /*
     Filter styling
 */
 
 #amenity_filters{
-    padding:4% 3% 4% 2vw;
-    margin-bottom:3%;
-    margin-right: 3%;
+    padding:3% 3% 4% 3%;
     background-color: bisque;
 }
 #filter_sidenote{
     font-style: italic;
     font-weight: lighter;
 }
-h4 {    /*REfers to the filter checkbox title*/
+h4 {    /*Refers to the filter checkbox title*/
     font-size:x-large;
 }
 .filters{
@@ -60,23 +51,41 @@ h4 {    /*REfers to the filter checkbox title*/
 end of filter styling
 */
 
+/**
+Map panel
+*/
 
-#halls_header_title{
+#map_container{
+    background-color: aqua;
+    margin: 4% 0% 4% 0%;
+}
+
+#map_title{
+    padding: 1% 0% 2% 2%;
+    text-align: center;
+}
+
+/**
+Main panel that displays the dorms
+*/
+
+#main_panel_of_dorms{
+}
+
+#dorms_header_title{
     font-size: xx-large;
-    padding: 2% 3% 2% 3%;
-    
+    padding: 2% 0% 2% 3%;
     float: left;
 }
 
-#halls_header_sort{
+#dorms_header_sort{
     float:right;
-    padding: 3% 6% 2% 27%;
+    text-align: right;
+    padding: 3% 3% 2% 4%;
 }
 
-
-#halls{
+#dorms{ 
     display: block; 
-    
     margin-bottom: 10%;
 }
 
@@ -85,16 +94,20 @@ end of filter styling
     max-width:20%;
     min-width: 90px;
     height:30%;
-    
 }
 
-.hall_card{
+.dorm_card{
     float:left;
+    transition: transform .2s;
+}
+
+.dorm_card:hover {
+    transform: scale(1.03); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 .card_right_panel{
     padding-left: 1.5vw;
-    min-width: 220px;
+    min-width: 150px;
 }
 
 .number_of_reviews{
@@ -133,10 +146,24 @@ div.star_rating i:first-of-type{
     }}
 
 /* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) { body {background-color: blue;} }
+@media (min-width: 768px) { body {background-color: blue;} 
+.card_right_panel{
+    padding-left: 1.5vw;
+    min-width: 200px;
+}
+
+}
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) { body {background-color: green;} }
+@media (min-width: 992px) { body {background-color: green;}
+#amenity_filters{
+    padding:3% 3% 4% 1vw;
+
+}
+
+.filters{
+    font-size:medium;
+} }
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { body {background-color: skyBlue;} }

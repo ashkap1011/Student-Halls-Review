@@ -37,11 +37,10 @@ class PageController extends Controller
         return view('/dorms_for_uni', compact('dorms','uni','amenities'));
         
     }   
-    
+    //not sure if we use the next method at all, blocked it from web.php
     public function getFilteredDorms(Request $request,$uniName){
         $uni = University::where('uni_name',strval($uniName))->first();
         $dorms = $this->getDormsForUni($uni);
-                
     }
     
     public function getDormsForUni($uni){
@@ -60,7 +59,7 @@ class PageController extends Controller
                 $dorm = Dorm::where('dorm_id', $interclgtDorm->dorm_id)->first();
                 if($dorm->uni_id != $uniId){        //avoids adding interCltdorms whose uni_id is same as the requested uni, i.e. already in $dorms of method caller
                 $dormName = $dorm->dorm_name;
-                $dorm->dorm_name = $dormName . ' (intercollegiate)'; //make it so that it removes distance for the thing
+                $dorm->dorm_name = $dormName . ' (I)'; //make it so that it removes distance for the thing
                 $dorms[] = $dorm;
                 }
             }
@@ -69,9 +68,10 @@ class PageController extends Controller
     }
 
     public function createReviewsForDorm($uniName, $dormName){
-        $dormId = Dorm::where('dorm_name', $dormName)->value('dorm_id');
-        $reviews = Review::where('dorm_id', $dormId)->get();
-        return view('dorm_reviews', compact('dormName', 'uniName', 'reviews'));
+        $uni = University::where('uni_name',$uniName)->first();
+        $dorm = Dorm::where('dorm_name', $dormName)->first();
+        $reviews = Review::where('dorm_id', $dorm->dorm_id)->get();
+        return view('reviews_for_dorm', compact('dorm', 'uni', 'reviews'));
     }
 
 
