@@ -282,11 +282,11 @@ function displayDorms(dormsArr){
     }*/
 
 }
-
+var dormForLink
 function createDormCard(rowDiv, dorm){
     console.log(dorm);
     rowDiv.append(
-        '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card">'+
+        '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card" id="dorm_'+dorm.dorm_id+'" style="cursor: pointer;">'+
             '<div class="card bg-light">'+
              ' <div class="card-body">'+
                 '<img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">'+
@@ -302,6 +302,10 @@ function createDormCard(rowDiv, dorm){
                  ' <i class="fas fa-running"></i>'+
                 '</div>   </div>   </div>     </div>')
 
+
+    $('#dorm_'+dorm.dorm_id).on("click", function(){
+        location.href="/"+uni.uni_name+ '/dorms/' + dorm.dorm_name
+    });
 }
 
 function getStarRatingAsStringElement(dorm){
@@ -332,6 +336,9 @@ function numOfReviews(reviewsCount){
     reviewString += reviewsCount==1 ? ' review': ' reviews'
     return reviewString;
 }
-    
+
+function reviewsForDorm(){
+    'location.href="/"+uni.uni_name+ '/dorms/' + dormForLink.dorm_name'
+}
     
 
