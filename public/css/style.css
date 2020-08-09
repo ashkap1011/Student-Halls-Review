@@ -24,10 +24,10 @@
 
 
 #uni_heading{
-    font-size: small;
+    font-size: xx-large;
     font-weight: 800;
-    padding-top: 3%;
-    padding-bottom: 2%;
+    padding-top: 2%;
+    padding-bottom: 1%;
 }
 
 
@@ -36,9 +36,11 @@
 /*
     Filter styling
 */
+
 #amenity_filters{
-    padding:4% 3% 3% 2%;
-    margin-right: 4%;
+    padding:4% 3% 4% 2vw;
+    margin-bottom:3%;
+    margin-right: 3%;
     background-color: bisque;
 }
 #filter_sidenote{
@@ -49,7 +51,7 @@ h4 {    /*REfers to the filter checkbox title*/
     font-size:x-large;
 }
 .filters{
-    font-size:large;
+    font-size:small;
     display: inline;
     padding:0.5%;
 }
@@ -61,26 +63,38 @@ end of filter styling
 
 #halls_header_title{
     font-size: xx-large;
-    padding-left: 3%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    display: inline-block;
+    padding: 2% 3% 2% 3%;
+    
+    float: left;
 }
 
-#halls_header_right{
-    float:right;   
-    padding: 3% 2% 1% 0%
+#halls_header_sort{
+    float:right;
+    padding: 3% 6% 2% 27%;
 }
 
 
-.halls{
-    float:left;
+#halls{
+    display: block; 
+    
+    margin-bottom: 10%;
 }
 
 .dorm_icon{
     float:left;
-    height:auto;
-    width:20%;
+    max-width:20%;
+    min-width: 90px;
+    height:30%;
+    
+}
+
+.hall_card{
+    float:left;
+}
+
+.card_right_panel{
+    padding-left: 1.5vw;
+    min-width: 220px;
 }
 
 .number_of_reviews{
@@ -107,9 +121,16 @@ h3{
       vertical-align: middle;
 }
 
+div.star_rating i:first-of-type{
+    padding-left: 2.5%;
+}
+    /*add media queires, look at reviews being cut. maybe overflow hidden in filters*/
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { body {background-color: pink; }
+    h4 {    /*REfers to the filter checkbox title*/
+        font-size:large;
+    }}
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { body {background-color: blue;} }
@@ -118,4 +139,4 @@ h3{
 @media (min-width: 992px) { body {background-color: green;} }
 
 /* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) { body {background-color: skyBlue;} }}
+@media (min-width: 1200px) { body {background-color: skyBlue;} }

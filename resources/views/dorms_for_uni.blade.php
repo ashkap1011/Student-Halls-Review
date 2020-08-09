@@ -24,10 +24,10 @@
 <div class="container main-body">       
 
   <h5 id="dorms_for_uni" hidden> </h5>   
-  <h1 id="uni_heading">{{strval($uni->uni_name)}}</h1>
+  <h1 id="uni_heading">{{strval($uni->uni_name)}} Queen Mary University Of London</h1>
 
   <div class="row">
-    <div class="col-md-auto col-lg-3" id="left_panel" >
+    <div class="col-sm-3">
       <div id="amenity_filters">
         <h4>Filter Amenities</h4>
         <p id="filter_sidenote">Generated from our reviews</p>
@@ -41,12 +41,13 @@
       </div>
     </div>
 
-    <div class="col-lg-9" style="background-color:lavenderblush;">
-      <div class="halls_header">
-        <div id="halls_header_title">          
+    <div class="col-sm-9" style="background-color:lavenderblush;">
+      
+      <div class="halls_header row">
+        <div id="halls_header_title" class="col-sm-4">          
           <h2>Halls</h2> 
         </div>
-        <div id="halls_header_right">
+        <div id="halls_header_sort" class="col-sm-8">
           <label for="Sort">Sort By:</label>
           <select name="Sort" id="sorting_options_dropdown">
             <option hidden disabled selected value> -- select an option -- </option>
@@ -56,59 +57,13 @@
           </select><br>
         </div> 
       </div>
-      <div class="halls">
-        <div class="row ">
-          <div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card">
-            <div class="card bg-light">
-              <div class="card-body">
-                <img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">
-                <div class="card_right_panel float-left pl-5">
-                  <h3 class="card-title">Wood Green</h3>
-                    <div class="star_rating">
-                      <p class="overall_rating_decimal pl-2">3.2</p>
-                      <i class="fas fa-star star-icon pl-2"></i>
-                      <i class="fas fa-star star-icon"></i>
-                      <i class="fas fa-star-half-alt star-icon"></i>
-                      <i class="far fa-star star-icon"></i>
-                      <i class="far fa-star star-icon"></i>
-                    </div><br>
-                  <span class="number_of_reviews">28 reviews</span> <br>
-                  <img src="http://www.googlemapsmarkers.com/v1/A/0099FF/">
-                  <span>15 mins walk</span>
-                  <i class="fas fa-running"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card">
-            <div class="card bg-light">
-              <div class="card-body">
-                <img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">
-                <div class="right_panel float-left pl-4">
-                  <h3 class="card-title">This is a long name</h3>
-                    <div class="star_rating">
-                      <p class="overall_rating_decimal pl-2">3.2</p>
-                      <i class="fas fa-star star-icon pl-2"></i>
-                      <i class="fas fa-star star-icon"></i>
-                      <i class="fas fa-star-half-alt star-icon"></i>
-                      <i class="far fa-star star-icon"></i>
-                      <i class="far fa-star star-icon"></i>
-                    </div><br>
-                  <span class=float-right >28 reviews</span> <br>
-                  <img src="http://www.googlemapsmarkers.com/v1/A/0099FF/">
-                  <span>15 mins walk</span>
-                  <i class="fas fa-running"></i>
-                </div>
-              </div>
-            </div>
-          </div>
-      </div>
+
+      <div id="halls">
+        
         
       </div>
 
-      <div class = "row">
-        <div id="dorms_div">
-      </div>
+    
       
       
     </div>

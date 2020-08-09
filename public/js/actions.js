@@ -265,12 +265,73 @@ function getSortOrder(prop) {
 }
 
 function displayDorms(dormsArr){
-    $('#dorms_div').empty();
-    for(var dorm in dormsArr){
-        $('#dorms_div').append('<a href="/'+ uni.uni_name+ '/dorms/' + dormsArr[dorm].dorm_name + '">' +dormsArr[dorm].dorm_name + '</a><br>')
+    $('#halls').empty();
+    console.log(dormsArr)
+    for(var i =0; i<dormsArr.length;i++){
+        $('#halls').append('<div class="row" id="row_'+i+'"></div>')
+        let row = $('#row_'+i)
+        createDormCard(row,dormsArr[i++])
+        if(i<dormsArr.length){
+        createDormCard(row,dormsArr[i])
+        }
     }
+    /*
+    for(var dorm in dormsArr){
+        $('#dorms_div').append(
+            '<a href="/'+ uni.uni_name+ '/dorms/' + dormsArr[dorm].dorm_name + '">' +dormsArr[dorm].dorm_name + '</a><br>')
+    }*/
+
 }
 
+function createDormCard(rowDiv, dorm){
+    console.log(dorm);
+    rowDiv.append(
+        '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link hall_card">'+
+            '<div class="card bg-light">'+
+             ' <div class="card-body">'+
+                '<img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">'+
+                '<div class="card_right_panel float-left">'+
+                  '<h3 class="card-title">'+dorm.dorm_name+'</h3>'+
+                   ' <div class="star_rating">'+ 
+                 '     <p class="overall_rating_decimal pl-2">'+dorm.overall_rating+'</p>'+
+                      getStarRatingAsStringElement(dorm)+
+                '    </div><br>'+
+               '   <span class="number_of_reviews">'+numOfReviews(dorm.reviews_count)+'</span> <br>'+
+                 ' <img src="http://www.googlemapsmarkers.com/v1/A/0099FF/">'+
+                '  <span>15 mins walk</span>'+
+                 ' <i class="fas fa-running"></i>'+
+                '</div>   </div>   </div>     </div>')
+
+}
+
+function getStarRatingAsStringElement(dorm){
+    let starRating = dorm.overall_rating;
+    var elementString="";
+    for(var i =1; i<=starRating; i++){
+        elementString+='<i class="fas fa-star star-icon"></i>';
+    }
+    let ratingIntegerPart = Math.floor(starRating);
+    var ratingDecimalPart = starRating-ratingIntegerPart;
+    if(ratingDecimalPart>= 0.5){
+        elementString+='<i class="fas fa-star-half-alt star-icon"></i>';
+        ratingIntegerPart++;
+    }
+        var elementString = addEmptyStars(ratingIntegerPart,elementString)
+    return elementString
+}   
+
+function addEmptyStars(ratingIntegerPart,elementString){
+    for(var i = ratingIntegerPart; i<=5; i++){
+        elementString += '<i class="far fa-star star-icon"></i>'
+    }
+    return elementString
+}
+
+function numOfReviews(reviewsCount){
+    var reviewString = reviewsCount;
+    reviewString += reviewsCount==1 ? ' review': ' reviews'
+    return reviewString;
+}
     
     
 
