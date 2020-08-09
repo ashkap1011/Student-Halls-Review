@@ -6,6 +6,7 @@ use App\TempReview;
 use App\University;
 use App\Dorm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use App\IntercollegiateDorm;
 
 
@@ -67,9 +68,10 @@ class ReviewsController extends Controller
             'quirk' => 'nullable',
             'review_text' => 'nullable'
         ]);
-
+       
         //todo make this neater using a constants.php thing
         $tempReview = new TempReview();
+         /*
         $tempReview->is_new_uni = $request->input('is_new_uni');
         $tempReview->room_rating = $request->input('room_rating');
         $tempReview->building_rating = $request->input('building_rating');
@@ -91,6 +93,27 @@ class ReviewsController extends Controller
         }
         $tempReview->quirk = $request->input('quirk');
         $tempReview->review_text = $request->input('review_text');
+
+        */
+
+        foreach(config('constants.options.generalColumnsOfTempReivew') as $columnName){
+            
+            if($columnName == 'amenities'){
+                $hasAmenities = $request->input($columnName);
+                if($hasAmenities  !== null){
+                $tempReview->$columnName = implode(',',$hasAmenities);
+                }
+                continue;
+            }
+            $tempReview->$columnName = $request->$columnName;
+
+            
+
+
+
+        }
+
+
 
         return $tempReview;
     }

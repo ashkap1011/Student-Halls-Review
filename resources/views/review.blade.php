@@ -32,7 +32,6 @@
 
 @section('form_beginning')
 
-
 <form action="/post_review" method="post">
     <input type="text" id="is_new_uni" name="is_new_uni" value="0" hidden>
 

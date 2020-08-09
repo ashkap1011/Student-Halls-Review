@@ -81,9 +81,9 @@
     <fieldset class="fieldsets">
     <br> Amenities: <br>
     @foreach ($amenities as $amenity)
-    @php($amenityValue=ucwords(str_replace("_"," ",$amenity)))
-    <input type='checkbox' id="{{$amenity}}" name="amenities[]" value="{{$amenity}}">
-    <label for="{{$amenity}}">{{$amenityValue}} </label><br>
+    @php($amenityId=str_replace(' ', '',strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $amenity))))
+    <input type='checkbox' id="{{$amenityId}}" name="amenities[]" value="{{$amenity}}">
+    <label for="{{$amenityId}}">{{$amenity}} </label><br>
     @endforeach
     </fieldset>
 
