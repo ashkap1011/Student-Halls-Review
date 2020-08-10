@@ -20,7 +20,6 @@ return [
                                         ,'year_of_residence','room_type','is_catered','catered_or_selfcatered_rating'
                                         ,'amenities','quirk','review_text')
 
-
     ]
         
 ];

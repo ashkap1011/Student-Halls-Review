@@ -29,7 +29,7 @@
   <div class="row">
     <div class="col-sm-4 col-md-3">
       <div id="amenity_filters">
-        <h4>Filter Amenities</h4>
+        <h4 id="filter_amenities_title">Filter Amenities</h4>
         <p id="filter_sidenote">Generated from our reviews</p>
         @foreach ($amenities as $amenity)
           @if ($amenity =='Games' || $amenity =='Social Events')
@@ -40,7 +40,10 @@
         @endforeach
       </div>
       <div id="map_container">
-        <h4 id="map_title">Halls Location</h4>
+        <div id="map_header">
+          <img id="map_icon" src="/storage/icons/map.svg">
+          <h4 id="map_title">Halls Location</h4>
+        </div>
         <div id="map"></div>
       </div>
     </div>

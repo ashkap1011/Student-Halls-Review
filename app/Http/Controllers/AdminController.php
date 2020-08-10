@@ -32,7 +32,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->temp_review_columns_names = Schema::getColumnListing('temp_reviews');
+        $this->tempReviewColumnsNames = Schema::getColumnListing('temp_reviews');
     }
 
     /**
@@ -50,30 +50,31 @@ class AdminController extends Controller
     public function reviews(){
         //reviews for pre-existing dorms will not have a dorm name but instead a dorm_id
         $reviews = TempReview::whereNull('dorm_name')->get();
-        $type_of_review = 'normal_reviews';
+        $typeOfReviews = 'normal_reviews';
 
-        $temp_review_columns = $this->temp_review_columns_names;
-        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
+        $tempReviewColumns = $this->tempReviewColumnsNames;
+        return view('/admin_reviews', compact('reviews','tempReviewColumns','typeOfReviews'));
     }
 
     //New dorm will have is_new_uni as false and will have a dorm name
     public function reviewsWithNewDorm(){
         $reviews = TempReview::where('is_new_uni','=','0')
                     ->whereNotNull('dorm_name')->get();
-        $type_of_review = 'new_dorm_reviews';
+        $typeOfReviews = 'new_dorm_reviews';
+        $tempReviewColumns = $this->tempReviewColumnsNames;
+        $dorms = Dorm::all();
 
-        $temp_review_columns = $this->temp_review_columns_names;
-
-        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
+        return view('/admin_reviews', compact('reviews','tempReviewColumns','typeOfReviews','dorms'));
     }
 
     public function reviewsWithNewUni(){
         $reviews = TempReview::where('is_new_uni','=','1')->get();
-        $type_of_review = 'new_uni_reviews';
+        $typeOfReviews = 'new_uni_reviews';
 
-        $temp_review_columns = $this->temp_review_columns_names;
-        
-        return view('/admin_reviews', compact('reviews','temp_review_columns','type_of_review'));
+        $tempReviewColumns = $this->tempReviewColumnsNames;
+        $universities = University::all();
+        $dorms = Dorm::all();
+        return view('/admin_reviews', compact('reviews','tempReviewColumns','typeOfReviews','universities','dorms'));
     }
     
     public function updateTempReview(Request $request){

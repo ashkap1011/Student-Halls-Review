@@ -8,6 +8,7 @@
 
 .main-body  {
     margin:auto;
+    min-width:80%;
 }
 /*background image*/
 .background{
@@ -39,7 +40,7 @@
     font-weight: lighter;
     font-size: small;
 }
-h4 {    /*Refers to the filter checkbox title*/
+#filter_amenities_title {    /*Refers to the filter checkbox title*/
     font-size:medium;
 }
 .filters{
@@ -60,10 +61,21 @@ Map panel
     background-color: aqua;
     margin: 4% 0% 4% 0%;
 }
-
+#map_header{
+text-align: center;
+}
+#map_icon{
+    display:inline-block;
+    width: 10%;
+    height:auto;
+    padding: 2% 0% 5% 0%;
+    margin:1% 1% 2% 0%
+}
 #map_title{
-    padding: 1% 0% 2% 2%;
-    text-align: center;
+    padding: 1% 0% 5% 0%;
+    margin-top: 2%;
+    font-size: large;
+    display:inline-block;
 }
 
 /**
@@ -92,7 +104,7 @@ Main panel that displays the dorms
 
 .dorm_icon{
     float:left;
-    max-width:20%;
+    max-width:15%;
     min-width: 90px;
     height:30%;
 }
@@ -153,8 +165,8 @@ div.star_rating i:first-of-type{
     min-width: 200px;
 }
 
-h4 {    /*REfers to the filter checkbox title*/
-    font-size:x-large;
+#filter_amenities_title {    /*REfers to the filter checkbox title*/
+    font-size:large;
 }
 
 
@@ -166,7 +178,9 @@ h4 {    /*REfers to the filter checkbox title*/
     padding:3% 3% 4% 1vw;
 
 }
-
+#filter_amenities_title {    /*REfers to the filter checkbox title*/
+    font-size:x-large;
+}
 #filter_sidenote{
     font-size: medium;
 }
@@ -176,3 +190,22 @@ h4 {    /*REfers to the filter checkbox title*/
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { body {background-color: skyBlue;} }
+
+
+
+
+
+/*
+Admin panel
+*/
+
+.admin_container{
+    max-width:70%;
+}
+
+.info_table{
+    max-width:300px;
+    float:left;
+}
+
+

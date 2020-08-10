@@ -111,28 +111,30 @@ $(document).ready(function(){
       });
       
       $('.delete_btn').click(function(){
-        //add r u sure!!!!
-        let rowId = $(this).attr('id').replace(/[^\d\.]/g, '');
-        $.post('/delete_temp_review',{
-            '_token': $('meta[name=csrf-token]').attr('content'),
-            reviewId: rowId
-        });
-        location.reload();
+        if(window.confirm("DELETE, U SURE?")){
+            let rowId = $(this).attr('id').replace(/[^\d\.]/g, '');
+            $.post('/delete_temp_review',{
+                '_token': $('meta[name=csrf-token]').attr('content'),
+                reviewId: rowId
+            });
+            location.reload();
+        }
       });
       
       //pushes reviews from temp_reviews to public reviews
     $('#push_btn').click(function(){
+        
         let reviewsToPush = $('input:checkbox:checked').map(function(){
             return $(this).attr('id').replace(/[^\d\.]/g, '');
-          }).get(); 
+        }).get(); 
         let reviewType = $('#type_of_reviews').html();
-        
-        $.post('/migrate_temp_review',{
-            '_token': $('meta[name=csrf-token]').attr('content'),
-            reviewsToMigrate: reviewsToPush,
-            typeOfReviews: reviewType
-        });
-       
+            if(checkForEmptyFields(reviewsToPush,reviewType)){
+                $.post('/migrate_temp_review',{
+                    '_token': $('meta[name=csrf-token]').attr('content'),
+                    reviewsToMigrate: reviewsToPush,
+                    typeOfReviews: reviewType
+                });
+            }
     });
 
 });
@@ -153,6 +155,42 @@ function updateReview(button){
     }
     );
     location.reload();
+}
+
+function checkForEmptyFields(reviewsToPush,reviewType){
+    var uniLocation = ['uni_address', 'uni_lat', 'uni_lng'];
+    var dormLocation = ['dorm_address',	'dorm_lat',	'dorm_lng'];
+    if(reviewType == 'new_uni_reviews'){
+        for(var i =0; i<reviewsToPush.length;i++){
+            for(var j=0;j< uniLocation.length;j++){
+                var fieldData = $('#row_'+reviewsToPush[i]+'_col_'+uniLocation[j]).html();
+                console.log(fieldData)
+                if(fieldData==""){
+                    window.alert('id:'+reviewsToPush[i] + " has  the following empty " +uniLocation[j])
+                    return false;
+                }
+                var fieldData = $('#row_'+reviewsToPush[i]+'_col_'+dormLocation[j]).html();
+                if(fieldData==""){
+                    window.alert('id:'+reviewsToPush[i] + " has  the following empty " +dormLocation[j])
+                    return false;
+                }
+            }
+        }
+    } 
+
+    if(reviewType == 'new_dorm_reviews'){
+        for(var i =0; i<reviewsToPush.length;i++){
+            for(var j=0;j< dormLocation.length;j++){
+                console.log(reviewsToPush[i])
+                var fieldData = $('#row_'+reviewsToPush[i]+'_col_'+dormLocation[j]).html();
+                if(fieldData == ""){
+                    window.alert('id:'+reviewsToPush[i] + " has  the following empty " +dormLocation[j])
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
 }
 
 
@@ -250,7 +288,7 @@ function createDormCard(rowDiv, dorm){
         '<div class="col-12 col-xl-6 h-100 mb-3 stretched-link dorm_card" id="dorm_'+dorm.dorm_id+'" style="cursor: pointer;">'+
             '<div class="card bg-light">'+
              ' <div class="card-body">'+
-                '<img class="card-img dorm_icon" src="/storage/dormIcon.jpg" alt="Card image">'+
+                '<img class="card-img dorm_icon" src="/storage/icons/dormIcon.jpg" alt="Card image">'+
                 '<div class="card_right_panel float-left">'+
                   '<h3 class="card-title">'+dorm.dorm_name+'</h3>'+
                    ' <div class="star_rating">'+ 
@@ -258,7 +296,6 @@ function createDormCard(rowDiv, dorm){
                       getStarRatingAsStringElement(dorm)+
                 '    </div><br>'+
                '   <span class="number_of_reviews">'+numOfReviews(dorm.reviews_count)+'</span> <br>'+
-                 ' <img src="http://www.googlemapsmarkers.com/v1/A/0099FF/">'+
                 '  <span>15 mins walk</span>'+
                  ' <i class="fas fa-running"></i>'+
                 '</div>   </div>   </div>     </div>')
