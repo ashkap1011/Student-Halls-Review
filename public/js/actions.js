@@ -242,7 +242,6 @@ function displayDorms(dormsArr){
         $('#dorms_div').append(
             '<a href="/'+ uni.uni_name+ '/dorms/' + dormsArr[dorm].dorm_name + '">' +dormsArr[dorm].dorm_name + '</a><br>')
     }*/
-
 }
 
 function createDormCard(rowDiv, dorm){
@@ -263,8 +262,6 @@ function createDormCard(rowDiv, dorm){
                 '  <span>15 mins walk</span>'+
                  ' <i class="fas fa-running"></i>'+
                 '</div>   </div>   </div>     </div>')
-
-
     $('#dorm_'+dorm.dorm_id).on("click", function(){
         location.href="/"+uni.uni_name+ '/dorms/' + dorm.dorm_name
     });

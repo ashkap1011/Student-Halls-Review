@@ -37,9 +37,10 @@
 #filter_sidenote{
     font-style: italic;
     font-weight: lighter;
+    font-size: small;
 }
 h4 {    /*Refers to the filter checkbox title*/
-    font-size:x-large;
+    font-size:medium;
 }
 .filters{
     font-size:small;
@@ -141,9 +142,9 @@ div.star_rating i:first-of-type{
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) { body {background-color: pink; }
-    h4 {    /*REfers to the filter checkbox title*/
-        font-size:large;
-    }}
+    
+    
+}
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { body {background-color: blue;} 
@@ -151,6 +152,11 @@ div.star_rating i:first-of-type{
     padding-left: 1.5vw;
     min-width: 200px;
 }
+
+h4 {    /*REfers to the filter checkbox title*/
+    font-size:x-large;
+}
+
 
 }
 
@@ -161,8 +167,11 @@ div.star_rating i:first-of-type{
 
 }
 
+#filter_sidenote{
+    font-size: medium;
+}
 .filters{
-    font-size:medium;
+    font-size:large;
 } }
 
 /* Extra large devices (large desktops, 1200px and up) */

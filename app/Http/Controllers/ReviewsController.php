@@ -9,18 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use App\IntercollegiateDorm;
 
-
+/**This Controller is in charge of handling the reviews that the user writes,
+ *  these are then saved temp_reviews table */
 class ReviewsController extends Controller
 {   
     
-
+    /**Create initial form page for writing reviews */
     public function writeReview(){
         $universities = University::all();
         $amenities = config('constants.options.amenities');
         return view('review', compact('universities','amenities'));
     }
 
-
+    /**alternate form page for writing reviews where it is for a new uni and dorm, or just dorm*/
     public function newUniOrDormReviewPage($uni_name){
         $amenities = config('constants.options.amenities');
         $isNewUni =false;
@@ -30,7 +31,7 @@ class ReviewsController extends Controller
         return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni'));
     }
 
-   
+    /**review is for an exisitng dorm */
     public function createNewReview(Request $request){
         $tempReview = $this->appendReview($request);
         $tempReview->dorm_id = $request->input('dorm_id'); 
@@ -49,28 +50,28 @@ class ReviewsController extends Controller
         $tempReview->save();
     }
 
+    /**The following method returns the Temp Review view model appended with the common 
+     *  review aspects, e.g. star ratings.
+     */
     public function appendReview($request){
-
-        $request->validate([ //addminmaxvalues
-            'is_new_uni' => 'required|boolean',
-            'room_rating' => 'required|integer|between:1,5',
-            'building_rating' => 'required|integer|between:1,5',
-            'location_rating' => 'required|integer|between:1,5',
-            'bathroom_rating' => 'required|integer|between:1,5',
-            'staff_rating' => 'required|integer|between:1,5',
-            'is_recommended' => 'required|boolean',
-            'year_of_study' => 'required|string',
-            'year_of_residence' => 'required|integer',
-            'year_of_study' => 'required|string',
-            'is_catered' => 'required|boolean',
-            'catered_or_selfcatered_rating' => 'required|integer|between:1,5',
-            'amenities' => 'array',
-            'quirk' => 'nullable',
-            'review_text' => 'nullable'
-        ]);
+        $request =$this->validateAppendReviewRequest($request);
+               
        
-        //todo make this neater using a constants.php thing
         $tempReview = new TempReview();
+        
+        foreach(config('constants.options.generalColumnsOfTempReivew') as $columnName){
+            
+            if($columnName == 'amenities'){
+                $hasAmenities = $request->input($columnName);
+                if($hasAmenities  !== null){
+                    $tempReview->$columnName = implode(',',$hasAmenities);
+                }
+                continue;
+            }
+            $tempReview->$columnName = $request->$columnName;
+        }
+        return $tempReview;
+
          /*
         $tempReview->is_new_uni = $request->input('is_new_uni');
         $tempReview->room_rating = $request->input('room_rating');
@@ -96,43 +97,43 @@ class ReviewsController extends Controller
 
         */
 
-        foreach(config('constants.options.generalColumnsOfTempReivew') as $columnName){
-            
-            if($columnName == 'amenities'){
-                $hasAmenities = $request->input($columnName);
-                if($hasAmenities  !== null){
-                $tempReview->$columnName = implode(',',$hasAmenities);
-                }
-                continue;
-            }
-            $tempReview->$columnName = $request->$columnName;
+    }
 
-            
-
-
-
-        }
-
-
-
-        return $tempReview;
+    private function validateAppendReviewRequest($request){
+        $request->validate([ //addminmaxvalues
+            'is_new_uni' => 'required|boolean',
+            'room_rating' => 'required|integer|between:1,5',
+            'building_rating' => 'required|integer|between:1,5',
+            'location_rating' => 'required|integer|between:1,5',
+            'bathroom_rating' => 'required|integer|between:1,5',
+            'staff_rating' => 'required|integer|between:1,5',
+            'is_recommended' => 'required|boolean',
+            'year_of_study' => 'required|string',
+            'year_of_residence' => 'required|integer',
+            'year_of_study' => 'required|string',
+            'is_catered' => 'required|boolean',
+            'catered_or_selfcatered_rating' => 'required|integer|between:1,5',
+            'amenities' => 'array',
+            'quirk' => 'nullable',
+            'review_text' => 'nullable'
+        ]);
+        return $request;
     }
 
 
+
+    /**returns all dorm names of a uni, including intercollegiate dorm */
     public function dormsOnUniSelection($uni_name){
         $uni = University::where('uni_name', $uni_name)->first();
         $dormsOfUni = Dorm::where('uni_id', $uni->uni_id)->get();   
-
         $dormNames= array();
+
         foreach($dormsOfUni as $dorm){
             array_push($dormNames, strval($dorm->dorm_name));
         }
-        
         if($uni->has_intercollegiate_dorms == '1'){
             $dormNames = $this->appendIntercollegiateDormNames($dormNames,$uni->uni_id);
         } 
-        
-        
         return $dormNames;
     }
 
@@ -141,6 +142,7 @@ class ReviewsController extends Controller
         return $dormId;
     }
 
+    /**Adds all the intercollegiate dorms of a given uni */
     private function appendIntercollegiateDormNames($dormNames,$uniId){
         $allIntercollegiateDorms = IntercollegiateDorm::all();
         foreach($allIntercollegiateDorms as $interclgtDorm){
@@ -152,7 +154,6 @@ class ReviewsController extends Controller
             }
         } 
         return $dormNames;
-
     }
 
     

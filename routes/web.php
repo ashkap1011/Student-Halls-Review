@@ -25,7 +25,7 @@ Route::post('/post_review_for_new_uni_or_dorm', 'ReviewsController@createReviewF
 Route::get('/dormsForUni/{uni_name}','ReviewsController@dormsOnUniSelection');
 Route::get('/dormNameToId/{dorm_name}','ReviewsController@dormNameToId');
 
-Route::get('/admin_panel', 'AdminController@adminPage');
+Route::get('/admin_panel', 'AdminController@index');
 Route::get('/posted_reviews','AdminController@reviews');
 Route::get('/posted_reviews_with_new_dorm','AdminController@reviewsWithNewDorm');
 Route::get('/posted_reviews_with_new_uni','AdminController@reviewsWithNewUni');
