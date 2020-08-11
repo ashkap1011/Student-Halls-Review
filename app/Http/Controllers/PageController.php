@@ -31,6 +31,16 @@ class PageController extends Controller
             }
         }
     }
+
+    public function getSearchMatchingUnis($searchString){
+        $universities=University::where('uni_name','LIKE','%'.$searchString."%")->get();
+        return view('search_results', compact('universities'));      
+    }
+
+
+
+
+
     
     public function createDormsForUni($uniName){
         $uni = University::where('uni_name',strval($uniName))->first();
@@ -81,6 +91,11 @@ class PageController extends Controller
         $reviews = Review::where('dorm_id', $dorm->dorm_id)->get();
         return view('reviews_for_dorm', compact('dorm', 'uni', 'reviews'));
     }
+
+    
+
+
+
     
     ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were.
 }

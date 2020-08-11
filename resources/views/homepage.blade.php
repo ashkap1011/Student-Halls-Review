@@ -20,22 +20,33 @@
     @endif
 </div>
 
-    <div class="content">
-        <div class="title m-b-md">
-            <a href="/add/new-review"> write a review</a><br>
-            
-            <div class="search">
-                <div class="search_bar">
-                    <input type="text" class="form-controller" id="search" name="search" autocomplete="off">
-                </div>
-                <div class="search_results">
+<nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Active</a>
+      </li>
+      <li class="nav-item">
+        <a href="/add/new-review"> write a review</a><br>
+      </li>
+    </ul>
+</nav>
 
-                </div>
-
-                Laravelhi
+        <div id="homepage_title_container" >
+            <pre id="homepage_title">Let's Find your 
+                    dream dorm</pre>
         </div>
-    </div>
-    </div>
+        <div class="search">
+            <div class="search_bar">
+                <input type="text" class="form-controller" id="search" name="search" autocomplete="off">
+                <a id="search_button"><img id="searh_icon" src="/storage/icons/search.png" alt=""></a>
+            </div>
+            <div class="search_results"></div>
+        </div>
+            
+        <div>
+            <img src="/storage/homepage/welcome.svg" alt="illustration of Uni students"id="hompage_main_image">
+        </div>              
+
     
 @endsection
 

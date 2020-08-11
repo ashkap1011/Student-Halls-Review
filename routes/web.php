@@ -37,6 +37,9 @@ Route::post('/migrate_temp_review','AdminController@migrateTempReviews');
 Route::get('/search', 'PageController@search');
 Route::get('/{uniName}/dorms', 'PageController@createDormsForUni');
 Route::get('/{uniName}/dorms/{dormName}','PageController@createReviewsForDorm');
+Route::get('/search/results/{searchString}','PageController@getSearchMatchingUnis');
+
+
 //Route::get('/{uniName}/filtered-dorms','PageController@getFilteredDorms');
 
 

@@ -50,24 +50,7 @@ $(document).ready(function(){
     });
 
     
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        }
-    });
-        
-    $('#search').on('keyup',function(){
-        console.log('yes')
-        $value=$(this).val();
-        $.ajax({
-            type : 'get',
-            url : '/search',
-            data:{'search':$value},
-            success:function(data){
-            $('.search_results').html(data);
-            }
-        });   
-    });
+    
 
 });
 
@@ -91,6 +74,49 @@ function setDormSectionPerUniSelection(){
         $('#dorm_name_section').show()
        $('.fieldsets').show()
 }
+
+//refers to homepage
+$(document).ready(function(){
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        }
+    });
+        
+    $('#search').on('keyup',function(){
+        //sets search button's href
+        var searchString = $('#search').val()
+        $(this).attr('href', '/search/results/'+searchString)
+
+        //dynamically retrieves all matching search results
+        let value=$(this).val();
+        $.ajax({
+            type : 'get',
+            url : '/search',
+            data:{'search':value},
+            success:function(data){
+            $('.search_results').html(data);
+            }
+        });   
+    });
+
+
+    $('#search_button').click(function(){
+        var searchString = $('#search').val()
+        $(this).attr('href', '/search/results/'+searchString) 
+        /*
+        $.post('/search-results',{
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            search: searchString
+        });*/
+    })
+
+
+
+});
+
+
+
 
 
 function setDormIdFormElement(dormName){

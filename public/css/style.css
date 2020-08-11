@@ -191,10 +191,6 @@ div.star_rating i:first-of-type{
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) { body {background-color: skyBlue;} }
 
-
-
-
-
 /*
 Admin panel
 */
@@ -207,5 +203,180 @@ Admin panel
     max-width:300px;
     float:left;
 }
+
+
+/**
+Homepage
+*/
+@media only screen and (min-width: 769px){
+#homepage_main_body{
+}
+
+#homepage_title_container{
+    position: relative;
+    z-index: 3;
+}
+
+#homepage_title{
+    font-size: 4vw;
+    font-family: 'Montserrat';
+    float: left;
+    padding:2em 0% 0% 1em;
+    z-index: 3;
+    text-shadow: 
+    -1px 0 black,
+    0 1px black, 
+    1px 0 black, 
+    0 -1px black,
+    -1px -1px black,
+    1px 1px black,
+    -1px 1px black,
+    1px -1px black;
+    position: absolute;
+    top:20%;
+    left:15%;
+}
+
+
+#hompage_main_image{
+    max-width: 40%;
+    min-width:50px;
+    height:auto;
+    margin-left:-5%;
+    margin-right:3vw;
+    top:20%;
+    position:absolute;
+    left: 60%;
+    bottom:10%;
+}
+
+.search{
+    z-index: 5;
+    position: absolute;
+    top: 48%;
+    left:10%;
+}
+.search_bar {
+    /* This bit sets up the horizontal layout */
+    display:flex;
+    
+    width: 35vw;
+    max-height: 3%;
+    /* This bit draws the box around it */
+    
+    /* I've used padding so you can see the edges of the elements. */
+    
+  }
+  
+  input {
+    /* Tell the input to use all the available space */
+    flex-grow:2;
+    /* And hide the input's outline, so the form looks like the outline */
+    border: 1px solid blue;
+  }
+    
+  #searh_icon {
+    /* Just a little styling to make it pretty */
+    border:1px solid blue;
+    background-color:white;
+    max-height: 35px;
+    width:auto;
+    cursor: pointer
+  }
+}
+  @media only screen and (max-width: 768px)  {
+    #homepage_title_container{
+    float:left;    
+    }
+    
+    #homepage_title{
+        font-size: 8vw;
+        font-family: 'Montserrat';
+        display:block;
+        text-shadow: 
+        -1px 0 black,
+        0 1px black, 
+        1px 0 black, 
+        0 -1px black,
+        -1px -1px black,
+        1px 1px black,
+        -1px 1px black,
+        1px -1px black;
+        margin-top:10%;
+        text-align: center;
+    }
+    
+    
+    #hompage_main_image{
+        max-width: 90%;
+        min-width:50px;
+        height:auto;
+        float: right;
+        padding-top:5%;    
+    }
+    
+    .search{
+        z-index: 5;
+        display:block;
+        max-width:75%;
+        margin:auto;
+    }
+    .search_bar {
+        /* This bit sets up the horizontal layout */
+        display:flex;
+        min-width:30vw;
+        max-height: 2%;
+        /* This bit draws the box around it*/
+      }
+
+      input {
+        /* Tell the input to use all the available space */
+        flex-grow:2;
+        /* And hide the input's outline, so the form looks like the outline */
+        border: 1px solid blue;
+      }
+        
+      #searh_icon {
+        /* Just a little styling to make it pretty */
+        border:1px solid blue;
+        background-color:white;
+        max-height: 35px;
+        width:auto;
+        cursor: pointer
+      }
+
+  }
+
+
+
+
+
+  /**
+  NavBar
+  */
+#write_review_button{
+    max-height:30px;
+    max-width:50%;
+    display:flex;
+    justify-content: center;
+
+
+}
+
+#write_icon{
+}
+#write_review_text{
+    display: inline-block;
+}
+
+#arrow_icon{
+}
+
+
+
+
+
+
+
 
 
