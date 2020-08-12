@@ -153,10 +153,7 @@ div.star_rating i:first-of-type{
     /*add media queires, look at reviews being cut. maybe overflow hidden in filters*/
 
 /* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) { body {background-color: pink; }
-    
-    
-}
+@media (min-width: 576px) { body {background-color: pink; }}
 
 /* Medium devices (tablets, 768px and up) */
 @media (min-width: 768px) { body {background-color: blue;} 
@@ -237,7 +234,6 @@ Homepage
     left:15%;
 }
 
-
 #hompage_main_image{
     max-width: 40%;
     min-width:50px;
@@ -252,7 +248,8 @@ Homepage
 
 .search{
     z-index: 5;
-    position: absolute;
+    float:left; 
+    margin:25% 5% 2vh 5% ;
     top: 48%;
     left:10%;
 }
@@ -265,7 +262,6 @@ Homepage
     /* This bit draws the box around it */
     
     /* I've used padding so you can see the edges of the elements. */
-    
   }
   
   input {
@@ -283,6 +279,13 @@ Homepage
     width:auto;
     cursor: pointer
   }
+  .search_result{
+    width: 100%;
+    background-color: aliceblue;
+    }
+    
+
+
 }
   @media only screen and (max-width: 768px)  {
     #homepage_title_container{
@@ -305,8 +308,7 @@ Homepage
         margin-top:10%;
         text-align: center;
     }
-    
-    
+        
     #hompage_main_image{
         max-width: 90%;
         min-width:50px;
@@ -344,6 +346,13 @@ Homepage
         width:auto;
         cursor: pointer
       }
+      .search_result{
+        width: 100%;
+        background-color: aliceblue;
+    }
+        
+
+      
 
   }
 

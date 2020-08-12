@@ -319,7 +319,7 @@ function createDormCard(rowDiv, dorm){
                   '<h3 class="card-title">'+dorm.dorm_name+'</h3>'+
                    ' <div class="star_rating">'+ 
                  '     <p class="overall_rating_decimal pl-2">'+dorm.overall_rating+'</p>'+
-                      getStarRatingAsStringElement(dorm)+
+                      getStarRatingAsStringElement(dorm.overall_rating)+
                 '    </div><br>'+
                '   <span class="number_of_reviews">'+numOfReviews(dorm.reviews_count)+'</span> <br>'+
                 '  <span>15 mins walk</span>'+
@@ -330,8 +330,7 @@ function createDormCard(rowDiv, dorm){
     });
 }
 
-function getStarRatingAsStringElement(dorm){
-    let starRating = dorm.overall_rating;
+function getStarRatingAsStringElement(starRating){
     var elementString="";
     for(var i =1; i<=starRating; i++){
         elementString+='<i class="fas fa-star star-icon"></i>';
@@ -394,4 +393,49 @@ function addMarker(marker,map){
             infoWindow.open(map, mark);
         });
 }
+
+//Document for Reviews of a dorm
+$(document).ready(function(){
+    if($('#reviews_for_dorms').length){
+        $('.star_ratings').each(function(index,element){
+            $(element).append(getStarRatingAsStringElement(dorm.overall_star_ratings[index]));
+        });
+
+        var overallRating = $('#dorm_overall_rating_value').html()
+        $('.dorm_overall_rating').append(getStarRatingAsStringElement(overallRating))
+    
+        $('.clap_icons').each(function(index,element){
+            $(element).on('click',function(){
+                var reviewId = $(element).attr('id').split('_').pop();
+                if($(element).css('background-color')!=='green'){
+                    $(element).css('background-color', 'green')
+                    //make ajax query to set to cookie
+                } else{
+                    //change colour to neutral
+                    //make ajax query to remove from cookies
+                }
+
+                //gets id and checks if it is in cookies,
+                //if not green and then make green and set cookie and set review clap row
+                
+            });
+        })
+    
+    }
+
+
+    //make stars
+
+
+
+
+});
+
+
+
+
+
+
+
+
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CookieController;
 use App\Http\Controllers\PageController;
 use App\Review;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,8 @@ Route::get('/{uniName}/dorms', 'PageController@createDormsForUni');
 Route::get('/{uniName}/dorms/{dormName}','PageController@createReviewsForDorm');
 Route::get('/search/results/{searchString}','PageController@getSearchMatchingUnis');
 
+Route::Get('/set','CookieController@setClapCookie');
+Route::Get('/get','CookieController@getClapCookie');
 
 //Route::get('/{uniName}/filtered-dorms','PageController@getFilteredDorms');
 

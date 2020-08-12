@@ -38,10 +38,6 @@ class PageController extends Controller
     }
 
 
-
-
-
-    
     public function createDormsForUni($uniName){
         $uni = University::where('uni_name',strval($uniName))->first();
         $amenities = config('constants.options.amenities');
@@ -89,13 +85,18 @@ class PageController extends Controller
         $uni = University::where('uni_name',$uniName)->first();
         $dorm = Dorm::where('dorm_name', $dormName)->first();
         $reviews = Review::where('dorm_id', $dorm->dorm_id)->get();
-        return view('reviews_for_dorm', compact('dorm', 'uni', 'reviews'));
+        $dormAmenities = $dorm->has_amenities;
+        $dormHasAmenities=[];
+        $AMENITIES = config('constants.options.amenities');
+        for($i = 0; $i< sizeof($AMENITIES);$i++){
+            if($dormAmenities[$i]== 1){
+                $dormHasAmenities[] = $AMENITIES[$i];
+            }
+        }
+        $STARRATINGS =  config('constants.options.starRatings');
+        
+        return view('reviews_for_dorm', compact('dorm', 'uni', 'reviews','dormHasAmenities','STARRATINGS'));
     }
-
-    
-
-
-
     
     ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were.
 }
