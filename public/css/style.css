@@ -385,7 +385,53 @@ Homepage
 
 
 
+/**
+Reviews For Dorm Page
+*/
+.review_card_body_header{
+    margin-bottom: 1vh;
+    padding-bottom: 1vh;
+}
 
+.review_overall_rating_container{
+    display: inline-block;
+}
+
+.review_recommends_container{
+    float:right;
+    display: block;
+    margin-right:-10%;
+}
+.review_recommend_icon{
+    width:10%;
+    height:auto;
+    margin-right:0.4vw;  
+}
+
+.review_card{
+    background: #FFFFFF;
+    box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.25);
+    border-radius: 40px;
+}
+
+.review_card_body{
+    margin:1% 1% -0.5% 1%;
+}
+
+.clap_icons{
+    margin-top: -1%;
+}
+.double_line_arrow{
+    max-width:5%;
+    height:13%;
+    transform: rotate(90deg);
+    position: absolute;
+    left:50%
+}
+
+.catering_rating{
+    float:right;    
+}
 
 
 

@@ -401,23 +401,48 @@ $(document).ready(function(){
             $(element).append(getStarRatingAsStringElement(dorm.overall_star_ratings[index]));
         });
 
-        var overallRating = $('#dorm_overall_rating_value').html()
-        $('.dorm_overall_rating').append(getStarRatingAsStringElement(overallRating))
-    
+        var dormOverallRating = $('#dorm_overall_rating_value').html()
+        $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating))
+        
+        var reviewOverallRating = $('.review_overall_rating_container').each(function(index,element){
+            $(element).append(getStarRatingAsStringElement(jQuery('b',this).html()))
+        })
+
+
+
+
+        //looks at cookies and makes clapped reviews clapped for the client
+        if(reviewClaps != null){
+           reviewIdOfClaps = JSON.parse(reviewClaps);
+            console.log(reviewIdOfClaps)
+            reviewIdOfClaps.forEach(element => {
+                $('#review_id_'+element).addClass('clapped');
+                $('#review_id_'+element).css('background-color', 'green');
+            });
+        }
+
+        //update cookies for reviews applauded 
         $('.clap_icons').each(function(index,element){
             $(element).on('click',function(){
-                var reviewId = $(element).attr('id').split('_').pop();
-                if($(element).css('background-color')!=='green'){
+                var idOfReview = $(element).attr('id').split('_').pop();
+                if($(element).attr('class') !== 'clap_icons clapped'){  //if it's already clapped
                     $(element).css('background-color', 'green')
-                    //make ajax query to set to cookie
-                } else{
-                    //change colour to neutral
-                    //make ajax query to remove from cookies
-                }
+                    $(element).addClass('clapped');
+                    $.post('/cookie/set/new/review_id', {
+                        '_token': $('meta[name=csrf-token]').attr('content'),
+                        reviewId: idOfReview
+                    });
+                    //post request to increase review's count
 
-                //gets id and checks if it is in cookies,
-                //if not green and then make green and set cookie and set review clap row
-                
+                } else{
+                    $(element).css('background-color', 'transparent')
+                    $(element).toggleClass('clapped');
+                    $.post('/cookie/set/delete/review_id', {
+                        '_token': $('meta[name=csrf-token]').attr('content'),
+                        reviewId: idOfReview
+                    });
+                    //post request to reduce review's count
+                }
             });
         })
     
