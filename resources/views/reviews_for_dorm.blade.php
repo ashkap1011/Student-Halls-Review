@@ -29,7 +29,7 @@
       </div>
    </div>
    <div class="row">
-      <div class="col-3" id="dorm_reviews_side_panel" >
+      <div class="col-2" id="dorm_reviews_side_panel" >
          <div id="ratings_breakdown">
             <h3>Rating Breakdown</h3><hr>
             @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
@@ -46,9 +46,12 @@
             @endforeach
          </div>
       </div>
-      <div class="col-9" id="dorm_reviews_main_panel">
-         <div class="col-9 h-100">
+      <div class="col-10" id="dorm_reviews_main_panel">
+
             @foreach ($reviews as $review)
+            <div class="row review_row">
+            
+            <div class="col-9 h-100 review_row_speech_box">
                <div class="card bg-light mb-3 review_card">
                   <div class="card-body review_card_body">
                      <div class="review_card_body_header">
@@ -89,8 +92,9 @@
                      @endif
                   </div>
                </div>
+            </div></div>
             @endforeach
-         </div>
+         
       </div>
    </div>
 </div>

@@ -402,12 +402,29 @@ $(document).ready(function(){
         });
 
         var dormOverallRating = $('#dorm_overall_rating_value').html()
-        $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating))
+        $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating));
         
         var reviewOverallRating = $('.review_overall_rating_container').each(function(index,element){
-            $(element).append(getStarRatingAsStringElement(jQuery('b',this).html()))
+            $(element).append(getStarRatingAsStringElement(jQuery('b',this).html()));
         })
 
+        var picCounter=1;
+        if(screen.width > 900){
+            $('.review_row').each(function(index,element){
+                if(picCounter == 8){   //7 refers to the last pic i.e. pic7.svg
+                    picCounter =1;
+                }
+                var illustrationAsStringElement= '<div class="col-3 review_row_illustration_container"> <img class="review_row_illustration" src="/storage/review_illustrations/pic'+picCounter+'.svg" alt="illustration of a typical student"></div>'
+                console.log(index)
+                if(index % 2 == 0){
+                    //left side
+                    $(element).prepend(illustrationAsStringElement)
+                } else{ //right side
+                    $(this).append(illustrationAsStringElement)
+                }
+                picCounter++;
+            })
+        }
 
 
 
