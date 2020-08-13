@@ -284,6 +284,11 @@ Homepage
     background-color: aliceblue;
     }
     
+#site_statistics{
+    margin-top:60%;
+    text-align:center;
+    font-size:xx-large;
+}
 
 
 }
@@ -388,6 +393,28 @@ Homepage
 /**
 Reviews For Dorm Page
 */
+
+.review_row{
+    margin:0.5%
+}
+.review_row_illustration_container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.review_row_illustration{
+    width:100%;
+    min-width:140px;
+    max-width:170px
+}
+
+@media only screen and (max-width: 768px)  {
+    .review_row_illustration{
+    min-width:90px;
+}}
+
+
 .review_card_body_header{
     margin-bottom: 1vh;
     padding-bottom: 1vh;
@@ -398,12 +425,11 @@ Reviews For Dorm Page
 }
 
 .review_recommends_container{
-    float:right;
     display: block;
-    margin-right:-10%;
 }
 .review_recommend_icon{
-    width:10%;
+    max-width:4%;
+    width:25px;
     height:auto;
     margin-right:0.4vw;  
 }
@@ -412,26 +438,43 @@ Reviews For Dorm Page
     background: #FFFFFF;
     box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.25);
     border-radius: 40px;
+    margin:1% 1% 1% 1%;
 }
 
 .review_card_body{
-    margin:1% 1% -0.5% 1%;
+    margin:1% 0% 0% 1%;
 }
 
+
 .clap_icons{
-    margin-top: -1%;
+    float:right;
 }
+
+.read_more_button{
+    margin-left:48%;
+}
+
 .double_line_arrow{
     max-width:5%;
     height:13%;
     transform: rotate(90deg);
-    position: absolute;
-    left:50%
 }
-
-.catering_rating{
-    float:right;    
+/*sub section, read more for review text*/
+a {
+	color: #0254EB
 }
-
-
-
+a:visited {
+	color: #0254EB
+}
+a.morelink {
+	text-decoration:none;
+	outline: none;
+}
+.morecontent span {
+	display: none;
+}
+.comment {
+	max-width: 80%;
+	background-color: #f0f0f0;
+	margin: 10px;
+}

@@ -30,7 +30,7 @@
       </li>
     </ul>
 </nav>
-
+        
         <div id="homepage_title_container" >
             <pre id="homepage_title">Let's Find your 
                     dream dorm</pre>
@@ -47,6 +47,8 @@
             <img src="/storage/homepage/welcome.svg" alt="illustration of Uni students"id="hompage_main_image">
         </div>              
 
-    
+        <div id="site_statistics">
+           <p>We have <b>{{$reviewCount}}</b> reviews from {{$universityCount}} universities from the UK </p> 
+        </div>
 @endsection
 

@@ -2,6 +2,9 @@
 
 @section('link')
 <script src="https://kit.fontawesome.com/242d15205f.js" crossorigin="anonymous"></script>
+<link href="{{ asset('css/odometer-theme-minimal.css') }}" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{ asset('js/odometer.min.js') }}"></script>
+
 @endsection
 
 @section('title', 'Reviews')
@@ -29,7 +32,7 @@
       </div>
    </div>
    <div class="row">
-      <div class="col-2" id="dorm_reviews_side_panel" >
+      <div class="col-lg-2" id="dorm_reviews_side_panel" >
          <div id="ratings_breakdown">
             <h3>Rating Breakdown</h3><hr>
             @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
@@ -46,18 +49,19 @@
             @endforeach
          </div>
       </div>
-      <div class="col-10" id="dorm_reviews_main_panel">
+      <div class="col-lg-10" id="dorm_reviews_main_panel">
 
             @foreach ($reviews as $review)
             <div class="row review_row">
-            
-            <div class="col-9 h-100 review_row_speech_box">
+            <div class="col-8 h-100 review_row_speech_box">
                <div class="card bg-light mb-3 review_card">
                   <div class="card-body review_card_body">
                      <div class="review_card_body_header">
                         <div class="review_overall_rating_container">
                            <b>{{$review->overall_rating}}</b>
                         </div> 
+                        <img class="clap_icons" id="review_id_{{$review->id}}" src="/storage/icons/clap.svg">
+                        <div id="odometer" class="odometer">125</div>
                         <div class="review_recommends_container">
                            @if ($review->is_recommended == 1)
                               <img class="review_recommend_icon" src="/storage/icons/recommended.svg" alt="thumbs up">
@@ -66,6 +70,7 @@
                            @endif
                            <b>Recommends</b>
                         </div>
+                        
                      </div>
                      <div class="review_informational_line">
                         <p>
@@ -81,15 +86,11 @@
                            room in 
                            <b>{{$review->year_of_residence}}</b>
                         </p>
+                     </div> 
+                     <div class="review_text" >
+                        {{$review}}
                      </div>
-                     <p class="pb-4">{{$review}}</p><hr style="height:1px;border:none;color:#333;background-color:#333;">
-                     <img class="clap_icons" id="review_id_{{$review->id}}" src="/storage/icons/clap.svg">
-                     <img class="double_line_arrow" src="/storage/icons/double_line_arrow.svg" alt="">
-                     @if ($isItCatered == 1)
-                        <b class="catering_rating">Kitchen Rating: {{$review->catered_or_selfcatered_rating}}/5</b>
-                     @else
-                        <b class="catering_rating">Food Rating: {{$review->catered_or_selfcatered_rating}} /5</b>
-                     @endif
+                     
                   </div>
                </div>
             </div></div>
@@ -97,6 +98,7 @@
          
       </div>
    </div>
+
 </div>
 
 
@@ -116,7 +118,10 @@
 
 <script>
    var dorm = {!! json_encode($dorm, JSON_HEX_TAG) !!}
+   var reviews = {{!! json_encode($reviews, JSON_HEX_TAG)}}
 </script>
+
+
 
 @endsection
 

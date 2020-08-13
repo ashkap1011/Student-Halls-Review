@@ -408,26 +408,80 @@ $(document).ready(function(){
             $(element).append(getStarRatingAsStringElement(jQuery('b',this).html()));
         })
 
-        var picCounter=1;
-        if(screen.width > 900){
+
+        if(screen.width <500){  //mobile screens
             $('.review_row').each(function(index,element){
-                if(picCounter == 8){   //7 refers to the last pic i.e. pic7.svg
-                    picCounter =1;
-                }
-                var illustrationAsStringElement= '<div class="col-3 review_row_illustration_container"> <img class="review_row_illustration" src="/storage/review_illustrations/pic'+picCounter+'.svg" alt="illustration of a typical student"></div>'
-                console.log(index)
-                if(index % 2 == 0){
-                    //left side
-                    $(element).prepend(illustrationAsStringElement)
-                } else{ //right side
-                    $(this).append(illustrationAsStringElement)
-                }
-                picCounter++;
-            })
+                $(element).find(".review_row_speech_box").toggleClass("col-8 col-12")
+            });
         }
 
+        else if(screen.width > 500 && screen.width < 900){
+            $('.review_row').each(function(index,element){
+                var picCounter = getRndInteger(1,7);
+                var illustrationAsStringElement= '<div class="col-2 review_row_illustration_container"> <img class="review_row_illustration" src="/storage/review_illustrations/Avatar '+picCounter+'.png" alt="illustration of a typical student"></div>'
+                $(element).prepend(illustrationAsStringElement);
+                $(element).find(".review_row_speech_box").toggleClass('col-8 col-10')
+            });
+        }
+        else{
+            $('.review_row').each(function(index,element){
+                createReviewLargeView(index,element);
+            })
+        }
+        $('.review_row').each(function(index,element){
+            setTimeout(function(){
+                $('.odometer').text('458');
+            }, 1000);
+        })
 
+        var resizeTimer;
 
+        $(window).on('resize', function(e) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {             //code here is executed when resizing stops
+            var areIllustrationsVisable = $('.review_row_illustration_container').length > 0 ? true: false;
+            console.log(areIllustrationsVisable);
+            if(screen.width < 500){
+                $('.review_row').each(function(index,element){
+                    $(element).find(".review_row_speech_box").removeClass('col-8 col-10')
+                    $(element).find(".review_row_speech_box").addClass('col-12')
+                    $(element).find('.review_row_illustration_container').remove();
+                    $(element).find('.space_element').remove();
+                });
+            } 
+
+            if(screen.width > 500 && screen.width < 900){ //going from very small screen to big screen
+                console.log('draw images since big screen and no images')
+                $('.review_row').each(function(index,element){
+                    $(element).find('.space_element').remove();
+                    $(element).find('.review_row_illustration_container').remove();
+
+                    var picCounter = getRndInteger(1,7);
+                    var illustrationAsStringElement= '<div class="col-2 review_row_illustration_container"> <img class="review_row_illustration" src="/storage/review_illustrations/Avatar '+picCounter+'.png" alt="illustration of a typical student"></div>'
+                    $(element).prepend(illustrationAsStringElement);
+                    $(element).find(".review_row_speech_box").removeClass('col-8 col-12')
+                    $(element).find(".review_row_speech_box").addClass('col-10')
+                    
+                });
+            }
+
+            if(screen.width > 900){
+                $('.review_row').each(function(index,element){
+                    $(element).find('.space_element').remove();
+                    $(element).find(".review_row_speech_box").removeClass('col-10 col-12')
+                    $(element).find(".review_row_speech_box").addClass('col-8')
+                    if(areIllustrationsVisable){
+                        $(element).find('.review_row_illustration_container').remove();
+                    } 
+                    createReviewLargeView(index,element);
+                });
+            }         
+        
+        }, 250);
+
+        });
+
+        
         //looks at cookies and makes clapped reviews clapped for the client
         if(reviewClaps != null){
            reviewIdOfClaps = JSON.parse(reviewClaps);
@@ -442,6 +496,8 @@ $(document).ready(function(){
         $('.clap_icons').each(function(index,element){
             $(element).on('click',function(){
                 var idOfReview = $(element).attr('id').split('_').pop();
+                
+                var clapsValue = $(element).parent().find('.odometer').text()
                 if($(element).attr('class') !== 'clap_icons clapped'){  //if it's already clapped
                     $(element).css('background-color', 'green')
                     $(element).addClass('clapped');
@@ -450,6 +506,9 @@ $(document).ready(function(){
                         reviewId: idOfReview
                     });
                     //post request to increase review's count
+                    console.log(clapsValue.replace(/(\r\n|\n|\r)/gm,""))
+                    $(element).children('.odometer').text(1)
+                    //TODO MAKE IT SO THAT THEY CAN'T CLAPS UNTIL THE ANIMATION IS DONE, OTHERWISE IT WILL MESS UP
 
                 } else{
                     $(element).css('background-color', 'transparent')
@@ -462,18 +521,63 @@ $(document).ready(function(){
                 }
             });
         })
+
+    //controles the readmore/read less button
+    var showChar = 200;
+	var ellipsestext = "...";
+	var moretext = "more";
+    var lesstext = "less";
+    var readMore ='<div class="read_more_button"><img class="double_line_arrow" style="transform: rotate(90deg);" src="/storage/icons/double_line_arrow.svg" alt="Read More"></div>'
+    var readLess='<div class="read_more_button"><img class="double_line_arrow" style="transform: rotate(270deg);" src="/storage/icons/double_line_arrow.svg" alt="Read Less"></div>'
+	$('.review_text').each(function() {
+		var content = $(this).html();
+		if(content.length > showChar) {
+			var c = content.substr(0, showChar);
+			var h = content.substr(showChar-1, content.length - showChar);
+            
+            var html = c + '<span class="moreellipses">' + ellipsestext+ '&nbsp;</span><span class="morecontent"><span>' + h + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + readMore + '</a></span>';
+
+			$(this).html(html);
+		}
+
+    });
+    
+
+	$(".morelink").click(function(){
+		if($(this).hasClass("less")) {
+			$(this).removeClass("less");
+			$(this).html(readMore);
+		} else {
+			$(this).addClass("less");
+			$(this).html(readLess);
+		}
+		$(this).parent().prev().toggle();
+		$(this).prev().toggle();
+		return false;
+	});
     
     }
 
-
-    //make stars
-
-
-
-
 });
 
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+  }
 
+function createReviewLargeView(index,element){
+    var picCounter = getRndInteger(1,7);
+        var spaceAsElement = '<div class="col-2 space_element"></div>';
+        var illustrationAsStringElement= '<div class="col-2 review_row_illustration_container"> <img class="review_row_illustration" src="/storage/review_illustrations/Avatar '+picCounter+'.png" alt="illustration of a typical student"></div>'
+        if(index % 2 == 0){
+            //left side
+            $(element).prepend(illustrationAsStringElement)
+            $(element).append(spaceAsElement)
+        } else{ //right side
+            $(element).append(illustrationAsStringElement)
+            $(element).prepend(spaceAsElement)
+
+        }
+}
 
 
 

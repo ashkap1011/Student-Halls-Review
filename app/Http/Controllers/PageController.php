@@ -14,7 +14,9 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {   
     public function index(){
-        return view('homepage');
+        $reviewCount = count(Review::all());
+        $universityCount = count(University::all());
+        return view('homepage', compact('reviewCount','universityCount'));
     }
     /**Used by the search function of the homepage */
     public function search(Request $request){
