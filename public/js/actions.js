@@ -394,12 +394,29 @@ function addMarker(marker,map){
         });
 }
 
+
+
+
 //Document for Reviews of a dorm
 $(document).ready(function(){
     if($('#reviews_for_dorms').length){
-        $('.star_ratings').each(function(index,element){
-            $(element).append(getStarRatingAsStringElement(dorm.overall_star_ratings[index]));
+
+        $('.star_rating_stars').each(function(index,element){
+            $(element).prepend(getStarRatingAsStringElement(dorm.overall_star_ratings[index]));
         });
+        
+        $('.catering_rating_child_span').each(function(index,element){
+            $(element).append(getStarRatingAsStringElement(reviews[index].catered_or_selfcatered_rating))
+        })
+        
+        $('.catering_rating_parent_span').click(function(){
+            var popup = $(this).children('span');
+            console.log(popup)
+            $(popup).toggleClass('show')
+           // popup.classList.toggle("show");
+        })
+          
+
 
         var dormOverallRating = $('#dorm_overall_rating_value').html()
         $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating));
@@ -428,11 +445,7 @@ $(document).ready(function(){
                 createReviewLargeView(index,element);
             })
         }
-        $('.review_row').each(function(index,element){
-            setTimeout(function(){
-                $('.odometer').text('458');
-            }, 1000);
-        })
+        
 
         var resizeTimer;
 
@@ -449,7 +462,6 @@ $(document).ready(function(){
                     $(element).find('.space_element').remove();
                 });
             } 
-
             if(screen.width > 500 && screen.width < 900){ //going from very small screen to big screen
                 console.log('draw images since big screen and no images')
                 $('.review_row').each(function(index,element){
@@ -464,7 +476,6 @@ $(document).ready(function(){
                     
                 });
             }
-
             if(screen.width > 900){
                 $('.review_row').each(function(index,element){
                     $(element).find('.space_element').remove();
@@ -476,12 +487,17 @@ $(document).ready(function(){
                     createReviewLargeView(index,element);
                 });
             }         
-        
         }, 250);
-
         });
 
-        
+
+        //timer before initial claps are loaded
+        $('.review_row').each(function(index,element){
+            setTimeout(function(){
+                $('.odometer').text('458');
+            }, 500);
+        })
+
         //looks at cookies and makes clapped reviews clapped for the client
         if(reviewClaps != null){
            reviewIdOfClaps = JSON.parse(reviewClaps);
@@ -494,33 +510,19 @@ $(document).ready(function(){
 
         //update cookies for reviews applauded 
         $('.clap_icons').each(function(index,element){
-            $(element).on('click',function(){
-                var idOfReview = $(element).attr('id').split('_').pop();
-                
-                var clapsValue = $(element).parent().find('.odometer').text()
-                if($(element).attr('class') !== 'clap_icons clapped'){  //if it's already clapped
-                    $(element).css('background-color', 'green')
-                    $(element).addClass('clapped');
-                    $.post('/cookie/set/new/review_id', {
-                        '_token': $('meta[name=csrf-token]').attr('content'),
-                        reviewId: idOfReview
-                    });
-                    //post request to increase review's count
-                    console.log(clapsValue.replace(/(\r\n|\n|\r)/gm,""))
-                    $(element).children('.odometer').text(1)
-                    //TODO MAKE IT SO THAT THEY CAN'T CLAPS UNTIL THE ANIMATION IS DONE, OTHERWISE IT WILL MESS UP
-
-                } else{
-                    $(element).css('background-color', 'transparent')
-                    $(element).toggleClass('clapped');
-                    $.post('/cookie/set/delete/review_id', {
-                        '_token': $('meta[name=csrf-token]').attr('content'),
-                        reviewId: idOfReview
-                    });
-                    //post request to reduce review's count
-                }
-            });
+            removeClapClicker(element)
+            $(element).attr('onclick','clapEvent(this)');
         })
+
+        setTimeout(function(){
+            $('.clap_icons').each(function(index,element){
+                addClapClicker(element)
+            })
+        },5000)
+        
+
+
+
 
     //controles the readmore/read less button
     var showChar = 200;
@@ -541,7 +543,6 @@ $(document).ready(function(){
 		}
 
     });
-    
 
 	$(".morelink").click(function(){
 		if($(this).hasClass("less")) {
@@ -559,6 +560,52 @@ $(document).ready(function(){
     }
 
 });
+
+function clapEvent(element){
+    removeClapClicker(element)
+
+    var idOfReview = $(element).attr('id').split('_').pop();                
+    var clapsValue = $(element).parent().find('.odometer').text()
+    if($(element).attr('class') !== 'clap_icons clapped'){  //if it's already clapped
+        $(element).css('background-color', 'green')
+        $(element).addClass('clapped');
+        $.post('/cookie/set/new/review_id', {
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewId: idOfReview
+        });
+        //post request to increase review's count
+        var newClapsValue = parseInt(clapsValue.replace(/(\r\n|\n|\r)/gm,"")) + 1;
+        
+        //TODO MAKE IT SO THAT THEY CAN'T CLAPS UNTIL THE ANIMATION IS DONE, OTHERWISE IT WILL MESS UP
+    } else{
+        $(element).css('background-color', 'transparent')
+        $(element).toggleClass('clapped');
+        $.post('/cookie/set/delete/review_id', {
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewId: idOfReview
+        });
+        //post request to reduce review's count
+        var newClapsValue = parseInt(clapsValue.replace(/(\r\n|\n|\r)/gm,"")) -1;
+    }
+    $(element).parent().children('.odometer').text(newClapsValue)
+
+    setTimeout(function(){
+        addClapClicker(element);
+    },2000)
+
+}
+
+function removeClapClicker(element){
+    $(element).each(function (){
+        this.style.pointerEvents = 'none'; 
+    }); 
+}
+
+function addClapClicker(element){
+    $(element).each(function (){
+        this.style.pointerEvents = 'auto'; 
+    }); 
+}
 
 function getRndInteger(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;

@@ -95,9 +95,23 @@ class PageController extends Controller
                 $dormHasAmenities[] = $AMENITIES[$i];
             }
         }
-        $STARRATINGS =  config('constants.options.starRatings');
+        $STARRATINGS = $this->starRatingNames();
         
         return view('reviews_for_dorm', compact('dorm', 'uni', 'reviews','dormHasAmenities','STARRATINGS'));
+    }
+
+    private function starRatingNames(){
+        $starRatingNamesUnedited = config('constants.options.starRatings');
+        $starRatingNames = [];
+
+        foreach($starRatingNamesUnedited as $ratingName){
+            if($ratingName == 'catered_or_selfcatered_rating'){
+                continue;
+            }
+            $starRatingNames[] = ucfirst(explode('_',$ratingName)[0]);
+        }
+        return $starRatingNames;
+
     }
     
     ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were.

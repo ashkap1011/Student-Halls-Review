@@ -36,11 +36,11 @@
          <div id="ratings_breakdown">
             <h3>Rating Breakdown</h3><hr>
             @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
-            @if ($STARRATINGS[$i]=='catered_or_selfcatered_rating')
-               @continue;
-            @endif
-               <div class="star_ratings">{{$STARRATINGS[$i]}}:  {{substr($dorm->overall_star_ratings[$i], 0, -1)}}</div>
-            @endfor
+               <div class="star_rating_container">
+                  <div class="star_rating_name">{{$STARRATINGS[$i]}}:  </div>
+                  <div class="star_rating_stars">{{substr($dorm->overall_star_ratings[$i], 0, -1)}}</div>
+               </div>
+               @endfor
          </div>
          <div id="amenities_breakdown">
             <h3>Amenities</h3><hr>
@@ -79,10 +79,11 @@
                            $studentYear = $studentType != 'postgraduate'? $studentType . ' year ' : ' Postgraduate ';
                            $isItCatered = $review->is_catered;
                            $isCatered = $isItCatered == 1 ? ' Catered ' : ' Self-Catered ';
+                           $cateringRatingName = $isItCatered == 1? 'Kitchen Rating: ' : 'Food Rating: '
                            @endphp
                            <b>{{$studentYear}}</b>
                            student living in a 
-                           <b>{{$isCatered . $review->room_type}}</b>
+                           <b> <span class="catering_rating_parent_span">{{$isCatered}}<span class="catering_rating_child_span" id="popup_for_review_{{$review->id}}">{{$cateringRatingName}}</span></span> {{$review->room_type}}</b>
                            room in 
                            <b>{{$review->year_of_residence}}</b>
                         </p>
@@ -118,7 +119,7 @@
 
 <script>
    var dorm = {!! json_encode($dorm, JSON_HEX_TAG) !!}
-   var reviews = {{!! json_encode($reviews, JSON_HEX_TAG)}}
+   var reviews = {!! json_encode($reviews, JSON_HEX_TAG) !!}
 </script>
 
 
