@@ -416,7 +416,7 @@ $(document).ready(function(){
            // popup.classList.toggle("show");
         })
           
-
+        $('#back_button').attr('onclick', 'goBack()')
 
         var dormOverallRating = $('#dorm_overall_rating_value').html()
         $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating));
@@ -446,6 +446,12 @@ $(document).ready(function(){
             })
         }
         
+        if(screen.width > 992 && screen.width <1095){
+            $('.star_rating_star_integer').each(function(index,element){
+                $(element).css('display','none');
+            })
+        }
+        
 
         var resizeTimer;
 
@@ -453,7 +459,6 @@ $(document).ready(function(){
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {             //code here is executed when resizing stops
             var areIllustrationsVisable = $('.review_row_illustration_container').length > 0 ? true: false;
-            console.log(areIllustrationsVisable);
             if(screen.width < 500){
                 $('.review_row').each(function(index,element){
                     $(element).find(".review_row_speech_box").removeClass('col-8 col-10')
@@ -486,7 +491,19 @@ $(document).ready(function(){
                     } 
                     createReviewLargeView(index,element);
                 });
-            }         
+            }
+            
+            if(screen.width > 992 && screen.width <1095){
+                $('.star_rating_star_integer').each(function(index,element){
+                    $(element).css('display','none');
+                })
+            } else{
+                $('.star_rating_star_integer').each(function(index,element){
+                    $(element).css('display','inline-block');
+                })
+            }
+
+
         }, 250);
         });
 
@@ -504,7 +521,7 @@ $(document).ready(function(){
             console.log(reviewIdOfClaps)
             reviewIdOfClaps.forEach(element => {
                 $('#review_id_'+element).addClass('clapped');
-                $('#review_id_'+element).css('background-color', 'green');
+                $('#review_id_'+element).attr('src', '/storage/icons/clapped.svg');
             });
         }
 
@@ -567,7 +584,7 @@ function clapEvent(element){
     var idOfReview = $(element).attr('id').split('_').pop();                
     var clapsValue = $(element).parent().find('.odometer').text()
     if($(element).attr('class') !== 'clap_icons clapped'){  //if it's already clapped
-        $(element).css('background-color', 'green')
+        $(element).attr('src', '/storage/icons/clapped.svg') //
         $(element).addClass('clapped');
         $.post('/cookie/set/new/review_id', {
             '_token': $('meta[name=csrf-token]').attr('content'),
@@ -578,7 +595,7 @@ function clapEvent(element){
         
         //TODO MAKE IT SO THAT THEY CAN'T CLAPS UNTIL THE ANIMATION IS DONE, OTHERWISE IT WILL MESS UP
     } else{
-        $(element).css('background-color', 'transparent')
+        $(element).attr('src', '/storage/icons/clap_neutral.svg')
         $(element).toggleClass('clapped');
         $.post('/cookie/set/delete/review_id', {
             '_token': $('meta[name=csrf-token]').attr('content'),
@@ -626,6 +643,9 @@ function createReviewLargeView(index,element){
         }
 }
 
+function goBack() {
+    window.history.back();
+  }
 
 
 

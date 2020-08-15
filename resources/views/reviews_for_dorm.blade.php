@@ -23,34 +23,50 @@
 </nav>
 <h5 id="reviews_for_dorms" hidden></h5>
 
-<div class="container-fluid">
+<div class="reivew_content_container">
    <div class="row reviews_header">
-      <h2>{{$uni->uni_name}}</h2>
-      <h1>{{$dorm->dorm_name}}</h1>
+      <h1 id="dorm_heading_reviews">{{$dorm->dorm_name}}</h1>
       <div class="dorm_overall_rating">
          <span id="dorm_overall_rating_value">{{$dorm->overall_rating}}</span>
       </div>
    </div>
    <div class="row">
       <div class="col-lg-2" id="dorm_reviews_side_panel" >
-         <div id="ratings_breakdown">
-            <h3>Rating Breakdown</h3><hr>
-            @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
-               <div class="star_rating_container">
-                  <div class="star_rating_name">{{$STARRATINGS[$i]}}:  </div>
-                  <div class="star_rating_stars">{{substr($dorm->overall_star_ratings[$i], 0, -1)}}</div>
-               </div>
-               @endfor
+         <div id="reviews_side_panel_header">
+            <div id="back_button">
+               <img id="back_button_arrow_img" src="/storage/icons/double_line_arrow.svg" alt="Go Back">
+               <h2 id="back_button_uni_name">Go Back</h2>
+            </div>
          </div>
-         <div id="amenities_breakdown">
-            <h3>Amenities</h3><hr>
-            @foreach ($dormHasAmenities as $amenities)
-               <p>{{$amenities}}</p>             
-            @endforeach
+         <div class="row" id="reviews_side_panel">
+            <div class="col-7 col-lg-12">
+               <div id="ratings_breakdown">
+                  <h3 class="review_side_panel_title">Rating Breakdown</h3><hr>
+                  @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
+                     <div class="star_rating_container pb-2">
+                        <div style="" class="star_rating_name">{{$STARRATINGS[$i]}}:  </div>
+                        <div style="" class="star_rating_stars"><span class="star_rating_star_integer">{{substr($dorm->overall_star_ratings[$i], 0, -1)}}</span></div>
+                     </div>
+                  @endfor
+               </div> <br>
+            </div>
+            <div class="col-5 col-lg-12">
+               <div id="amenities_breakdown">
+                  <h3 class="review_side_panel_title">Amenities</h3>
+                  <p id="filter_sidenote">(From our Reviews)</p><hr>
+                  @foreach ($dormHasAmenities as $amenities)
+                     <p>{{$amenities}}</p>             
+                  @endforeach
+               </div>
+
+            </div>
+         </div>
+         <div >
+            
+            
          </div>
       </div>
       <div class="col-lg-10" id="dorm_reviews_main_panel">
-
             @foreach ($reviews as $review)
             <div class="row review_row">
             <div class="col-8 h-100 review_row_speech_box">
@@ -58,10 +74,12 @@
                   <div class="card-body review_card_body">
                      <div class="review_card_body_header">
                         <div class="review_overall_rating_container">
-                           <b>{{$review->overall_rating}}</b>
+                           <b class="review_rating_integer">{{$review->overall_rating}}</b>
                         </div> 
-                        <img class="clap_icons" id="review_id_{{$review->id}}" src="/storage/icons/clap.svg">
-                        <div id="odometer" class="odometer">125</div>
+                        <div class="clap_feature_container">
+                           <img class="clap_icons" id="review_id_{{$review->id}}" src="/storage/icons/clap_neutral.svg">
+                           <div id="odometer" class="odometer">125</div>
+                        </div>
                         <div class="review_recommends_container">
                            @if ($review->is_recommended == 1)
                               <img class="review_recommend_icon" src="/storage/icons/recommended.svg" alt="thumbs up">
@@ -79,7 +97,7 @@
                            $studentYear = $studentType != 'postgraduate'? $studentType . ' year ' : ' Postgraduate ';
                            $isItCatered = $review->is_catered;
                            $isCatered = $isItCatered == 1 ? ' Catered ' : ' Self-Catered ';
-                           $cateringRatingName = $isItCatered == 1? 'Kitchen Rating: ' : 'Food Rating: '
+                           $cateringRatingName = $isItCatered == 1? 'Food Rating: ': 'Kitchen Rating: ';
                            @endphp
                            <b>{{$studentYear}}</b>
                            student living in a 

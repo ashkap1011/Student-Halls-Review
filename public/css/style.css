@@ -217,8 +217,7 @@ Homepage
 #homepage_title{
     font-size: 4vw;
     font-family: 'Montserrat';
-    float: left;
-    padding:2em 0% 0% 1em;
+    padding:1em 0% 0% 0.8em;
     z-index: 3;
     text-shadow: 
     -1px 0 black,
@@ -230,7 +229,7 @@ Homepage
     -1px 1px black,
     1px -1px black;
     position: absolute;
-    top:20%;
+    top:12%;
     left:15%;
 }
 
@@ -242,7 +241,7 @@ Homepage
     margin-right:3vw;
     top:20%;
     position:absolute;
-    left: 60%;
+    left: 62%;
     bottom:10%;
 }
 
@@ -256,11 +255,10 @@ Homepage
 .search_bar {
     /* This bit sets up the horizontal layout */
     display:flex;
-    
+    font-size: x-large;
     width: 35vw;
-    max-height: 3%;
+    height: 40px;
     /* This bit draws the box around it */
-    
     /* I've used padding so you can see the edges of the elements. */
   }
   
@@ -273,14 +271,15 @@ Homepage
     
   #searh_icon {
     /* Just a little styling to make it pretty */
-    border:1px solid blue;
+    border:2px solid black;
     background-color:white;
-    max-height: 35px;
+    max-height: 40px;
     width:auto;
     cursor: pointer
   }
   .search_result{
-    width: 100%;
+    flex: 1;
+    font-size: x-large;
     background-color: aliceblue;
     }
     
@@ -290,8 +289,14 @@ Homepage
     font-size:xx-large;
 }
 
+}
+
+@media only screen and (min-width: 1800px)  {
+    #searh_icon {max-height: 60px;}
+    .search_bar {height: 60px;}
 
 }
+
   @media only screen and (max-width: 768px)  {
     #homepage_title_container{
     float:left;    
@@ -315,7 +320,7 @@ Homepage
     }
         
     #hompage_main_image{
-        max-width: 90%;
+        max-width: 100%;
         min-width:50px;
         height:auto;
         float: right;
@@ -345,7 +350,7 @@ Homepage
         
       #searh_icon {
         /* Just a little styling to make it pretty */
-        border:1px solid blue;
+        border:1px solid black;
         background-color:white;
         max-height: 35px;
         width:auto;
@@ -368,23 +373,20 @@ Homepage
   /**
   NavBar
   */
+
+.navigation_bar{
+    background-color: #CEC0C0;
+}
+
 #write_review_button{
-    max-height:30px;
-    max-width:50%;
-    display:flex;
-    justify-content: center;
-
-
+    height:2vw;
+    min-height: 32px;
+    width:auto;
 }
 
-#write_icon{
-}
-#write_review_text{
-    display: inline-block;
-}
 
-#arrow_icon{
-}
+
+
 
 
 
@@ -393,6 +395,91 @@ Homepage
 /**
 Reviews For Dorm Page
 */
+
+.reivew_content_container{
+    margin:auto;
+    margin:0% 5%;
+}
+
+#dorm_heading_reviews{
+    font-size: 3em;
+    font-weight: 900;
+    font-family: 'Montserrat';
+    margin-left:10%;
+    padding: 3%;
+}
+
+
+
+@media only screen and (max-width: 991px)  {
+    #reviews_side_panel{
+        margin:5% 2vw;
+    }
+    #reviews_side_panel_header{
+        margin-left:10%;
+    }
+
+}
+@media (min-width: 776px){
+    .reivew_content_container{
+        margin:auto;
+        width:80%;
+    }
+    #dorm_heading_reviews{
+    font-size:4vw;
+    }
+        
+}
+
+#back_button{
+    display: inline-block;
+    background-color: antiquewhite;
+    border: none;
+    color: black;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom:4%;
+    border-radius: 8px;
+    margin-left:-5%;
+    cursor:pointer;
+}
+#back_button_arrow_img{
+    transform:rotate(180deg);
+    width:auto;
+    height:25px;
+    display:inline-block;
+}
+#back_button_uni_name{
+    display:inline-block;
+    font-size:1em;
+}
+
+#reviews_side_panel{
+    background-color: bisque;
+    padding-bottom:5%;
+    border-radius: 10px;
+}
+.star_rating_name{
+    font-size: 1em;
+}
+.review_side_panel_title{
+    font-size: 1.35em;
+    margin-top: 2%;;
+}
+
+@media (min-width: 1200px) {
+    .review_side_panel_title{
+        font-size: 1.7em;
+    }
+    .star_rating_name{
+        font-size: 1.25em;
+    }
+    #dorm_heading_reviews{
+        font-size: 3.5vw;
+        padding:2%;
+    }
+}
 
 .review_row{
     margin:0.5%
@@ -406,15 +493,14 @@ Reviews For Dorm Page
 .review_row_illustration{
     width:100%;
     min-width:140px;
-    max-width:170px
+    max-width:150px
 }
 
 @media only screen and (max-width: 768px)  {
     .review_row_illustration{
-    min-width:90px;
-}}
-
-
+    min-width:100px;
+}
+}
 .review_card_body_header{
     margin-bottom: 1vh;
     padding-bottom: 1vh;
@@ -440,7 +526,7 @@ Reviews For Dorm Page
     position: relative;
     display: inline-block;
     cursor: pointer;
-    border-bottom: 1px dotted;
+    border-bottom: 1.5px dotted;
     height: 20px;
   }
 
@@ -508,9 +594,21 @@ Reviews For Dorm Page
     margin:1% 0% 0% 1%;
 }
 
-
-.clap_icons{
+.clap_feature_container{
     float:right;
+    width:84px;
+}
+.clap_icons{
+    height:65px;
+    width: auto;
+    padding-bottom: 10%;
+}
+.clap_icons:hover{
+    content:url('/storage/icons/clap_hover.svg');
+}
+.odometer{
+    color: #000; /* Fallback for older browsers */
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .read_more_button{

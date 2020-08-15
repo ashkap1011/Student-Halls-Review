@@ -30,7 +30,7 @@
     <div class="col-sm-4 col-md-3">
       <div id="amenity_filters">
         <h4 id="filter_amenities_title">Filter Amenities</h4>
-        <p id="filter_sidenote">Generated from our reviews</p>
+        <p id="filter_sidenote">(From Our Reviews)</p>
         @foreach ($amenities as $amenity)
           @if ($amenity =='Games' || $amenity =='Social Events')
               @continue;
