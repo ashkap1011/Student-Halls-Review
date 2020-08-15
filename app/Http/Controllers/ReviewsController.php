@@ -17,18 +17,21 @@ class ReviewsController extends Controller
     /**Create initial form page for writing reviews */
     public function writeReview(){
         $universities = University::all();
+        $starRatings = config('constants.options.starRatings');
         $amenities = config('constants.options.amenities');
-        return view('review', compact('universities','amenities'));
+        return view('review', compact('universities','amenities','starRatings'));
     }
 
     /**alternate form page for writing reviews where it is for a new uni and dorm, or just dorm*/
     public function newUniOrDormReviewPage($uni_name){
         $amenities = config('constants.options.amenities');
+        $starRatings = config('constants.options.starRatings');
+
         $isNewUni =false;
         if ($uni_name == '-'){
             $isNewUni = true;
         }
-        return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni'));
+        return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni','starRatings'));
     }
 
     /**review is for an exisitng dorm */

@@ -34,6 +34,9 @@ $(document).ready(function(){
         on user selection, also changes the text for the catering/self catered 
         rating
         */
+
+       $('.fieldsets .rating3').prop('checked', true);
+
     }
     
     $('input[type=radio][name=is_catered]').change(function(){

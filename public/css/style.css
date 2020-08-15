@@ -1,10 +1,6 @@
-.fieldsets {
-    display:none;
-}
 
-#dorm_name_section{
-    display:none;
-}
+
+/**Homepage*/
 
 .main-body  {
     margin:auto;
@@ -257,6 +253,7 @@ Homepage
     display:flex;
     font-size: x-large;
     width: 35vw;
+    min-width: 350px;
     height: 40px;
     /* This bit draws the box around it */
     /* I've used padding so you can see the edges of the elements. */
@@ -281,6 +278,7 @@ Homepage
     flex: 1;
     font-size: x-large;
     background-color: aliceblue;
+    font-family: 'Montserrat';
     }
     
 #site_statistics{
@@ -359,6 +357,7 @@ Homepage
       .search_result{
         width: 100%;
         background-color: aliceblue;
+        font-family: 'Montserrat';
     }
         
 
@@ -639,3 +638,96 @@ a.morelink {
 	background-color: #f0f0f0;
 	margin: 10px;
 }
+
+
+/*Form Page*/
+
+.fieldsets {
+    display:none;
+}
+
+#dorm_name_section{
+    display:none;
+}
+#write_review_header_title{
+    text-align: center;
+    font-weight: 900;
+    padding-top:5%;
+    font-size: 5em;
+}
+
+.form_body{
+    margin-top: 7%;
+    
+    background-color:#E5DED9; 
+    height: 100%;
+    
+    padding: 4% 4% 4% 8%;
+}
+
+label{
+    font-weight: bold;
+}
+
+
+.starRating:not(old){
+    display        : inline-block;
+    width          : 7.5em;
+    height         : 1.5em;
+    overflow       : hidden;
+    vertical-align : bottom;
+}
+.starRating:not(old) > input{
+    margin-right : -100%;
+    opacity      : 0;
+  }
+
+  .starRating:not(old) > label{
+    display         : block;
+    float           : right;
+    position        : relative;
+    background      : url('/storage/icons/star_empty.svg');
+    background-size : contain;
+  }
+  .starRating:not(old) > label:before{
+    content         : '';
+    display         : block;
+    width           : 1.5em;
+    height          : 1.5em;
+    background      : url('/storage/icons/star_full.svg');
+    background-size : contain;
+    opacity         : 0;
+    transition      : opacity 0.2s linear;
+  }
+.starRating:not(old) > label:hover:before,
+.starRating:not(old) > label:hover ~ label:before,
+.starRating:not(:hover) > :checked ~ label:before{
+  opacity : 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
