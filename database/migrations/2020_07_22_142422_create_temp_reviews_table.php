@@ -39,9 +39,7 @@ class CreateTempReviewsTable extends Migration
 
             $table->set('amenities',config('constants.options.amenities'))->nullable();
          
-            $table->string('quirk', 50)->nullable();
-
-            $table->string('review_text', 400)->nullable();
+            $table->string('review_text', 600)->nullable();
             /**if the user inputs a new uni there will also be a new dorm hence two locations */
             $table->string('uni_address',100)->nullable();
             $table->float('uni_lat', 10, 6)->nullable();
@@ -50,7 +48,7 @@ class CreateTempReviewsTable extends Migration
             $table->string('dorm_address',100)->nullable();
             $table->float('dorm_lat', 10, 6)->nullable();
             $table->float('dorm_lng', 10, 6)->nullable();
-
+            $table->tinyInteger('walking_mins_to_uni')->nullable();
             $table->timestamps();
         });
     }

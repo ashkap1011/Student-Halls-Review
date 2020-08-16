@@ -14,24 +14,29 @@ use App\IntercollegiateDorm;
 class ReviewsController extends Controller
 {   
     
+    private $starRatingCaptionsArr= array('Consider the comfort, furniture and lighting','Consider the age, aesthetics, and cleaniness'
+    ,'Consider the safety of the area, the nearby shops, distance to uni','Consider the appliances, cleaniness and size'
+    ,'Consider their friendliness, helpfulness and responsiveness','Consider the quality/variety of the food/kitchen appliances');
+
     /**Create initial form page for writing reviews */
     public function writeReview(){
         $universities = University::all();
         $starRatings = config('constants.options.starRatings');
         $amenities = config('constants.options.amenities');
-        return view('review', compact('universities','amenities','starRatings'));
+        $ratingCaptions = $this->starRatingCaptionsArr;
+        return view('review', compact('universities','amenities','starRatings','ratingCaptions'));
     }
 
     /**alternate form page for writing reviews where it is for a new uni and dorm, or just dorm*/
     public function newUniOrDormReviewPage($uni_name){
         $amenities = config('constants.options.amenities');
         $starRatings = config('constants.options.starRatings');
-
+        $ratingCaptions = $this->starRatingCaptionsArr;
         $isNewUni =false;
         if ($uni_name == '-'){
             $isNewUni = true;
         }
-        return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni','starRatings'));
+        return view('review_for_new_uni_and_or_dorm', compact('uni_name', 'amenities','isNewUni','starRatings','ratingCaptions'));
     }
 
     /**review is for an exisitng dorm */
@@ -43,8 +48,8 @@ class ReviewsController extends Controller
 
     public function createReviewForNewUniOrDorm(Request $request){
         $request->validate([
-            'uni_name' => 'required',
-            'dorm_name' => 'required',
+            'uni_name' => 'required|string',
+            'dorm_name' => 'required|string',
         ]);
 
         $tempReview = $this->appendReview($request);
@@ -117,7 +122,6 @@ class ReviewsController extends Controller
             'is_catered' => 'required|boolean',
             'catered_or_selfcatered_rating' => 'required|integer|between:1,5',
             'amenities' => 'array',
-            'quirk' => 'nullable',
             'review_text' => 'nullable'
         ]);
         return $request;

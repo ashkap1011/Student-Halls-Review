@@ -28,9 +28,9 @@ class CreateReviewsTable extends Migration
             $table->boolean('is_catered');
             $table->tinyInteger('catered_or_selfcatered_rating');
          
-            $table->string('quirk', 50)->nullable();
-
-            $table->string('review_text', 400)->nullable();
+            $table->string('review_text', 600)->nullable();
+            $table->tinyInteger('walking_mins_to_uni');
+            $table->smallInteger('review_claps');
 
             $table->string('created_at',63)->nullable();
             

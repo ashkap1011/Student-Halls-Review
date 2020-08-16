@@ -39,10 +39,16 @@ Route::get('/search', 'PageController@search');
 Route::get('/{uniName}/dorms', 'PageController@createDormsForUni');
 Route::get('/{uniName}/dorms/{dormName}','PageController@createReviewsForDorm');
 Route::get('/search/results/{searchString}','PageController@getSearchMatchingUnis');
+Route::post('/review/claps/increment','PageController@incrementReviewClaps');
+Route::post('/review/claps/decrement','PageController@decrementReviewClaps');
+
+
 
 Route::post('/cookie/set/new/review_id','CookieController@setNewClapCookie');
 Route::post('/cookie/set/delete/review_id','CookieController@deleteReviewFromClapCookie');
 Route::get('/get','CookieController@getClapCookie');
+
+
 
 //Route::get('/{uniName}/filtered-dorms','PageController@getFilteredDorms');
 

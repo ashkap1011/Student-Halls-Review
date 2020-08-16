@@ -113,6 +113,25 @@ class PageController extends Controller
         return $starRatingNames;
 
     }
+
+    public function incrementReviewClaps(Request $request){
+        $request->validate([
+            'reviewId' => 'required|integer',
+        ]);
+        $review = Review::where('id',$request->reviewId)->first();
+        $review->increment('review_claps');
+        $review->save();
+    }
+    public function decrementReviewClaps(Request $request){
+        $request->validate([
+            'reviewId' => 'required|integer',
+        ]);
+        $review = Review::where('id',$request->reviewId)->first();
+        $review->decrement('review_claps');
+        $review->save();
+    }
+
+
     
     ///!!!!!!!!!!!!!!!!!1 for distances remove mins to university, maybe do it client side for dorms that are intercollegiate that way they are good for the uni they originally were.
 }

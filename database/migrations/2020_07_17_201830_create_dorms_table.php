@@ -28,7 +28,8 @@ class CreateDormsTable extends Migration
             $table->json('amenities_count');    //counts the number of each amenitiy based on reviews
             $table->string('address',127);
             $table->float('lat', 10, 6);
-            $table->float('lng', 10, 6);         
+            $table->float('lng', 10, 6);  
+            $table->tinyInteger('walking_mins_to_uni');      
         });
     }
 

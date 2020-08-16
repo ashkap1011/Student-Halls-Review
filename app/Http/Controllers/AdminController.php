@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {   
-    private $temp_review_columns_names;
+    private $tempReviewColumnsNames;
 
      /**
      * Create a new controller instance.
@@ -122,17 +122,19 @@ class AdminController extends Controller
     public function mapTempReviewToPublicReview($tempReview){
         $publicReviewColumnNames = Schema::getColumnListing('reviews');
         $publicReview = new Review();
-        foreach($publicReviewColumnNames as $columName){
-            if($columName =='id'){
+        foreach($publicReviewColumnNames as $columnName){
+            if($columnName =='id'){
                 continue;
-            } if($columName == 'overall_rating'){   
+            }else if($columnName == 'overall_rating'){   
                 $publicReview->overall_rating = $this->calculateOverallReviewRating($tempReview);
                 continue;
-            } 
-          $publicReview->$columName = $tempReview->$columName;
+            }else if($columnName =='review_claps'){
+                $publicReview->$columnName = 0;
+            } else {
+          $publicReview->$columnName = $tempReview->$columnName;}
        }
        return $publicReview;
-    }
+    } 
     /**
      * Creates new dorm record using info from $temp_review
      */
@@ -198,6 +200,7 @@ class AdminController extends Controller
             $newDorm->address= $tempReview->dorm_address;
             $newDorm->lat= $tempReview->dorm_lat;
             $newDorm->lng= $tempReview->dorm_lng;
+            $newDorm->walking_mins_to_uni= $tempReview->walking_mins_to_uni;
             $newDorm->save();
     }
 

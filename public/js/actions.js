@@ -7,7 +7,7 @@ $(document).ready(function(){
     selects communal kitchen check box as checked.
     */
     if($('#new_review_form').length){
-        $('#catered_selfcatered_label').text('Communal Kitchen rating')
+        $('#catered_selfcatered_label').text('Communal Kitchen')
         $('.fieldsets #communal_kitchen').prop('checked', true);
         console.log('hi')
         if($('#dorm_id').html() == null){
@@ -41,12 +41,12 @@ $(document).ready(function(){
     
     $('input[type=radio][name=is_catered]').change(function(){
         if ($('input[type=radio][name=is_catered]:checked').val() === '0'){
-            $('#catered_selfcatered_label').text('Food Quality rating');
+            $('#catered_selfcatered_label').text('Food Quality');
             $('#communal_kitchen').prop('checked', false);
             $('#catering').prop('checked', true);
 
         } else{
-            $('#catered_selfcatered_label').text('Communal Kitchen rating');
+            $('#catered_selfcatered_label').text('Communal Kitchen');
             $('#communal_kitchen').prop('checked', true);
             $('#catering').prop('checked', false);
         }
@@ -106,6 +106,10 @@ $(document).ready(function(){
 
     $('#search_button').click(function(){
         var searchString = $('#search').val()
+        if(searchString == ""){
+            location.reload();
+            return;
+        }
         $(this).attr('href', '/search/results/'+searchString) 
         /*
         $.post('/search-results',{
@@ -322,10 +326,10 @@ function createDormCard(rowDiv, dorm){
                   '<h3 class="card-title">'+dorm.dorm_name+'</h3>'+
                    ' <div class="star_rating">'+ 
                  '     <p class="overall_rating_decimal pl-2">'+dorm.overall_rating+'</p>'+
-                      getStarRatingAsStringElement(dorm.overall_rating)+
+                      getStarRatingAsStringElement('stars_for_dorm_card',dorm.overall_rating)+
                 '    </div><br>'+
                '   <span class="number_of_reviews">'+numOfReviews(dorm.reviews_count)+'</span> <br>'+
-                '  <span>15 mins walk</span>'+
+                '  <span>'+dorm.walking_mins_to_uni+' mins walk</span>'+
                  ' <i class="fas fa-running"></i>'+
                 '</div>   </div>   </div>     </div>')
     $('#dorm_'+dorm.dorm_id).on("click", function(){
@@ -333,24 +337,24 @@ function createDormCard(rowDiv, dorm){
     });
 }
 
-function getStarRatingAsStringElement(starRating){
+function getStarRatingAsStringElement(className,starRating){
     var elementString="";
     for(var i =1; i<=starRating; i++){
-        elementString+='<i class="fas fa-star star-icon"></i>';
+        elementString+='<img class="'+className+'" src="/storage/icons/star_full.svg"></img>';
     }
     let ratingIntegerPart = Math.floor(starRating);
     var ratingDecimalPart = starRating-ratingIntegerPart;
     if(ratingDecimalPart>= 0.5){
-        elementString+='<i class="fas fa-star-half-alt star-icon"></i>';
+        elementString+='<img class="'+className+'" src="/storage/icons/star_half.svg"></img>';
         ratingIntegerPart++;
     }
-        var elementString = addEmptyStars(ratingIntegerPart,elementString)
+        var elementString = addEmptyStars(className,ratingIntegerPart,elementString)
     return elementString
 }   
 
-function addEmptyStars(ratingIntegerPart,elementString){
+function addEmptyStars(className,ratingIntegerPart,elementString){
     for(var i = ratingIntegerPart; i<5; i++){
-        elementString += '<i class="far fa-star star-icon"></i>'
+        elementString += '<img class="'+className+'" src="/storage/icons/star_empty.svg"></img>'
     }
     return elementString
 }
@@ -405,11 +409,11 @@ $(document).ready(function(){
     if($('#reviews_for_dorms').length){
 
         $('.star_rating_stars').each(function(index,element){
-            $(element).prepend(getStarRatingAsStringElement(dorm.overall_star_ratings[index]));
+            $(element).prepend(getStarRatingAsStringElement('stars_for_dorms_constituent_rating',dorm.overall_star_ratings[index]));
         });
         
         $('.catering_rating_child_span').each(function(index,element){
-            $(element).append(getStarRatingAsStringElement(reviews[index].catered_or_selfcatered_rating))
+            $(element).append(getStarRatingAsStringElement('stars_for_catering',reviews[index].catered_or_selfcatered_rating))
         })
         
         $('.catering_rating_parent_span').click(function(){
@@ -422,10 +426,10 @@ $(document).ready(function(){
         $('#back_button').attr('onclick', 'goBack()')
 
         var dormOverallRating = $('#dorm_overall_rating_value').html()
-        $('.dorm_overall_rating').append(getStarRatingAsStringElement(dormOverallRating));
+        $('.dorm_overall_rating').append(getStarRatingAsStringElement('stars_for_dorms_overall',dormOverallRating));
         
         var reviewOverallRating = $('.review_overall_rating_container').each(function(index,element){
-            $(element).append(getStarRatingAsStringElement(jQuery('b',this).html()));
+            $(element).append(getStarRatingAsStringElement('stars_for_review_overall',jQuery('b',this).html()));
         })
 
 
@@ -496,7 +500,7 @@ $(document).ready(function(){
                 });
             }
             
-            if(screen.width > 992 && screen.width <1095){
+            if(screen.width > 992 && screen.width <1130){
                 $('.star_rating_star_integer').each(function(index,element){
                     $(element).css('display','none');
                 })
@@ -514,7 +518,7 @@ $(document).ready(function(){
         //timer before initial claps are loaded
         $('.review_row').each(function(index,element){
             setTimeout(function(){
-                $('.odometer').text('458');
+                $('.odometer').text(reviews[index].review_claps);
             }, 500);
         })
 
@@ -533,12 +537,12 @@ $(document).ready(function(){
             removeClapClicker(element)
             $(element).attr('onclick','clapEvent(this)');
         })
-
+        //add ability to clap when animation loaded
         setTimeout(function(){
             $('.clap_icons').each(function(index,element){
                 addClapClicker(element)
             })
-        },5000)
+        },3000)
         
 
 
@@ -593,10 +597,14 @@ function clapEvent(element){
             '_token': $('meta[name=csrf-token]').attr('content'),
             reviewId: idOfReview
         });
+        $.post('/review/claps/increment', {
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewId: idOfReview
+        });
+        console.log('increment sent')
         //post request to increase review's count
         var newClapsValue = parseInt(clapsValue.replace(/(\r\n|\n|\r)/gm,"")) + 1;
         
-        //TODO MAKE IT SO THAT THEY CAN'T CLAPS UNTIL THE ANIMATION IS DONE, OTHERWISE IT WILL MESS UP
     } else{
         $(element).attr('src', '/storage/icons/clap_neutral.svg')
         $(element).toggleClass('clapped');
@@ -604,6 +612,11 @@ function clapEvent(element){
             '_token': $('meta[name=csrf-token]').attr('content'),
             reviewId: idOfReview
         });
+        $.post('/review/claps/decrement', {
+            '_token': $('meta[name=csrf-token]').attr('content'),
+            reviewId: idOfReview
+        });
+        console.log('sent')
         //post request to reduce review's count
         var newClapsValue = parseInt(clapsValue.replace(/(\r\n|\n|\r)/gm,"")) -1;
     }

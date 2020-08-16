@@ -58,7 +58,6 @@
                      <p>{{$amenities}}</p>             
                   @endforeach
                </div>
-
             </div>
          </div>
          <div >
@@ -78,7 +77,7 @@
                         </div> 
                         <div class="clap_feature_container">
                            <img class="clap_icons" id="review_id_{{$review->id}}" src="/storage/icons/clap_neutral.svg">
-                           <div id="odometer" class="odometer">125</div>
+                           <div id="odometer_id_{{$review->id}}" class="odometer">0</div>
                         </div>
                         <div class="review_recommends_container">
                            @if ($review->is_recommended == 1)
