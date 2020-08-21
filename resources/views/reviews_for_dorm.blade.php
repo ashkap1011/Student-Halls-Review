@@ -45,7 +45,7 @@
                   @for ($i = 0; $i < sizeOf($STARRATINGS); $i++)
                      <div class="star_rating_container pb-2">
                         <div style="" class="star_rating_name">{{$STARRATINGS[$i]}}:  </div>
-                        <div style="" class="star_rating_stars"><span class="star_rating_star_integer">{{substr($dorm->overall_star_ratings[$i], 0, -1)}}</span></div>
+                        <div style="" class="star_rating_stars"><span class="star_rating_star_integer" hidden>{{substr($dorm->overall_star_ratings[$i], 0, -1)}}</span></div>
                      </div>
                   @endfor
                </div> <br>
@@ -89,8 +89,8 @@
                         </div>
                         
                      </div>
-                     <div class="review_informational_line">
-                        <p>
+                     <div class="review_informational_line_container">
+                        <p class="review_information_line">
                            @php 
                            $studentType = $review->year_of_study;
                            $studentYear = $studentType != 'postgraduate'? $studentType . ' year ' : ' Postgraduate ';

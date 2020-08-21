@@ -409,9 +409,18 @@ Reviews For Dorm Page
     margin-left:10%;
     padding: 3%;
 }
+.dorm_overall_rating{
+    padding-top: 2.5%;
+    width:35vw;
+    min-width:280px;
+    margin-top:1vw;
+}
 
 #dorm_overall_rating_value{
-    font-size: 2em;
+    font-size: 1.5em;
+    display: inline-block;
+    vertical-align: bottom;
+    font-weight: 700;
 }
 
 @media only screen and (max-width: 991px)  {
@@ -452,6 +461,18 @@ Reviews For Dorm Page
     #dorm_heading_reviews{
     font-size:4vw;
     }
+
+    .review_text{
+        font-size: large;
+    }
+
+    .review_rating_integer{
+        font-size: x-large;
+        font-weight:700;
+        padding-right: 5px;
+        vertical-align: 2px;
+    }
+
         
 }
 
@@ -494,15 +515,42 @@ Reviews For Dorm Page
 }
 
 @media (min-width: 1200px) {
+    .dorm_overall_rating{
+        margin-top:10px;
+        padding-top:1.5%;
+    }
+
+    .stars_for_dorms_overall{
+        max-width:50px;
+    }
+
+    #dorm_overall_rating_value{
+        font-size:2.5em;
+        vertical-align: auto;
+    }
+
+    .review_information_line{
+        font-size:large;
+    }
+
     .review_side_panel_title{
         font-size: 1.7em;
     }
     .star_rating_name{
         font-size: 1.25em;
     }
+    .star_rating_star_integer{
+        font-size:1.1em;
+    }
     #dorm_heading_reviews{
         font-size: 3.5vw;
         padding:2%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .stars_for_dorms_overall{
+        max-width:35px;
     }
 }
 
@@ -521,11 +569,30 @@ Reviews For Dorm Page
     max-width:150px
 }
 
-@media only screen and (max-width: 768px)  {
+@media only screen and (max-width: 771px)  {
     .review_row_illustration{
     min-width:100px;
+    }
+    .dorm_overall_rating{
+        margin:auto;
+    }
+    #dorm_heading_reviews{
+        margin:auto;
+        text-align:center;
+        font-size:2.5em;
+    }
+    .reviews_header{
+        margin:auto;
+    }
+
+    #back_button{
+        margin-top:20px;
+    }
+
+
+
 }
-}
+
 .review_card_body_header{
     margin-bottom: 1vh;
     padding-bottom: 1vh;
@@ -539,10 +606,15 @@ Reviews For Dorm Page
     display: block;
 }
 .review_recommend_icon{
-    max-width:4%;
-    width:25px;
+    width:4%;
+    min-width:25px;
     height:auto;
     margin-right:0.4vw;  
+}
+.review_rating_integer{
+    font-size:large;
+    vertical-align: 5px;
+    padding-right:5px;
 }
 
 /*Popup for catered/selcatered rating*/
@@ -552,7 +624,6 @@ Reviews For Dorm Page
     display: inline-block;
     cursor: pointer;
     border-bottom: 1.5px dotted;
-    height: 20px;
   }
 
   .catering_rating_parent_span:hover{
@@ -573,6 +644,7 @@ Reviews For Dorm Page
     bottom: 125%;
     left: 20%;
     margin-left: -80px;
+    font-size: 0.8em;
   }
   
   /* Popup arrow */
@@ -606,8 +678,6 @@ Reviews For Dorm Page
   }
 
 
-
-
 .review_card{
     background: #FFFFFF;
     box-shadow: 10px 10px 8px rgba(0, 0, 0, 0.25);
@@ -619,13 +689,17 @@ Reviews For Dorm Page
     margin:1% 0% 0% 1%;
 }
 
+
+
 .clap_feature_container{
     float:right;
     width:84px;
 }
 .clap_icons{
-    height:65px;
-    width: auto;
+    height:auto;
+    max-width:47px;
+    width: 4vw;
+    min-width:40px;
     padding-bottom: 10%;
 }
 .clap_icons:hover{
@@ -666,11 +740,15 @@ a.morelink {
 }
 
 .stars_for_dorms_overall{
-    height:3.5em;
+    vertical-align: -2.5vh;
+    width:20%;
+    min-width:20px;
+    display: inline-block;
 }
 
 .stars_for_review_overall{
     height:1.8em;
+    vertical-align:baseline;
 }
 
 .stars_for_catering{

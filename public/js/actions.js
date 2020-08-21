@@ -425,8 +425,8 @@ $(document).ready(function(){
           
         $('#back_button').attr('onclick', 'goBack()')
 
-        var dormOverallRating = $('#dorm_overall_rating_value').html()
-        $('.dorm_overall_rating').append(getStarRatingAsStringElement('stars_for_dorms_overall',dormOverallRating));
+
+        $('.dorm_overall_rating').prepend(getStarRatingAsStringElement('stars_for_dorms_overall',dorm.overall_rating));
         
         var reviewOverallRating = $('.review_overall_rating_container').each(function(index,element){
             $(element).append(getStarRatingAsStringElement('stars_for_review_overall',jQuery('b',this).html()));
@@ -518,7 +518,7 @@ $(document).ready(function(){
         //timer before initial claps are loaded
         $('.review_row').each(function(index,element){
             setTimeout(function(){
-                $('.odometer').text(reviews[index].review_claps);
+                $(element).find('.odometer').text(reviews[index].review_claps);
             }, 500);
         })
 
