@@ -64,7 +64,7 @@ function setDormSectionPerUniSelection(){
         $.get('/dormsForUni/' + uniName, function(data){    //gets dorm names.
             $('#dorm_name_drpdwn').empty() //empties all the child nodes of select
             $(data).each(function (){
-                $('#dorm_name_drpdwn').append($('<option />').val(this).text(this));
+                $('#dorm_name_drpdwn').append($('<option class="form_drop_down_options"/>').val(this).text(this));
             });
             setDormIdFormElement(data[0]);//this sets the initial dorm id to first dorm of the uni
             //todo make the field set work properly such that if this value is "" then hide

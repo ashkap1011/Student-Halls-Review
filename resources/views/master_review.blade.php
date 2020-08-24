@@ -3,7 +3,7 @@
 @section('title', 'WriteReviews')
 
 @section('content')
-<div class="container">
+<div class="form_container">
     <div class="form_header">
         <h1 id="write_review_header_title">write a review</h1>
     </div>
@@ -43,17 +43,19 @@
             
             <!-- recommends-->
             <fieldset class="fieldsets">
-            <h4 class="form_label">Recommended:</h4>   
-            <input type="radio" id="is_recommended_yes" name="is_recommended" value="1" checked>
-            <label for="is_recommended_yes">Yes</label>
-            <input type="radio" id="is_recommended_no" name="is_recommended" value="0">
-            <label for="is_recommended_no">No</label><br><br>
+            <label class="form_label" for="is_recommended" style="vertical-align: top;">Recommended:</label>   
+            <div class="form_yes_no_radio_buttons_container" style="vertical-align: top;">
+                <input type="radio" id="is_recommended_yes" name="is_recommended" value="1" checked>
+                <label class="form_yes_no_label form_rbtn_yes"  for="is_recommended_yes">Yes</label>
+                <input type="radio" id="is_recommended_no" name="is_recommended" value="0">
+                <label class="form_yes_no_label" for="is_recommended_no">No</label><br><br>
+            </div>
             </fieldset>
 
             <!-- Year of Study-->
             <fieldset class="fieldsets">
             <label class="form_label" for="year_of_study">Year of Study:</label>
-            <select id="year_of_study" name="year_of_study">
+            <select class="form_drop_down" id="year_of_study" name="year_of_study">
                 <option value="First" selected>First</option>
                 <option value="Second">Second</option>
                 <option value="Third">Third</option>
@@ -66,7 +68,7 @@
             <!--calendar year-->
             <br> 
             <label class="form_label" for="year_of_residence">Year of Residency:</label>    
-            <select id="year_of_residence" name="year_of_residence" >
+            <select class="form_drop_down" id="year_of_residence" name="year_of_residence" >
                 @php ($last= 2015)
                 @php ($now = date('Y'))
             
@@ -79,9 +81,9 @@
 
             <!-- Room type -->
             <fieldset class="fieldsets">
-            <br>
+                <br> 
             <label class="form_label" for="room_type">Room Type:</label>
-            <select id="room_type" name="room_type">
+            <select class="form_drop_down" id="room_type" name="room_type">
                 <option value="single" selected>Single</option>
                 <option value="double">Double</option>
                 <option value="shared">Shared</option>
@@ -90,11 +92,18 @@
             </fieldset>
 
             <fieldset class="fieldsets">
+                <br> 
                 <label class="form_label" for="is_catered"> Is it Self Catered</label>
-                <input type="radio" id="is_catered_yes" name="is_catered" value="1" checked>
-                <label for="is_catered_yes">Yes</label>
-                <input type="radio" id="is_catered_no" name="is_catered" value="0">
-                <label for="is_catered_no">No</label><br>
+                <div class="form_yes_no_radio_buttons_container">
+                    <input type="radio" id="is_catered_yes" name="is_catered" value="1" checked>
+                    <label class="form_yes_no_label form_rbtn_yes" for="is_catered_yes">Yes</label>
+                    <input type="radio" id="is_catered_no" name="is_catered" value="0">
+                    <label class="form_yes_no_label" for="is_catered_no">No</label><br>
+                </div>
+              
+            </fieldset>
+
+            <fieldset class="fieldsets">
                 <div class="star_rating_parent_container">
                     <h4 class="form_label" id="catered_selfcatered_label"></h4>
                     <span class="starRating" id="catered_or_selfcatered_rating_star_container">
@@ -110,7 +119,7 @@
                         <label for="rating1_catered_or_selfcatered_rating">1</label> 
                     </span>
                     <p>{{$ratingCaptions[5]}}</p>
-                    <br>
+                    
                 </div>
             </fieldset>
 
@@ -124,10 +133,14 @@
             </fieldset>
 
             <fieldset class="fieldsets">
-            <br><br> 
-            <h4 class="form_label">Leave a comment</h4>
+                <br>
+            <div>
+                <h4 class="form_label">Leave a comment</h4>
+            </div>
+            
             <textarea name="review_text" rows="10" cols="30" placeholder="Any quirks?"> </textarea>
-            <input type="submit" value="Submit">
+            <div>            <input type="submit" value="Submit">
+            </div>
 
             </fieldset>
             
@@ -135,7 +148,6 @@
 
         </form>
 
-        use spellcheck attribute
         @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
         @endforeach
