@@ -7,19 +7,9 @@
 @section('title', 'University')
 @section('content')
 
-<nav class="navbar navbar-expand-sm bg-light navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      
-    </ul>
-</nav>
 
-  <div class="background" style="background-image: url(/storage/university-banner/qmul1.jpg);">
+
+  <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
   </div>
 <div class="container main-body">       
 
@@ -48,7 +38,7 @@
       </div>
     </div>
 
-    <div class="col-sm-8 col-md-9" id="main_panel_of_dorms" style="background-color:lavenderblush;">
+    <div class="col-sm-8 col-md-9" id="main_panel_of_dorms" >
       
       <div class="dorms_header row">
         <div id="dorms_header_title" class="col-sm-4">          
@@ -67,17 +57,9 @@
 
       <div id="dorms">
         
-        
       </div>
-      
-    
-      
-      
     </div>
   </div>
- 
-
-
 
 
 <!--
@@ -96,8 +78,6 @@
   </style>
 
 
-
-  
 <script>
    var dorms = {!! json_encode($dorms, JSON_HEX_TAG) !!}
     
@@ -107,9 +87,11 @@
 
    
 </script>
+
   <!---
     <script defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgKta8lMAtyclRFwFAAb-mkGRf8ORQJxo&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key={{env('MAPS_API_KEY')}}&callback=initMap">
     </script>
  --->
+
 @endsection

@@ -36,7 +36,7 @@ class PageController extends Controller
 
     public function getSearchMatchingUnis($searchString){
         $universities=University::where('uni_name','LIKE','%'.$searchString."%")->get();
-        return view('search_results', compact('universities'));      
+        return view('search_results', compact('universities','searchString'));      
     }
 
 

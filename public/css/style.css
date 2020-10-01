@@ -2,10 +2,18 @@
 
 /**Homepage*/
 
+body{
+    background-color: rgb(238, 238, 238);
+
+}
+
+
 .main-body  {
     margin:auto;
     min-width:80%;
+
 }
+
 /*background image*/
 .background{
     background-repeat: no-repeat;
@@ -16,6 +24,8 @@
     margin: auto;
 }
 
+
+
 #uni_heading{
     font-size: xx-large;
     font-weight: 800;
@@ -23,13 +33,31 @@
     padding-bottom: 1%;
 }
 
+/**
+Search Results page
+
+*/
+
+#search_result_heading{
+    text-align:center;
+    
+}
+
+#search_result_add_new_uni{
+    text-align: right;
+}
+
+
+
+
+
 /*
     Filter styling
 */
 
 #amenity_filters{
     padding:3% 3% 4% 3%;
-    background-color: bisque;
+    background-color: #F3EAE4;
 }
 #filter_sidenote{
     font-style: italic;
@@ -54,7 +82,7 @@ Map panel
 */
 
 #map_container{
-    background-color: aqua;
+    background-color: #F3EAE4;
     margin: 4% 0% 4% 0%;
 }
 #map_header{
@@ -79,6 +107,7 @@ Main panel that displays the dorms
 */
 
 #main_panel_of_dorms{
+    background-color: #F3EAE4;
 }
 
 #dorms_header_title{
@@ -143,15 +172,13 @@ h3{
 .stars_for_dorm_card{
     width:1.8em;
     min-width: 15px;
-    float: right;
+    float: left;
 }
     /*add media queires, look at reviews being cut. maybe overflow hidden in filters*/
 
-/* Small devices (landscape phones, 576px and up) */
-@media (min-width: 576px) { body {background-color: pink; }}
-
 /* Medium devices (tablets, 768px and up) */
-@media (min-width: 768px) { body {background-color: blue;} 
+@media (min-width: 768px) { 
+    
 .card_right_panel{
     padding-left: 1.5vw;
     min-width: 200px;
@@ -161,11 +188,10 @@ h3{
     font-size:large;
 }
 
-
 }
 
 /* Large devices (desktops, 992px and up) */
-@media (min-width: 992px) { body {background-color: green;}
+@media (min-width: 992px) { 
 #amenity_filters{
     padding:3% 3% 4% 1vw;
 
@@ -179,9 +205,6 @@ h3{
 .filters{
     font-size:large;
 } }
-
-/* Extra large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) { body {background-color: skyBlue;} }
 
 /*
 Admin panel
@@ -255,7 +278,6 @@ Homepage
     min-width: 350px;
     height: 40px;
     /* This bit draws the box around it */
-    /* I've used padding so you can see the edges of the elements. */
   }
   
   input {
@@ -289,10 +311,15 @@ Homepage
 
 }
 
+@media only screen and (min-width: 769px)  {
+    #searh_icon {max-height: 45px;}
+    .search_bar {height: 45px;}
+}
+
+
 @media only screen and (min-width: 1800px)  {
     #searh_icon {max-height: 60px;}
     .search_bar {height: 60px;}
-
 }
 
   @media only screen and (max-width: 768px)  {
@@ -501,7 +528,7 @@ Reviews For Dorm Page
 }
 
 #reviews_side_panel{
-    background-color: bisque;
+    background-color: #F3EAE4;
     padding-bottom:5%;
     border-radius: 10px;
 }
@@ -836,7 +863,7 @@ a.morelink {
 
 .form_body{
     margin-top: 7%;
-    background-color:#F2EFEC; 
+    background-color:#F3EAE4; 
     height: 100%;
     padding: 4% 4% 4% 12%;
 }

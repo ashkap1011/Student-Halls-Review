@@ -10,17 +10,8 @@
 @section('title', 'Reviews')
 
 @section('content')
-<nav class="navbar navbar-expand-sm bg-light navbar-light">
-   <ul class="navbar-nav">
-     <li class="nav-item active">
-       <a class="nav-link" href="#">Active</a>
-     </li>
-     <li class="nav-item">
-       <a class="nav-link" href="#">Link</a>
-     </li>
-     
-   </ul>
-</nav>
+
+
 <h5 id="reviews_for_dorms" hidden></h5>
 
 <div class="reivew_content_container">

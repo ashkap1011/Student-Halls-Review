@@ -4,27 +4,11 @@
 
 @section('content')
 
-<nav class="navbar navbar-expand-sm bg-light navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Active</a>
-      </li>
-      <li class="nav-item">
-        <a href="/add/new-review">
-            <!--
-            <div id="write_review_button">
-                <img src="/storage/icons/review_write.svg" id="write_icon">    
-                <p id="write_review_text">write a review</p> 
-                <img src="/storage/icons/review_arrow.svg" id="arrow_icon"> 
-            </div>--->
-        </a>
-      </li>
-    </ul>
-</nav>
 
 
 
 <div class="container">
+    <h1 class="p-4 mt-5 mb-5" id="search_result_heading">Search results for "{{$searchString}}"</h1>
     @if (sizeof($universities)>0)
     <div id="uni_cards_panel mt-5">
         @foreach ($universities as $uni)
@@ -42,8 +26,13 @@
             </div>
         @endforeach
     </div>
+    <h2 class="" id="search_result_add_new_uni">Don't see your university? Add it <a href="/-/add/new-uni-dorm-review">here</a></h2>
     @else
-        <h1>We don't have a uni with that name, add it here</h1>
+        <h1>Oooh this sounds like a Uni we don't have, add it <a href="/-/add/new-uni-dorm-review">here</a></h1>
+
+        <!--Maybe add a pic here or something--->
+
+
     @endif
 </div>
 @endsection
