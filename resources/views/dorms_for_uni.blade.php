@@ -7,14 +7,16 @@
 @section('title', 'University')
 @section('content')
 
-
+<!--
+TODO here if background image exists then put it here
+-->
 
   <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
   </div>
 <div class="container main-body">       
 
   <h5 id="dorms_for_uni" hidden> </h5>   
-  <h1 id="uni_heading">{{strval($uni->uni_name)}} Queen Mary University Of London</h1>
+  <h1 id="uni_heading">{{strval($uni->uni_name)}}</h1>
 
   <div class="row">
     <div class="col-sm-4 col-md-3">
@@ -88,10 +90,11 @@
    
 </script>
 
-  <!---
+ <!---
     <script defer
-      src="https://maps.googleapis.com/maps/api/js?key={{env('MAPS_API_KEY')}}&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key={{config('constants.options.Google_Maps_Key')}}&callback=initMap">
     </script>
- --->
+ 
+--->
 
 @endsection

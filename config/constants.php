@@ -18,8 +18,12 @@ return [
         'generalColumnsOfTempReivew' => array('is_new_uni', 'room_rating', 'building_rating','location_rating'
                                         ,'bathroom_rating','staff_rating','is_recommended','year_of_study'
                                         ,'year_of_residence','room_type','is_catered','catered_or_selfcatered_rating'
-                                        ,'amenities','review_text')
+                                        ,'amenities','review_text'),
+        'Google_Maps_Key' => env('MAPS_API_KEY')                              
 
-    ]
+    
+    
+    
+                                    ]
         
 ];

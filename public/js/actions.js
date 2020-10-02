@@ -1,5 +1,4 @@
 //const { toArray, create } = require("lodash");
-//don't know why the above function exists
 $(document).ready(function(){
     
     /*sets as defualt the dorm being self catered 
@@ -38,7 +37,14 @@ $(document).ready(function(){
        $('.fieldsets .rating3').prop('checked', true);
 
     }
-    
+
+    $('#review_submit_button').click(function(){
+            console.log("heyyy")
+            $('form').submit()
+            window.location.href = '/'
+            window.alert("Your review has been submitted for approval")
+            event.preventDefault()
+        })
     $('input[type=radio][name=is_catered]').change(function(){
         if ($('input[type=radio][name=is_catered]:checked').val() === '0'){
             $('#catered_selfcatered_label').text('Food Quality');
@@ -51,10 +57,6 @@ $(document).ready(function(){
             $('#catering').prop('checked', false);
         }
     });
-
-    
-    
-
 });
 
 
@@ -509,8 +511,6 @@ $(document).ready(function(){
                     $(element).css('display','inline-block');
                 })
             }
-
-
         }, 250);
         });
 

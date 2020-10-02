@@ -16,28 +16,28 @@
             <!-- ratings-->
             <fieldset class="fieldsets">
                 @php($i=0)
-            @foreach ($starRatings as $rating)
-            @if ($rating == 'catered_or_selfcatered_rating')
-                @continue;
-            @endif
-            <div class="star_rating_parent_container">
-                <div class="star_rating_label_with_rating">
-                <h4 class="form_label">{{ucfirst(explode('_',$rating)[0])}}</h4>    
-                <span class="starRating" id="{{$rating}}_star_container">
-                    <input class="rating5" id="rating5_{{$rating}}" type="radio" name="{{$rating}}" value="5">
-                    <label for="rating5_{{$rating}}">5</label>
-                    <input class="rating4" id="rating4_{{$rating}}" type="radio" name="{{$rating}}" value="4">
-                    <label for="rating4_{{$rating}}">4</label>
-                    <input class="rating3" id="rating3_{{$rating}}" type="radio" name="{{$rating}}" value="3">
-                    <label for="rating3_{{$rating}}">3</label>
-                    <input class="rating2" id="rating2_{{$rating}}" type="radio" name="{{$rating}}" value="2">
-                    <label for="rating2_{{$rating}}">2</label>
-                    <input class="rating1" id="rating1_{{$rating}}" type="radio" name="{{$rating}}" value="1">
-                    <label for="rating1_{{$rating}}">1</label> 
-                </span></div>
-                <p>{{$ratingCaptions[$i++]}}</p>
-            </div>
-            @endforeach
+                @foreach ($starRatings as $rating)
+                @if ($rating == 'catered_or_selfcatered_rating')
+                    @continue;
+                @endif
+                <div class="star_rating_parent_container">
+                    <div class="star_rating_label_with_rating">
+                    <h4 class="form_label">{{ucfirst(explode('_',$rating)[0])}}</h4>    
+                    <span class="starRating" id="{{$rating}}_star_container">
+                        <input class="rating5" id="rating5_{{$rating}}" type="radio" name="{{$rating}}" value="5">
+                        <label for="rating5_{{$rating}}">5</label>
+                        <input class="rating4" id="rating4_{{$rating}}" type="radio" name="{{$rating}}" value="4">
+                        <label for="rating4_{{$rating}}">4</label>
+                        <input class="rating3" id="rating3_{{$rating}}" type="radio" name="{{$rating}}" value="3">
+                        <label for="rating3_{{$rating}}">3</label>
+                        <input class="rating2" id="rating2_{{$rating}}" type="radio" name="{{$rating}}" value="2">
+                        <label for="rating2_{{$rating}}">2</label>
+                        <input class="rating1" id="rating1_{{$rating}}" type="radio" name="{{$rating}}" value="1">
+                        <label for="rating1_{{$rating}}">1</label> 
+                    </span></div>
+                    <p>{{$ratingCaptions[$i++]}}</p>
+                </div>
+                @endforeach
             
             </fieldset>
             
@@ -139,13 +139,11 @@
             </div>
             
             <textarea name="review_text" rows="10" cols="30" placeholder="Any quirks?"> </textarea>
-            <div>            <input type="submit" value="Submit">
+            <div>          
             </div>
-
+            <button id="review_submit_button" type="button">Submit</button>
             </fieldset>
-            
             @csrf
-
         </form>
 
         @foreach ($errors->all() as $error)
