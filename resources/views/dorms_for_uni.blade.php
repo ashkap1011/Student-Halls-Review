@@ -10,12 +10,20 @@
 <!--
 TODO here if background image exists then put it here
 
-  <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
-
 -->
+@if(file_exists('storage/university-banner/'.$uni->uni_name.'.jpg'))
 
-  <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
-  </div>
+<div class="background " style="background-image: url(/storage/university-banner/{{$uni->uni_name}}.jpg);">
+</div>
+
+@else
+<div class="background " style="background-image: url(/storage/university-banner/default.jpg);">
+</div>
+@endif
+
+
+
+  
 <div class="container main-body">       
 
   <h5 id="dorms_for_uni" hidden> </h5>   

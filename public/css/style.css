@@ -402,6 +402,13 @@ Homepage
   NavBar
   */
 
+
+#logo{
+    height:80px;
+    width:auto;
+    margin: -19px 0px 0px 30px;
+}
+
 .navigation_bar{
     background-color: #CEC0C0;
 }
