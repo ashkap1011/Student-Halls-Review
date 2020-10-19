@@ -9,6 +9,9 @@
 
 <!--
 TODO here if background image exists then put it here
+
+  <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
+
 -->
 
   <div class="background " style="background-image: url(/storage/university-banner/qmul1.jpg);">
