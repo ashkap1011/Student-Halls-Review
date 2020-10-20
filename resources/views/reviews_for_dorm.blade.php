@@ -97,7 +97,7 @@
                         </p>
                      </div> 
                      <div class="review_text" >
-                        {{$review}}
+                        {{$review->review_text}}
                      </div>
                      
                   </div>
